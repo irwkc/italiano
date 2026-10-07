@@ -1,0 +1,103 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
+import { ArrowRight } from "@phosphor-icons/react";
+import { ScriptWrite } from "@/components/script-write";
+import { contact, site } from "@/lib/content";
+
+type Status = "idle" | "sending" | "sent";
+
+export function Contact() {
+  const [status, setStatus] = useState<Status>("idle");
+  const [errors, setErrors] = useState<{ name?: string; handle?: string }>({});
+
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const name = String(data.get("name") ?? "").trim();
+    const handle = String(data.get("handle") ?? "").trim();
+    const next: typeof errors = {};
+    if (!name) next.name = "Как к вам обращаться?";
+    if (!handle) next.handle = "Нужен Telegram или почта, чтобы ответить.";
+    setErrors(next);
+    if (Object.keys(next).length) return;
+
+    // MOCK: здесь будет отправка (Telegram-бот, почта или форма).
+    setStatus("sending");
+    window.setTimeout(() => setStatus("sent"), 900);
+  }
+
+  return (
+    <section id="contatti" className="relative px-5 md:px-10 pt-[14vh] pb-[20vh] overflow-hidden" aria-label="Контакты">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 items-start">
+        <div className="md:col-span-5 order-2 md:order-1 mt-12 md:mt-0">
+          <h2 className="reveal serif text-[1.9rem] md:text-[2.5rem] leading-[1.05]">{contact.title}</h2>
+          <p className="reveal mt-4 text-ink-soft text-[0.95rem] md:text-base leading-relaxed max-w-[26rem]">{contact.body}</p>
+
+          {status === "sent" ? (
+            <p className="mt-12 serif italic text-[1.6rem] md:text-[2rem] text-pompei" role="status">
+              {contact.success}
+            </p>
+          ) : (
+            <form onSubmit={onSubmit} noValidate className="mt-12 grid gap-8 max-w-[30rem]">
+              <div className="grid gap-2">
+                <label htmlFor="name" className="label">
+                  Имя
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  className="field"
+                  autoComplete="name"
+                  aria-invalid={Boolean(errors.name)}
+                  aria-describedby={errors.name ? "name-err" : undefined}
+                />
+                {errors.name && (
+                  <p id="name-err" className="text-pompei text-sm">
+                    {errors.name}
+                  </p>
+                )}
+              </div>
+              <div className="grid gap-2">
+                <label htmlFor="handle" className="label">
+                  Telegram или почта
+                </label>
+                <input
+                  id="handle"
+                  name="handle"
+                  className="field"
+                  autoComplete="email"
+                  aria-invalid={Boolean(errors.handle)}
+                  aria-describedby={errors.handle ? "handle-err" : undefined}
+                />
+                {errors.handle && (
+                  <p id="handle-err" className="text-pompei text-sm">
+                    {errors.handle}
+                  </p>
+                )}
+              </div>
+              <div className="grid gap-2">
+                <label htmlFor="goal" className="label">
+                  Зачем вам итальянский
+                </label>
+                <textarea id="goal" name="goal" rows={2} className="field resize-none" />
+              </div>
+              <button type="submit" className="btn btn-primary justify-self-start" disabled={status === "sending"}>
+                {status === "sending" ? "Отправляю" : site.cta}
+                <ArrowRight size={14} weight="light" />
+              </button>
+            </form>
+          )}
+        </div>
+
+        <div className="md:col-span-7 order-1 md:order-2 md:text-right md:-mr-[4vw]">
+          <ScriptWrite
+            text={contact.script}
+            className="text-pompei whitespace-nowrap"
+            style={{ fontSize: "clamp(5rem, 18vw, 22rem)" }}
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
