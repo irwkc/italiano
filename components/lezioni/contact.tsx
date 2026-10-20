@@ -90,11 +90,11 @@ export function Contact() {
           )}
         </div>
 
-        <div className="lg:col-span-7 order-1 lg:order-2 lg:text-right lg:pr-[6vw] lg:-translate-x-[4vw] overflow-x-clip">
+        <div className="lg:col-span-7 order-1 lg:order-2 lg:flex lg:justify-end max-lg:overflow-x-clip">
           <ScriptWrite
             text={contact.script}
             data-menu-word="Scrivimi"
-            className="text-pompei whitespace-nowrap max-w-full"
+            className="text-pompei whitespace-nowrap max-lg:max-w-full lg:shrink-0 lg:-translate-x-[14vw]"
             style={{ fontSize: "clamp(3.2rem, 18vw, 22rem)" }}
           />
         </div>

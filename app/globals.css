@@ -227,6 +227,20 @@ html.menu-open [data-menu-word],
 html.menu-travel [data-menu-word] {
   visibility: hidden !important;
   opacity: 0 !important;
+  transition: none !important;
+}
+/* Сбор italia: чёрные буквы гаснут с страницей, прячем только красные. */
+html.menu-open.menu-gather [data-menu-word],
+html.menu-travel.menu-gather [data-menu-word] {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+/* Оригиналы акцентов прячем — летят клоны. */
+html.menu-open [data-menu-accent],
+html.menu-travel [data-menu-accent] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  transition: none !important;
 }
 .menu-veil {
   position: absolute;
@@ -244,6 +258,12 @@ html.menu-travel [data-menu-word] {
 }
 .menu-item:hover .caps-outline,
 .menu-item:focus-visible .caps-outline {
+  -webkit-text-stroke-color: var(--pompei);
+}
+.menu-item:hover .r-fill,
+.menu-item:focus-visible .r-fill {
+  color: var(--pompei);
+  -webkit-text-fill-color: var(--pompei);
   -webkit-text-stroke-color: var(--pompei);
 }
 .menu-item .label {

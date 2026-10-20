@@ -29,8 +29,8 @@ export function Faq() {
                   <Plus
                     size={20}
                     weight="light"
-                    className={`mt-2 shrink-0 transition-transform duration-500 [transition-timing-function:cubic-bezier(.16,1,.3,1)] ${
-                      isOpen ? "rotate-45" : ""
+                    className={`mt-2 shrink-0 transition-[transform,color] duration-500 [transition-timing-function:cubic-bezier(.16,1,.3,1)] ${
+                      isOpen ? "rotate-45 text-pompei" : ""
                     }`}
                     aria-hidden
                   />

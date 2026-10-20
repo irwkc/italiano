@@ -7,14 +7,15 @@ type Props = {
   text: string;
   className?: string;
   style?: CSSProperties;
-  /** Индексы букв, которые красятся в помпейский красный (рубрикация). */
+  /** Индексы букв в помпейский красный. */
   accent?: number[];
-  /** Доля экрана, на которой надпись дописывается: start -> end (ScrollTrigger positions) */
   start?: string;
   end?: string;
+  /** false — без CSS-mask (десктоп метода: маска резала выносные). */
+  mask?: boolean;
 } & Omit<HTMLAttributes<HTMLSpanElement>, "className" | "style">;
 
-/** Каллиграфия, которая пишется, пока проезжает через экран. */
+/** Каллиграфия; при mask пишется по скроллу. */
 export function ScriptWrite({
   text,
   className = "",
@@ -22,6 +23,7 @@ export function ScriptWrite({
   accent,
   start = "top 85%",
   end = "top 35%",
+  mask = true,
   ...rest
 }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -31,6 +33,24 @@ export function ScriptWrite({
     const el = ref.current;
     if (!el) return;
     const mm = gsap.matchMedia();
+
+    if (!mask) {
+      gsap.set(el, { opacity: 1, clearProps: "transform" });
+      mm.add(`${MOTION_OK} and ${DESK}`, () => {
+        gsap.fromTo(
+          el,
+          { opacity: 0.15 },
+          {
+            opacity: 1,
+            ease: "none",
+            force3D: false,
+            scrollTrigger: { trigger: el, start, end, scrub: 0.5 },
+          },
+        );
+      });
+      return () => mm.revert();
+    }
+
     mm.add(PHONE, () => {
       gsap.set(el, { "--w": 0 });
     });
@@ -42,20 +62,35 @@ export function ScriptWrite({
       });
     });
     return () => mm.revert();
-  }, [start, end]);
+  }, [start, end, mask]);
 
   return (
-    <span ref={ref} className={`script write inline-block ${className}`} style={style} {...rest}>
+    <span
+      ref={ref}
+      className={`script inline-block overflow-visible ${mask ? "write" : ""} ${className}`}
+      style={
+        mask
+          ? style
+          : {
+              lineHeight: 1.5,
+              ...style,
+            }
+      }
+      {...rest}
+    >
       {marks
-        ? text.split("").map((ch, i) =>
-            marks.has(i) ? (
-              <span key={i} className="text-pompei">
+        ? text.split("").map((ch, i) => {
+            const accent = marks.has(i);
+            return (
+              <span
+                key={i}
+                {...(accent ? { "data-menu-accent": "" } : {})}
+                className={`inline-block align-baseline leading-none ${accent ? "text-pompei" : ""}`}
+              >
                 {ch}
               </span>
-            ) : (
-              <span key={i}>{ch}</span>
-            ),
-          )
+            );
+          })
         : text}
     </span>
   );

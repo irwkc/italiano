@@ -25,8 +25,8 @@ export function Colosseo() {
         },
       });
 
-      tl.fromTo(".c-ave", { scale: 0.55, opacity: 1 }, { scale: 11, ease: "power2.in", duration: 0.78 }, 0);
-      tl.to(".c-ave", { opacity: 0, duration: 0.12, ease: "none" }, 0.66);
+      tl.fromTo(".c-ave", { scale: 0.55, opacity: 1 }, { scale: 11, ease: "power2.in", duration: 0.7 }, 0);
+      tl.to(".c-ave", { opacity: 0, duration: 0.14, ease: "none" }, 0.44);
 
       root.querySelectorAll<HTMLElement>(".c-shout").forEach((el) => {
         const s = parseFloat(el.dataset.s ?? "1");
@@ -45,10 +45,10 @@ export function Colosseo() {
           },
           0.02 * s,
         );
-        tl.to(el, { opacity: 0, duration: 0.1 }, 0.6 + 0.04 * s);
+        tl.to(el, { opacity: 0, duration: 0.1 }, 0.42 + 0.04 * s);
       });
 
-      tl.fromTo(".c-text", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.2, stagger: 0.05, ease: "power3.out" }, 0.72);
+      tl.fromTo(".c-text", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.2, stagger: 0.05, ease: "power3.out" }, 0.56);
     });
     mm.add("(prefers-reduced-motion: reduce)", () => {
       gsap.set(".c-ave", { scale: 1 });
@@ -62,17 +62,21 @@ export function Colosseo() {
     <section
       ref={ref}
       data-year={colosseo.year}
-      className="relative hidden md:block md:h-[420vh]"
+      className="relative hidden md:block md:h-[300vh]"
       aria-label="Колизей"
     >
       <div className="c-pin relative h-[100dvh] overflow-hidden">
         <div
           data-menu-word="AVE"
-          className="c-ave caps caps-outline absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none will-change-transform"
+          className="c-ave caps caps-outline absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none will-change-transform whitespace-nowrap"
           style={{ fontSize: "clamp(4.8rem, 28vw, 40rem)" }}
           aria-hidden
         >
-          {colosseo.word}
+          {colosseo.word.split("").map((ch, i) => (
+            <span key={`${ch}-${i}`} className="inline-block overflow-visible align-bottom">
+              <span className="inline-block">{ch}</span>
+            </span>
+          ))}
         </div>
 
         {colosseo.shouts.map((s, i) => (

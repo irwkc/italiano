@@ -6,6 +6,19 @@ export type MenuLine = {
   marginTopEm: number;
 };
 
+/** Снимок красной буквы для клона (метод → italia). Без ссылок на живой DOM. */
+export type MenuGatherLetter = {
+  char: string;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  fontSize: number;
+  fontFamily: string;
+  lineHeight: string;
+  color: string;
+};
+
 export type MenuSource = {
   el: HTMLElement | null;
   text: string;
@@ -23,10 +36,14 @@ export type MenuSource = {
   align: "left" | "center" | "right";
   outline: boolean;
   script: boolean;
+  /** clip-path слоя заливки (.r-fill / .r-fill-m), напр. inset(50% …) пока ROMA набирает чернила. */
+  fillClip?: string;
   /** Целиком, без разлёта букв (скрипт, цифры). Стеки ITA/LI/ANO — по буквам. */
   solid: boolean;
   /** Строки как в hero: ITA / LI / ANO. */
   lines?: MenuLine[];
+  /** Красные акценты метода: клоны слетаются в italia. */
+  gather?: MenuGatherLetter[];
 };
 
 function clamp(n: number, a: number, b: number) {
@@ -82,9 +99,165 @@ export function fallbackSource(): MenuSource {
     align: "center",
     outline: false,
     script: false,
+    fillClip: undefined,
     solid: true,
     lines: undefined,
+    gather: undefined,
   };
+}
+
+function scoreRect(rect: DOMRect, vw: number, vh: number) {
+  const visW = Math.min(rect.right, vw) - Math.max(rect.left, 0);
+  const visH = Math.min(rect.bottom, vh) - Math.max(rect.top, 0);
+  if (visW <= 0 || visH <= 0) return -1;
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const dist = Math.hypot(cx - vw / 2, cy - vh / 2);
+  return (visW * visH) / (1 + dist * 0.45);
+}
+
+/** Секция «Как проходит урок»: красные буквы → клоны italia. */
+function tryGatherSource(vw: number, vh: number): { source: MenuSource; score: number } | null {
+  const root = document.querySelector<HTMLElement>("[data-menu-gather]");
+  if (!root) return null;
+  const style = getComputedStyle(root);
+  if (style.display === "none" || style.visibility === "hidden") return null;
+
+  const rootRect = root.getBoundingClientRect();
+  const score = scoreRect(rootRect, vw, vh);
+  const visH = Math.min(rootRect.bottom, vh) - Math.max(rootRect.top, 0);
+  const minVis = vw < 768 ? vh * 0.28 : vh * 0.22;
+  if (score < 0 || visH < minVis) return null;
+
+  const nodes = [...root.querySelectorAll<HTMLElement>("[data-menu-accent]")].filter((el) => {
+    if (el.getClientRects().length === 0) return false;
+    for (let p: HTMLElement | null = el; p; p = p.parentElement) {
+      const ps = getComputedStyle(p);
+      if (ps.display === "none" || ps.visibility === "hidden") return false;
+    }
+    return true;
+  });
+  const text = (root.dataset.menuGather || "").replace(/\s+/g, "");
+  if (nodes.length < 2 || nodes.length !== text.length) return null;
+
+  const gather: MenuGatherLetter[] = nodes.map((el) => {
+    const r = el.getBoundingClientRect();
+    const cs = getComputedStyle(el);
+    const fontSize = parseFloat(cs.fontSize) || 48;
+    return {
+      char: (el.textContent || "").trim().slice(0, 1),
+      left: r.left,
+      top: r.top,
+      width: Math.max(1, r.width),
+      height: Math.max(1, r.height),
+      fontSize,
+      fontFamily: cs.fontFamily,
+      lineHeight: cs.lineHeight,
+      color: cs.color,
+    };
+  });
+  if (gather.some((g) => !g.char)) return null;
+
+  const avg = gather.reduce((n, g) => n + g.fontSize, 0) / gather.length;
+  const fontSize = Math.min(Math.max(avg * 1.05, vw * (vw < 768 ? 0.12 : 0.07)), vw < 768 ? 96 : 140);
+  const width = gather.reduce((n, g) => n + g.width, 0);
+  const left = (vw - width) / 2;
+  const top = vh * 0.3;
+
+  return {
+    score: score * 1.4,
+    source: {
+      el: root,
+      text: gather.map((g) => g.char).join(""),
+      left,
+      top,
+      width,
+      height: Math.max(...gather.map((g) => g.height)),
+      fontSize,
+      fontFamily: gather[0]!.fontFamily,
+      fontWeight: "400",
+      letterSpacing: "0.02em",
+      color: gather[0]!.color,
+      paddingLeft: "0px",
+      lineHeight: gather[0]!.lineHeight,
+      align: "center",
+      outline: false,
+      script: true,
+      fillClip: undefined,
+      solid: false,
+      lines: undefined,
+      gather,
+    },
+  };
+}
+
+/** Запас вокруг глифа: слой трансформации иначе режет росчерки Italianno. */
+export function gatherInkPad(fontSize: number) {
+  return fontSize * 0.6;
+}
+
+/**
+ * Куда слетаются буквы: живая строка italia, не сумма чужих bounding-box.
+ * left/top — верхний левый угол глифа, тот же бокс, что у клона без padding.
+ */
+export function measureGatherSlots(letters: MenuGatherLetter[], top: number, vw: number) {
+  const host = document.createElement("div");
+  host.style.cssText =
+    "position:fixed;left:0;top:0;display:flex;align-items:baseline;white-space:nowrap;visibility:hidden;pointer-events:none;";
+  const spans = letters.map((g) => {
+    const s = document.createElement("span");
+    s.className = "script";
+    s.style.display = "inline-block";
+    s.style.fontSize = `${g.fontSize}px`;
+    s.style.fontFamily = g.fontFamily;
+    s.style.lineHeight = "1";
+    s.style.verticalAlign = "baseline";
+    s.textContent = g.char;
+    host.appendChild(s);
+    return s;
+  });
+  document.body.appendChild(host);
+  const hr = host.getBoundingClientRect();
+  const dx = (vw - hr.width) / 2 - hr.left;
+  const dy = top - hr.top;
+  const slots = spans.map((s) => {
+    const r = s.getBoundingClientRect();
+    return { left: r.left + dx, top: r.top + dy };
+  });
+  host.remove();
+  return slots;
+}
+
+/**
+ * clip-path заливки ROMA в процентах по высоте.
+ * getComputedStyle часто отдаёт inset в px от крупного слова — на пунктах меню
+ * тот же px срезает всю заливку. Нормализуем top → %, чтобы уровень совпадал.
+ */
+function readFillClip(el: HTMLElement): string | undefined {
+  const fill = el.querySelector<HTMLElement>(".r-fill, .r-fill-m, [data-menu-fill]");
+  if (!fill) return undefined;
+  const clip = getComputedStyle(fill).clipPath;
+  if (!clip || clip === "none") return undefined;
+
+  const inset = clip.match(/inset\(\s*([^)]+?)\s*\)/i);
+  if (!inset) return clip;
+
+  const topTok = inset[1].trim().split(/\s+/)[0];
+
+  let topPct: number;
+  if (topTok.endsWith("%")) {
+    topPct = parseFloat(topTok);
+  } else {
+    const h = fill.getBoundingClientRect().height;
+    if (h <= 0) return clip;
+    const topPx = parseFloat(topTok);
+    if (Number.isNaN(topPx)) return clip;
+    topPct = (topPx / h) * 100;
+  }
+
+  if (Number.isNaN(topPct)) return clip;
+  // Боковые -0.12em как в roma — не переносим px от крупного ROMA на мелкие пункты.
+  return `inset(${topPct}% -0.12em -0.12em -0.12em)`;
 }
 
 function readMenuLines(el: HTMLElement): MenuLine[] | undefined {
@@ -105,6 +278,23 @@ function readMenuLines(el: HTMLElement): MenuLine[] | undefined {
 
 function isPhone() {
   return window.innerWidth < 768;
+}
+
+/** Стили клона с глифа (.caps / .script), не с обёртки. */
+function visualTypeEl(el: HTMLElement) {
+  if (el.classList.contains("caps") || el.classList.contains("script")) return el;
+  return el.querySelector<HTMLElement>(".caps, .script") ?? el;
+}
+
+/** Слово уже разрезано на буквы, как ITALIANO / LEZIONI. Иначе клон держим целиком. */
+function isLetterSplit(el: HTMLElement) {
+  const kids = [...el.children].filter((n): n is HTMLElement => {
+    if (!(n instanceof HTMLElement)) return false;
+    const s = getComputedStyle(n);
+    return s.display !== "none" && s.visibility !== "hidden";
+  });
+  if (kids.length < 2) return false;
+  return kids.every((k) => (k.textContent || "").replace(/\s/g, "").length === 1);
 }
 
 export function findMenuSource(): MenuSource {
@@ -141,10 +331,7 @@ export function findMenuSource(): MenuSource {
     if (rect.height > vh * (phone ? 2.2 : 1.55)) continue;
     if (rect.width > vw * (phone ? 3.2 : 1.7)) continue;
 
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dist = Math.hypot(cx - vw / 2, cy - vh / 2);
-    const score = visW * visH / (1 + dist * 0.45);
+    const score = scoreRect(rect, vw, vh);
     if (score > bestScore) {
       bestEl = el;
       bestRect = rect;
@@ -152,25 +339,28 @@ export function findMenuSource(): MenuSource {
     }
   }
 
-  if (!bestEl || !bestRect) return fallbackSource();
+  const gather = tryGatherSource(vw, vh);
+  if (gather && gather.score > bestScore) return gather.source;
+
+  if (!bestEl || !bestRect) return gather?.source ?? fallbackSource();
 
   const el = bestEl;
-  const style = getComputedStyle(el);
-  const ink = inkBox(el, bestRect);
+  const typeEl = visualTypeEl(el);
+  const style = getComputedStyle(typeEl);
+  const typeRect = typeEl === el ? bestRect : typeEl.getBoundingClientRect();
+  const ink = inkBox(typeEl, typeRect);
   const cx = ink.left + ink.width / 2;
   const align: MenuSource["align"] =
     cx < vw * 0.36 ? "left" : cx > vw * 0.64 ? "right" : "center";
-  const text = (el.dataset.menuWord || el.textContent || "").replace(/\s+/g, " ").trim();
-  const script = el.classList.contains("script");
+  const text = (el.dataset.menuWord || typeEl.textContent || "").replace(/\s+/g, " ").trim();
+  const script = typeEl.classList.contains("script");
   const lines = readMenuLines(el);
-  const forcedSolid = el.dataset.menuSolid !== undefined;
-  // Стеки с data-menu-line разлетаются по буквам; solid — скрипт / цифры / явный data-menu-solid.
-  const solid =
-    !lines?.length &&
-    (script || forcedSolid || (phone && /[0-9]/.test(text)) || ink.height > ink.fontSize * 2.1);
+  const outline = typeEl.classList.contains("caps-outline") || Boolean(typeEl.querySelector(".caps-outline"));
+  const fillClip = outline ? readFillClip(typeEl) : undefined;
+  const solid = !lines?.length && !isLetterSplit(typeEl);
 
   return {
-    el,
+    el: typeEl,
     text,
     left: ink.left,
     top: ink.top,
@@ -184,26 +374,43 @@ export function findMenuSource(): MenuSource {
     paddingLeft: style.paddingLeft,
     lineHeight: style.lineHeight,
     align,
-    outline: el.classList.contains("caps-outline") || Boolean(el.querySelector(".caps-outline")),
+    outline,
     script,
+    fillClip,
     solid,
     lines,
+    gather: undefined,
   };
 }
 
-/** Рамка, в которую надо посадить клон: inkBox для калиграфии, иначе видимый rect. */
-export function cloneFit(
-  cloneRect: DOMRect,
-  orig: HTMLElement,
-  scaleX = 1,
-  scaleY = 1,
-) {
+/**
+ * Посадка клона на видимый глиф.
+ * AVE масштабируется с центра — клон тоже. Write остаётся от левого верхнего чернил.
+ */
+export function cloneFit(cloneRect: DOMRect, orig: HTMLElement, _scaleX = 1, _scaleY = 1) {
   const to = orig.classList.contains("write") ? inkBox(orig) : orig.getBoundingClientRect();
+  if (orig.classList.contains("write")) {
+    return {
+      left: to.left,
+      top: to.top,
+      xPercent: 0,
+      yPercent: 0,
+      scaleX: 1,
+      scaleY: 1,
+      transformOrigin: "0 0",
+    };
+  }
+  const sx = cloneRect.width ? to.width / cloneRect.width : 1;
+  const sy = cloneRect.height ? to.height / cloneRect.height : 1;
+  const scale = Math.abs(sx - sy) < 0.12 ? (sx + sy) / 2 : sx;
   return {
-    left: to.left,
-    top: to.top,
-    scaleX: cloneRect.width ? scaleX * (to.width / cloneRect.width) : scaleX,
-    scaleY: cloneRect.height ? scaleY * (to.height / cloneRect.height) : scaleY,
+    left: to.left + to.width / 2,
+    top: to.top + to.height / 2,
+    xPercent: -50,
+    yPercent: -50,
+    scaleX: scale,
+    scaleY: scale,
+    transformOrigin: "50% 50%",
   };
 }
 
@@ -222,14 +429,9 @@ export function menuFitSize(source: MenuSource, longest: number) {
   return clamp(Math.min(source.fontSize, byHeight, byWidth), floor, 220);
 }
 
-/** Кегль клона слова: на телефоне однострочный ITALIANO не должен вылезать за экран. */
+/** Кегль клона = кегль оригинала. Сжимать нельзя: VOLGARE специально шире экрана. */
 export function menuCloneSize(source: MenuSource) {
-  if (source.lines?.length) return source.fontSize;
-  const vw = window.innerWidth;
-  if (!source.solid || source.script) return source.fontSize;
-  const chars = Math.max(source.text.replace(/\s/g, "").length, 1);
-  const fit = (vw * 0.92) / (chars * 0.58);
-  return Math.min(source.fontSize, fit);
+  return source.fontSize;
 }
 
 /** Держит стек в экране: сначала двигает вверх, если не влезает — уменьшает кегль. */

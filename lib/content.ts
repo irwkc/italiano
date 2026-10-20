@@ -201,4 +201,7 @@ export const contact = {
 
 export const footer = {
   word: "A PRESTO",
+  creditHref: "https://irwkc.ru",
+  credit: "made by irwkc",
+  creditNote: "con amore",
 };

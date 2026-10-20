@@ -6,6 +6,14 @@ import { volgare } from "@/lib/content";
 import { Sketch } from "@/components/sketch";
 import { PhoneDrift } from "@/components/phone-drift";
 
+function CapsLetters({ word }: { word: string }) {
+  return word.split("").map((ch, i) => (
+    <span key={`${ch}-${i}`} className="inline-block overflow-visible align-bottom">
+      <span className="inline-block">{ch}</span>
+    </span>
+  ));
+}
+
 /** Глава III. Десктоп: полный пан. Мобилка: с intro Данте, без гигантского 1321. */
 export function Volgare() {
   const wrap = useRef<HTMLElement>(null);
@@ -47,7 +55,12 @@ export function Volgare() {
   }, []);
 
   return (
-    <section ref={wrap} data-year={volgare.year} className="relative overflow-hidden" aria-label="Данте">
+    <section
+      ref={wrap}
+      data-year={volgare.year}
+      className="relative overflow-hidden"
+      aria-label="Данте"
+    >
       <div className="md:hidden px-5 pt-14 pb-16">
         <div>
           <h2 className="serif text-[1.55rem] leading-[1.08]">{volgare.intro.title}</h2>
@@ -73,7 +86,7 @@ export function Volgare() {
               style={{ fontSize: "clamp(4rem, 28vw, 7rem)" }}
               aria-hidden
             >
-              {volgare.outro.word}
+              <CapsLetters word={volgare.outro.word} />
             </span>
           </PhoneDrift>
           <PhoneDrift from={28} to={-36} className="relative z-10 w-[72vw] mt-8">
@@ -100,7 +113,7 @@ export function Volgare() {
             style={{ fontSize: "clamp(4.5rem, 28vw, 38rem)" }}
             aria-hidden
           >
-            1321
+            <CapsLetters word="1321" />
           </span>
           <div className="absolute right-5 md:right-10 bottom-[14vh] max-w-[28rem] text-right">
             <h2 className="reveal serif text-[1.75rem] md:text-[2.5rem]">{volgare.intro.title}</h2>
@@ -124,7 +137,7 @@ export function Volgare() {
             style={{ fontSize: "clamp(6rem, 24vw, 30rem)" }}
             aria-hidden
           >
-            {volgare.outro.word}
+            <CapsLetters word={volgare.outro.word} />
           </span>
           <div className="absolute left-[10%] top-[12vh] w-[40vw] md:left-[14%] md:top-[8vh] md:w-[20vw]">
             <Sketch
