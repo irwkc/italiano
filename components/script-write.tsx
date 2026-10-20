@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties, type HTMLAttributes } from "react";
 import { gsap, MOTION_OK } from "@/lib/gsap";
 
 type Props = {
@@ -10,10 +10,10 @@ type Props = {
   /** Доля экрана, на которой надпись дописывается: start -> end (ScrollTrigger positions) */
   start?: string;
   end?: string;
-};
+} & Omit<HTMLAttributes<HTMLSpanElement>, "className" | "style">;
 
 /** Каллиграфия, которая пишется, пока проезжает через экран. */
-export function ScriptWrite({ text, className = "", style, start = "top 85%", end = "top 35%" }: Props) {
+export function ScriptWrite({ text, className = "", style, start = "top 85%", end = "top 35%", ...rest }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export function ScriptWrite({ text, className = "", style, start = "top 85%", en
   }, [start, end]);
 
   return (
-    <span ref={ref} className={`script write inline-block ${className}`} style={style}>
+    <span ref={ref} className={`script write inline-block ${className}`} style={style} {...rest}>
       {text}
     </span>
   );

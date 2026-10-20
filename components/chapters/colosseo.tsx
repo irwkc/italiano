@@ -62,6 +62,7 @@ export function Colosseo() {
     <section ref={ref} data-year={colosseo.year} className="relative h-[420vh]" aria-label="Колизей">
       <div className="c-pin relative h-[100dvh] overflow-hidden">
         <div
+          data-menu-word="AVE"
           className="c-ave caps caps-outline absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none will-change-transform"
           style={{ fontSize: "clamp(7rem, 34vw, 40rem)" }}
           aria-hidden

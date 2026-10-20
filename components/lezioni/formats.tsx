@@ -8,6 +8,7 @@ export function Formats() {
   return (
     <section id="lezioni" data-year="Oggi" className="relative pt-[14vh] pb-[22vh] overflow-hidden" aria-label="Форматы уроков">
       <span
+        data-menu-word="LEZIONI"
         className="caps absolute -right-[5vw] top-[2vh] text-ink select-none whitespace-nowrap leading-[0.8]"
         style={{ fontSize: "clamp(5.5rem, 27vw, 34rem)" }}
         aria-hidden

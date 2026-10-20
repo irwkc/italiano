@@ -43,6 +43,7 @@ export function Volgare() {
         {/* Панель 1 */}
         <div className="relative w-screen shrink-0">
           <span
+            data-menu-word="1321"
             className="v-year caps absolute -left-[2vw] top-[10vh] text-ink select-none"
             style={{ fontSize: "clamp(7rem, 32vw, 38rem)" }}
             aria-hidden
@@ -68,6 +69,7 @@ export function Volgare() {
         {/* Панель 3 */}
         <div className="relative w-screen shrink-0">
           <span
+            data-menu-word="VOLGARE"
             className="caps absolute right-[-6vw] top-[8vh] text-ink select-none whitespace-nowrap"
             style={{ fontSize: "clamp(6rem, 24vw, 30rem)" }}
             aria-hidden

@@ -29,6 +29,7 @@ html {
   color-scheme: light;
   scrollbar-width: thin;
   scrollbar-color: rgba(28, 25, 21, 0.3) transparent;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -54,10 +55,19 @@ body {
   line-height: 0.82;
 }
 
-/* Контурные капители */
+/* Контурные капители: заливка цветом фона прячет внутренние контуры глифа */
 .caps-outline {
-  color: transparent;
-  -webkit-text-stroke: 1px var(--ink);
+  color: var(--ivory);
+  -webkit-text-fill-color: var(--ivory);
+  -webkit-text-stroke: 2px var(--ink);
+  paint-order: stroke fill;
+}
+
+/* Чернильная заливка чуть выступает за глиф, чтобы закрыть засечки и обводку */
+.r-fill {
+  color: var(--ink);
+  -webkit-text-fill-color: var(--ink);
+  -webkit-text-stroke: 2px var(--ink);
 }
 
 /* Рукописная каллиграфия */
@@ -179,6 +189,48 @@ body {
 .field::placeholder { color: rgba(92, 85, 75, 0.6); }
 .field:focus { border-bottom-color: var(--ink); }
 .field[aria-invalid="true"] { border-bottom-color: var(--pompei); }
+
+/* Меню: текущее слово главы расходится, страница только стихает */
+main, footer, .year-mark {
+  transition: opacity 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+html.menu-open main,
+html.menu-open footer,
+html.menu-open .year-mark {
+  opacity: 0.1;
+  pointer-events: none;
+}
+html.menu-undim main,
+html.menu-undim footer,
+html.menu-undim .year-mark {
+  opacity: 1;
+}
+html.menu-open [data-menu-word],
+html.menu-travel [data-menu-word] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+.menu-veil {
+  position: absolute;
+  inset: 0;
+  background: var(--ivory);
+  opacity: 0.88;
+  pointer-events: none;
+}
+.menu-item {
+  opacity: 0;
+}
+.menu-item:focus-visible .caps,
+.menu-item:focus-visible .script {
+  color: var(--pompei);
+}
+.menu-item:hover .caps-outline,
+.menu-item:focus-visible .caps-outline {
+  -webkit-text-stroke-color: var(--pompei);
+}
+.menu-item .label {
+  text-transform: none;
+}
 
 /* Скрытые до появления элементы */
 .reveal { opacity: 0; transform: translateY(24px); }

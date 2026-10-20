@@ -3,7 +3,7 @@ import { footer, site } from "@/lib/content";
 export function Footer() {
   return (
     <footer className="relative overflow-hidden pt-[6vh] pb-[16vh] md:pb-[12vh]" aria-label="Подвал">
-      <div className="caps whitespace-nowrap select-none text-ink -ml-[2vw] leading-[0.8]" style={{ fontSize: "clamp(5rem, 23vw, 30rem)" }} aria-hidden>
+      <div data-menu-word="A PRESTO" className="caps whitespace-nowrap select-none text-ink -ml-[2vw] leading-[0.8]" style={{ fontSize: "clamp(5rem, 23vw, 30rem)" }} aria-hidden>
         {footer.word}
       </div>
       <div className="grid grid-cols-12 gap-4 px-5 md:px-10 mt-12 label">

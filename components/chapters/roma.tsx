@@ -24,7 +24,12 @@ export function Roma() {
         },
       });
 
-      tl.fromTo(".r-fill", { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", ease: "none", duration: 1 }, 0);
+      tl.fromTo(
+        ".r-fill",
+        { clipPath: "inset(100% -0.12em -0.12em -0.12em)" },
+        { clipPath: "inset(-0.12em -0.12em -0.12em -0.12em)", ease: "none", duration: 1 },
+        0,
+      );
 
       root.querySelectorAll<HTMLElement>(".r-pair").forEach((pair, i) => {
         const at = 0.08 + i * 0.17;
@@ -33,7 +38,7 @@ export function Roma() {
       });
     });
     mm.add("(prefers-reduced-motion: reduce)", () => {
-      gsap.set(".r-fill", { clipPath: "inset(0% 0 0 0)" });
+      gsap.set(".r-fill", { clipPath: "inset(-0.12em -0.12em -0.12em -0.12em)" });
       gsap.set(".r-la", { opacity: 0 });
     });
     return () => mm.revert();
@@ -44,12 +49,13 @@ export function Roma() {
       <div className="r-pin relative h-[100dvh] overflow-hidden">
         {/* ROMA: контур и наполнение */}
         <div
+          data-menu-word="ROMA"
           className="caps absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none whitespace-nowrap"
           style={{ fontSize: "clamp(6rem, 30vw, 36rem)" }}
           aria-hidden
         >
           <span className="caps-outline block">{roma.word}</span>
-          <span className="r-fill absolute inset-0 block text-ink" style={{ clipPath: "inset(100% 0 0 0)" }}>
+          <span className="r-fill absolute inset-0 block" style={{ clipPath: "inset(100% -0.12em -0.12em -0.12em)" }}>
             {roma.word}
           </span>
         </div>

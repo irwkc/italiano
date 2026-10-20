@@ -48,6 +48,7 @@ export function Hero() {
     >
       {/* Гигантская капитель, уходит за края */}
       <h1
+        data-menu-word="ITALIANO"
         className="h-word caps absolute left-1/2 -translate-x-1/2 top-[13vh] md:top-[11vh] whitespace-nowrap text-ink select-none"
         style={{ fontSize: "clamp(4.25rem, 19.6vw, 25rem)" }}
       >

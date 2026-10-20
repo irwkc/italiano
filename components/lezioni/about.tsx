@@ -20,6 +20,7 @@ export function About() {
         <div className="relative md:col-span-7 md:col-start-1 -ml-[2vw]">
           <ScriptWrite
             text={about.script}
+            data-menu-word="Giacomo"
             className="relative z-10 text-ink whitespace-nowrap"
             style={{ fontSize: "clamp(5rem, 20vw, 24rem)" }}
           />

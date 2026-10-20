@@ -90,9 +90,10 @@ export function Contact() {
           )}
         </div>
 
-        <div className="md:col-span-7 order-1 md:order-2 md:text-right md:-mr-[4vw]">
+        <div className="md:col-span-7 order-1 md:order-2 md:text-right md:pr-[6vw] md:-translate-x-[4vw]">
           <ScriptWrite
             text={contact.script}
+            data-menu-word="Scrivimi"
             className="text-pompei whitespace-nowrap"
             style={{ fontSize: "clamp(5rem, 18vw, 22rem)" }}
           />

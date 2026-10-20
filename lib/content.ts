@@ -10,10 +10,10 @@ export const site = {
   telegramHandle: "t.me/itagiacomo",
   cta: "Записаться на урок",
   nav: [
-    { label: "Storia", href: "#storia" },
-    { label: "Lezioni", href: "#lezioni" },
-    { label: "Giacomo", href: "#giacomo" },
-    { label: "Contatti", href: "#contatti" },
+    { label: "Storia", ru: "История", href: "#storia" },
+    { label: "Lezioni", ru: "Уроки", href: "#lezioni" },
+    { label: "Giacomo", ru: "Джакомо", href: "#giacomo" },
+    { label: "Contatti", ru: "Контакты", href: "#contatti" },
   ],
 };
 
