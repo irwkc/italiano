@@ -132,11 +132,37 @@ export function findMenuDest(href: string): HTMLElement | null {
   return section.querySelector("[data-menu-word]");
 }
 
+/** Высота четырёх пунктов с русскими подписями. У script глифы выше line-height. */
+export function menuStackHeight(fit: number, script = false) {
+  return script ? fit * 7.6 + 80 : fit * 5.28 + 60;
+}
+
 export function menuFitSize(source: MenuSource, longest: number) {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const byHeight = (vh * 0.7) / 4.55;
+  const byHeight = source.script ? (vh - 120) / 7.6 : (vh - 176) / 5.28;
   const char = source.script ? 0.9 : 0.62;
   const byWidth = (vw * 0.88) / Math.max(longest * char, 1);
   return clamp(Math.min(source.fontSize, byHeight, byWidth), 42, 220);
+}
+
+/** Держит стек в экране: сначала двигает вверх, если не влезает — уменьшает кегль. */
+export function clampMenuNav(nav: HTMLElement, topMin = 88, padBot = 28) {
+  const floor = window.innerHeight - padBot;
+  const rect = nav.getBoundingClientRect();
+  const overflow = rect.bottom - floor;
+  if (overflow > 0) {
+    nav.style.top = `${Math.max(topMin, rect.top - overflow)}px`;
+  }
+  const after = nav.getBoundingClientRect();
+  const still = after.bottom - floor;
+  if (still <= 0) return;
+  const room = floor - topMin;
+  if (after.height <= 0 || after.height <= room) {
+    nav.style.top = `${topMin}px`;
+    return;
+  }
+  const fs = parseFloat(getComputedStyle(nav).fontSize);
+  nav.style.fontSize = `${Math.max(42, fs * (room / after.height))}px`;
+  nav.style.top = `${topMin}px`;
 }

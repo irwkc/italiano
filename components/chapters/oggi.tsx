@@ -13,17 +13,21 @@ export function Oggi() {
         <span
           key={w.text}
           data-speed={w.speed}
-          className={`script absolute whitespace-nowrap select-none will-change-transform ${
-            w.red ? "text-pompei" : "text-ink"
-          } ${i % 3 === 2 ? "hidden md:block" : ""}`}
-          style={{
-            left: `${w.x}%`,
-            top: `${w.y}%`,
-            fontSize: `clamp(2.5rem, ${w.size}vw, ${w.size * 1.1}rem)`,
-          }}
+          className={`absolute whitespace-nowrap select-none will-change-transform ${
+            i % 3 === 2 ? "hidden md:block" : ""
+          }`}
+          style={{ left: `${w.x}%`, top: `${w.y}%` }}
           aria-hidden
         >
-          {w.text}
+          <span
+            className={`script block pr-[0.3em] ${w.red ? "text-pompei" : "text-ink"}`}
+            style={{
+              fontSize: `clamp(2.5rem, ${w.size}vw, ${w.size * 1.1}rem)`,
+              translate: `min(0px, calc(97vw - 100% - ${w.x}vw))`,
+            }}
+          >
+            {w.text}
+          </span>
         </span>
       ))}
 

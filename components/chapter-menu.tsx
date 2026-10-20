@@ -4,7 +4,15 @@ import { useLayoutEffect, useRef, type CSSProperties } from "react";
 import { gsap, REDUCED } from "@/lib/gsap";
 import { getLenis } from "@/lib/lenis-store";
 import { site } from "@/lib/content";
-import { cloneFit, findMenuDest, inkBox, menuFitSize, type MenuSource } from "@/lib/menu-source";
+import {
+  clampMenuNav,
+  cloneFit,
+  findMenuDest,
+  inkBox,
+  menuFitSize,
+  menuStackHeight,
+  type MenuSource,
+} from "@/lib/menu-source";
 
 type Props = {
   source: MenuSource;
@@ -18,6 +26,7 @@ type Props = {
 export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTravelStart, onTravelEnd }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
   const lettersRef = useRef<HTMLDivElement>(null);
+  const veilRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
   const traveling = useRef(false);
@@ -38,6 +47,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
     const items = navRef.current?.querySelectorAll<HTMLElement>("[data-item]");
     const gloss = navRef.current?.querySelectorAll<HTMLElement>("[data-gloss]");
     if (!items?.length) return;
+    if (!closing && navRef.current) clampMenuNav(navRef.current);
 
     const reduced = window.matchMedia(REDUCED).matches;
 
@@ -45,6 +55,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
       gsap.set(letterNodes ?? [], { opacity: 0 });
       gsap.set(items, { yPercent: 0, opacity: 1 });
       gsap.set(gloss ?? [], { opacity: 1 });
+      if (veilRef.current) gsap.set(veilRef.current, { opacity: closing ? 0 : 0.88 });
       firstLinkRef.current?.focus({ preventScroll: true });
       if (closing && !traveling.current) onClosed();
       return;
@@ -52,11 +63,12 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
 
     if (closing) {
       if (traveling.current) return;
-      document.documentElement.classList.add("menu-undim");
       const clone = lettersRef.current;
+      const veil = veilRef.current;
       const tl = gsap.timeline({
         onComplete: () => {
           document.documentElement.classList.remove("menu-undim");
+          document.documentElement.classList.remove("menu-open");
           onClosed();
         },
       });
@@ -91,16 +103,16 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
             ...cloneFit(clone.getBoundingClientRect(), source.el!, sx, sy),
             duration: 0.22,
             ease: "power2.inOut",
-            onComplete: () => {
-              document.documentElement.classList.remove("menu-open");
-              gsap.set(clone, { autoAlpha: 0 });
-            },
           });
         });
         tl.to({}, { duration: 0.24 });
-      } else {
-        tl.add(() => document.documentElement.classList.remove("menu-open"));
       }
+      tl.add(() => document.documentElement.classList.add("menu-undim"));
+      if (veil) tl.to(veil, { opacity: 0, duration: 0.45, ease: "power2.inOut" }, "<");
+      tl.add(() => {
+        document.documentElement.classList.remove("menu-open");
+        if (clone) gsap.set(clone, { autoAlpha: 0 });
+      });
       return () => {
         snap?.kill();
         tl.kill();
@@ -117,6 +129,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
     }
 
     const tl = gsap.timeline();
+    if (veilRef.current) tl.to(veilRef.current, { opacity: 0.88, duration: 0.45, ease: "power2.inOut" }, 0);
     if (letterNodes?.length) {
       if (source.script) {
         tl.to(letterNodes, { y: -36, opacity: 0, duration: 0.9, ease: "power2.inOut" }, 0);
@@ -192,14 +205,15 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
     if (others?.length) {
       tl.to(others, { yPercent: 115, opacity: 0, duration: 0.48, stagger: 0.06, ease: "power2.inOut" }, 0);
     }
+    if (veilRef.current) tl.to(veilRef.current, { opacity: 0, duration: 0.4, ease: "power2.inOut" }, 0);
   };
 
+  const stackH = menuStackHeight(fit, source.script);
+  const topMin = 88;
+  const topMax = Math.max(topMin, window.innerHeight - stackH - 28);
   const stackTop = Math.max(
-    88,
-    Math.min(
-      source.top + source.height / 2 - fit * 2.15,
-      window.innerHeight - fit * 4.4 - 32,
-    ),
+    topMin,
+    Math.min(source.top + source.height / 2 - stackH / 2, topMax),
   );
 
   const navW = Math.min(window.innerWidth * 0.92, 72 * 16);
@@ -207,7 +221,10 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
     source.align === "center"
       ? { left: 0, right: 0, marginInline: "auto", textAlign: "center" }
       : source.align === "right"
-        ? { right: 24, textAlign: "right" }
+        ? {
+            right: Math.max(20, window.innerWidth - source.left - source.width),
+            textAlign: "right",
+          }
         : {
             left: Math.max(20, Math.min(source.left, window.innerWidth - navW - 20)),
             textAlign: "left",
@@ -224,7 +241,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
       aria-label="Меню"
       className="fixed inset-0 z-[55]"
     >
-      <div className="menu-veil" aria-hidden />
+      <div ref={veilRef} className="menu-veil" aria-hidden />
       <button
         type="button"
         className="absolute inset-0 cursor-default"

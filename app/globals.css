@@ -214,7 +214,7 @@ html.menu-travel [data-menu-word] {
   position: absolute;
   inset: 0;
   background: var(--ivory);
-  opacity: 0.88;
+  opacity: 0;
   pointer-events: none;
 }
 .menu-item {
