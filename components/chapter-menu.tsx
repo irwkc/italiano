@@ -30,6 +30,8 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
   const traveling = useRef(false);
   const longest = site.nav.reduce((n, item) => Math.max(n, item.label.length), 0);
   const fit = menuFitSize(source, longest);
+  const phone = typeof window !== "undefined" && window.innerWidth < 768;
+  const solid = source.script || (phone && /[0-9]/.test(source.text));
   const letters = source.text ? [...source.text] : [];
 
   useLayoutEffect(() => {
@@ -73,7 +75,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
       tl.to(gloss ?? [], { opacity: 0, duration: 0.22, ease: "power2.inOut" }, 0);
       tl.to(items, { yPercent: 115, opacity: 0, duration: 0.48, stagger: 0.05, ease: "power2.inOut" }, 0);
       if (letterNodes?.length) {
-        if (source.script) {
+        if (solid) {
           tl.to(letterNodes, { y: 0, opacity: 1, duration: 0.9, ease: "power2.inOut" }, 0.12);
         } else {
           tl.to(
@@ -129,7 +131,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
     const tl = gsap.timeline();
     if (veilRef.current) tl.to(veilRef.current, { opacity: 0.88, duration: 0.45, ease: "power2.inOut" }, 0);
     if (letterNodes?.length) {
-      if (source.script) {
+      if (solid) {
         tl.to(letterNodes, { y: -36, opacity: 0, duration: 0.9, ease: "power2.inOut" }, 0);
       } else {
         const n = letterNodes.length;
@@ -160,7 +162,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
     return () => {
       tl.kill();
     };
-  }, [closing, onClosed, source.script]);
+  }, [closing, onClosed, source.el, source.script, solid]);
 
   const go = (href: string) => {
     if (traveling.current || closing) return;
@@ -206,16 +208,18 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
   };
 
   const stackH = menuStackHeight(fit, source.script);
-  const topMin = 88;
-  const topMax = Math.max(topMin, window.innerHeight - stackH - 28);
+  const vh = typeof window !== "undefined" ? (window.visualViewport?.height ?? window.innerHeight) : 800;
+  const topMin = typeof window !== "undefined" && window.innerWidth < 768 ? 72 : 88;
+  const topMax = Math.max(topMin, vh - stackH - 28);
   const stackTop = Math.max(
     topMin,
     Math.min(source.top + source.height / 2 - stackH / 2, topMax),
   );
 
   const navW = Math.min(window.innerWidth * 0.92, 72 * 16);
-  const alignStyle: CSSProperties =
-    source.align === "center"
+  const alignStyle: CSSProperties = phone
+    ? { left: 20, textAlign: "left" }
+    : source.align === "center"
       ? { left: 0, right: 0, marginInline: "auto", textAlign: "center" }
       : source.align === "right"
         ? {
@@ -227,7 +231,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
             textAlign: "left",
           };
 
-  const typeClass = source.script ? "script" : source.outline ? "caps caps-outline" : "caps";
+  const typeClass = source.script ? "script" : phone ? "caps" : source.outline ? "caps caps-outline" : "caps";
 
   return (
     <div
@@ -261,7 +265,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
           }}
           aria-hidden
         >
-          {source.script ? (
+          {solid ? (
             <span data-letter className="inline-block will-change-transform">
               {source.text}
             </span>
@@ -281,7 +285,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
       >
         <ul>
           {site.nav.map((n, i) => (
-            <li key={n.href} className={source.script ? "overflow-hidden py-[0.3em] -my-[0.3em]" : "overflow-hidden"}>
+            <li key={n.href} className={solid ? "overflow-hidden py-[0.3em] -my-[0.3em]" : "overflow-hidden"}>
               <a
                 ref={i === 0 ? firstLinkRef : undefined}
                 href={n.href}

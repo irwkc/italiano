@@ -8,9 +8,9 @@ export function Faq() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="relative px-5 md:px-10 py-[14vh]" aria-label="Вопросы">
+    <section className="relative px-5 md:px-10 py-14 md:py-[14vh]" aria-label="Вопросы">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6">
-        <h2 className="reveal md:col-span-4 serif text-[1.5rem] md:text-[1.9rem] text-ink-soft mb-10 md:mb-0">
+        <h2 className="reveal md:col-span-4 serif text-[1.4rem] md:text-[1.9rem] text-ink-soft mb-8 md:mb-0">
           Domande
         </h2>
         <ul className="md:col-span-7 md:col-start-6 border-t border-line">
@@ -23,7 +23,7 @@ export function Faq() {
                   aria-expanded={isOpen}
                   aria-controls={`faq-${i}`}
                   onClick={() => setOpen(isOpen ? null : i)}
-                  className="flex w-full items-start justify-between gap-6 py-6 text-left"
+                  className="flex w-full items-start justify-between gap-6 min-h-11 py-6 text-left"
                 >
                   <span className="serif text-[1.35rem] md:text-[1.75rem] leading-[1.15]">{item.q}</span>
                   <Plus

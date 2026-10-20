@@ -1,48 +1,49 @@
 import { ScriptWrite } from "@/components/script-write";
 import { Sketch } from "@/components/sketch";
+import { PhoneDrift } from "@/components/phone-drift";
 import { about, site } from "@/lib/content";
 
 /** Кто ведёт уроки. Подпись пишется, факты рассыпаны по полям. */
 export function About() {
   return (
-    <section id="giacomo" className="relative min-h-[100dvh] px-5 md:px-10 py-[18vh]" aria-label="Джакомо">
+    <section id="giacomo" className="relative px-5 md:px-10 pt-16 pb-14 md:min-h-[100dvh] md:py-[18vh]" aria-label="Джакомо">
       {about.facts.map((f) => (
         <span
           key={f.text}
-          className="label absolute hidden md:block max-w-[14ch]"
+          className="label absolute hidden lg:block max-w-[14ch]"
           style={{ left: `${f.x}%`, top: `${f.y}%` }}
         >
           {f.text}
         </span>
       ))}
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6">
-        <div className="relative md:col-span-7 md:col-start-1 -ml-[2vw]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-6">
+        <div className="relative lg:col-span-7 lg:col-start-1 md:-ml-[2vw]">
           <ScriptWrite
             text={about.script}
             data-menu-word="Giacomo"
             className="relative z-10 text-ink whitespace-nowrap"
-            style={{ fontSize: "clamp(5rem, 20vw, 24rem)" }}
+            style={{ fontSize: "clamp(3.4rem, 20vw, 24rem)" }}
           />
-          <div className="relative z-0 -mt-4 ml-[3vw] w-[min(92vw,32rem)] md:-mt-10 md:ml-[6vw] md:w-[36vw]">
+          <PhoneDrift from={28} to={-36} className="relative z-0 -mt-3 ml-0 w-full md:-mt-10 md:ml-[6vw] md:w-[min(92vw,32rem)] lg:w-[36vw]">
             <Sketch
               src="/sketch/sketch-giacomo-earring.jpg"
               alt="Карандашный портрет Джакомо в лавровом венке"
               width={864}
               height={1152}
-              sizes="(min-width: 768px) 36vw, 92vw"
+              sizes="(min-width: 1024px) 36vw, (min-width: 768px) 92vw, 100vw"
             />
-          </div>
+          </PhoneDrift>
         </div>
-        <div className="md:col-span-4 md:col-start-8 mt-24 md:mt-[28vh]">
-          <p className="reveal serif text-[1.6rem] md:text-[2rem] leading-[1.1]">{about.lead}</p>
-          <p className="reveal mt-6 text-ink-soft text-[0.95rem] md:text-base leading-relaxed">{about.body}</p>
-          <div className="mt-8 flex flex-col items-start gap-3">
+        <div className="lg:col-span-4 lg:col-start-8 mt-8 lg:mt-[28vh]">
+          <p className="reveal serif text-[1.45rem] leading-[1.12] md:text-[2rem] md:leading-[1.1] pb-1">{about.lead}</p>
+          <p className="reveal mt-4 md:mt-6 text-ink-soft text-[0.9rem] md:text-base leading-relaxed">{about.body}</p>
+          <div className="mt-6 md:mt-8 flex flex-col items-start gap-1">
             <a
               href={site.instagram}
               target="_blank"
               rel="noreferrer"
-              className="reveal link label text-ink"
+              className="reveal link label inline-flex min-h-11 items-center text-ink"
             >
               Instagram {site.instagramHandle}
             </a>
@@ -50,7 +51,7 @@ export function About() {
               href={site.telegram}
               target="_blank"
               rel="noreferrer"
-              className="reveal link label text-ink"
+              className="reveal link label inline-flex min-h-11 items-center text-ink"
             >
               Telegram {site.telegramHandle}
             </a>

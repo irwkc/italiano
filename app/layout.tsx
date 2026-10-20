@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Cormorant_Garamond, Italianno } from "next/font/google";
 import "./globals.css";
 
@@ -23,6 +23,12 @@ export const metadata: Metadata = {
   title: "Giacomo. Итальянский с носителем из Новары",
   description:
     "Путь от латыни до вашей первой фразы по-итальянски. Индивидуальные онлайн-уроки с носителем.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

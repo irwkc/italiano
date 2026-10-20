@@ -30,6 +30,9 @@ html {
   scrollbar-width: thin;
   scrollbar-color: rgba(28, 25, 21, 0.3) transparent;
   scrollbar-gutter: stable;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: clip;
 }
 
 body {
@@ -39,6 +42,7 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: clip;
+  -webkit-tap-highlight-color: rgba(168, 55, 31, 0.18);
 }
 
 ::selection {
@@ -64,7 +68,8 @@ body {
 }
 
 /* Чернильная заливка чуть выступает за глиф, чтобы закрыть засечки и обводку */
-.r-fill {
+.r-fill,
+.r-fill-m {
   color: var(--ink);
   -webkit-text-fill-color: var(--ink);
   -webkit-text-stroke: 2px var(--ink);
@@ -152,10 +157,12 @@ body {
   background: transparent;
   transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s, transform 0.2s;
 }
-.btn:hover { background: var(--ink); color: var(--ivory); }
 .btn:active { transform: translateY(1px); }
 .btn-primary { background: var(--ink); color: var(--ivory); }
-.btn-primary:hover { background: var(--pompei); border-color: var(--pompei); color: var(--ivory); }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { background: var(--ink); color: var(--ivory); }
+  .btn-primary:hover { background: var(--pompei); border-color: var(--pompei); color: var(--ivory); }
+}
 
 .link {
   position: relative;
@@ -172,7 +179,9 @@ body {
   transform-origin: right;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.link:hover::after { transform: scaleX(1); transform-origin: left; }
+@media (hover: hover) and (pointer: fine) {
+  .link:hover::after { transform: scaleX(1); transform-origin: left; }
+}
 
 .field {
   width: 100%;
@@ -182,9 +191,12 @@ body {
   padding: 0.875rem 0;
   color: var(--ink);
   font-family: var(--font-serif);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   outline: none;
   transition: border-color 0.3s;
+}
+@media (min-width: 768px) {
+  .field { font-size: 1.5rem; }
 }
 .field::placeholder { color: rgba(92, 85, 75, 0.6); }
 .field:focus { border-bottom-color: var(--ink); }
@@ -204,6 +216,12 @@ html.menu-undim main,
 html.menu-undim footer,
 html.menu-undim .year-mark {
   opacity: 1;
+}
+@media (max-width: 767px) {
+  html.menu-open .year-mark {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 html.menu-open [data-menu-word],
 html.menu-travel [data-menu-word] {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
-import { gsap, REDUCED } from "@/lib/gsap";
+import { gsap, REDUCED, PHONE } from "@/lib/gsap";
 
 type Props = {
   children: ReactNode;
@@ -22,14 +22,15 @@ export function ParallaxField({ children, className, range = 220, ...rest }: Pro
   useEffect(() => {
     const root = ref.current;
     if (!root || window.matchMedia(REDUCED).matches) return;
+    const travel = window.matchMedia(PHONE).matches ? range * 1.45 : range;
     const ctx = gsap.context(() => {
       root.querySelectorAll<HTMLElement>("[data-speed]").forEach((el) => {
         const speed = parseFloat(el.dataset.speed ?? "1");
         gsap.fromTo(
           el,
-          { y: (speed - 1) * range },
+          { y: (speed - 1) * travel },
           {
-            y: (1 - speed) * range,
+            y: (1 - speed) * travel,
             ease: "none",
             scrollTrigger: { trigger: root, start: "top bottom", end: "bottom top", scrub: true },
           },

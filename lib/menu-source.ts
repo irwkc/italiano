@@ -133,30 +133,34 @@ export function menuStackHeight(fit: number, script = false) {
 
 export function menuFitSize(source: MenuSource, longest: number) {
   const vw = window.innerWidth;
-  const vh = window.innerHeight;
+  const vh = window.visualViewport?.height ?? window.innerHeight;
   const byHeight = source.script ? (vh - 120) / 7.6 : (vh - 176) / 5.28;
   const char = source.script ? 0.9 : 0.62;
   const byWidth = (vw * 0.88) / Math.max(longest * char, 1);
-  return clamp(Math.min(source.fontSize, byHeight, byWidth), 42, 220);
+  const floor = vw < 480 ? 28 : 42;
+  return clamp(Math.min(source.fontSize, byHeight, byWidth), floor, 220);
 }
 
 /** Держит стек в экране: сначала двигает вверх, если не влезает — уменьшает кегль. */
 export function clampMenuNav(nav: HTMLElement, topMin = 88, padBot = 28) {
-  const floor = window.innerHeight - padBot;
+  const vh = window.visualViewport?.height ?? window.innerHeight;
+  const inset = window.innerWidth < 768 ? 72 : topMin;
+  const floor = vh - padBot;
   const rect = nav.getBoundingClientRect();
   const overflow = rect.bottom - floor;
   if (overflow > 0) {
-    nav.style.top = `${Math.max(topMin, rect.top - overflow)}px`;
+    nav.style.top = `${Math.max(inset, rect.top - overflow)}px`;
   }
   const after = nav.getBoundingClientRect();
   const still = after.bottom - floor;
   if (still <= 0) return;
-  const room = floor - topMin;
+  const room = floor - inset;
   if (after.height <= 0 || after.height <= room) {
-    nav.style.top = `${topMin}px`;
+    nav.style.top = `${inset}px`;
     return;
   }
   const fs = parseFloat(getComputedStyle(nav).fontSize);
-  nav.style.fontSize = `${Math.max(42, fs * (room / after.height))}px`;
-  nav.style.top = `${topMin}px`;
+  const min = window.innerWidth < 480 ? 28 : 42;
+  nav.style.fontSize = `${Math.max(min, fs * (room / after.height))}px`;
+  nav.style.top = `${inset}px`;
 }

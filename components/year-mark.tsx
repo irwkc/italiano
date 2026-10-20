@@ -41,9 +41,9 @@ export function YearMark() {
   }, []);
 
   return (
-    <div className="year-mark fixed left-5 bottom-5 md:left-10 md:bottom-8 z-40 pointer-events-none mix-blend-multiply">
+    <div className="year-mark fixed left-[max(1.25rem,env(safe-area-inset-left))] bottom-[max(1.25rem,env(safe-area-inset-bottom))] md:left-10 md:bottom-8 z-40 pointer-events-none mix-blend-multiply">
       <span className="label block mb-1">anno</span>
-      <span ref={ref} className="caps block text-[1.75rem] md:text-[2.5rem] text-ink">
+      <span ref={ref} className="caps block text-[1.45rem] md:text-[2.5rem] text-ink">
         753 a.C.
       </span>
     </div>

@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap, MOTION_OK } from "@/lib/gsap";
+import { gsap, MOTION_OK, DESK } from "@/lib/gsap";
 import { colosseo } from "@/lib/content";
 import { Sketch } from "@/components/sketch";
 
-/** Глава II. Камера летит сквозь слово AVE, крики толпы проносятся мимо. Всё типографикой. */
+/** Глава II. Камера летит сквозь слово AVE, крики толпы проносятся мимо. Всё типографикой. Только десктоп. */
 export function Colosseo() {
   const ref = useRef<HTMLElement>(null);
 
@@ -13,7 +13,7 @@ export function Colosseo() {
     const root = ref.current;
     if (!root) return;
     const mm = gsap.matchMedia();
-    mm.add(MOTION_OK, () => {
+    mm.add(`${MOTION_OK} and ${DESK}`, () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root,
@@ -59,12 +59,17 @@ export function Colosseo() {
   }, []);
 
   return (
-    <section ref={ref} data-year={colosseo.year} className="relative h-[420vh]" aria-label="Колизей">
+    <section
+      ref={ref}
+      data-year={colosseo.year}
+      className="relative hidden md:block md:h-[420vh]"
+      aria-label="Колизей"
+    >
       <div className="c-pin relative h-[100dvh] overflow-hidden">
         <div
           data-menu-word="AVE"
           className="c-ave caps caps-outline absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none will-change-transform"
-          style={{ fontSize: "clamp(7rem, 34vw, 40rem)" }}
+          style={{ fontSize: "clamp(4.8rem, 28vw, 40rem)" }}
           aria-hidden
         >
           {colosseo.word}
@@ -84,14 +89,14 @@ export function Colosseo() {
           </span>
         ))}
 
-        <div className="absolute left-5 md:left-10 top-[22vh] md:top-1/2 md:-translate-y-1/2 max-w-[30rem] pr-8">
-          <h2 className="c-text serif text-[2rem] md:text-[3.25rem] leading-[1.02]">{colosseo.title}</h2>
+        <div className="absolute left-5 md:left-10 top-[18svh] md:top-1/2 md:-translate-y-1/2 max-w-[30rem] pr-8 z-10">
+          <h2 className="c-text serif text-[1.7rem] md:text-[3.25rem] leading-[1.02]">{colosseo.title}</h2>
           <p className="c-text mt-6 text-ink-soft text-[0.95rem] md:text-base leading-relaxed max-w-[26rem]">
             {colosseo.body}
           </p>
         </div>
 
-        <div className="c-text absolute -right-[4vw] bottom-[4vh] w-[78vw] md:right-[3vw] md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:w-[46vw]">
+        <div className="c-text absolute right-0 bottom-[max(1rem,env(safe-area-inset-bottom))] w-[min(86vw,28rem)] md:right-[3vw] md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:w-[46vw]">
           <Sketch src="/sketch/sketch-colosseo.jpg" alt="Карандашный набросок Колизея" width={1152} height={864} />
         </div>
       </div>

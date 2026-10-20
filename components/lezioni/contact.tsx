@@ -28,11 +28,11 @@ export function Contact() {
   }
 
   return (
-    <section id="contatti" className="relative px-5 md:px-10 pt-[14vh] pb-[20vh] overflow-hidden" aria-label="Контакты">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 items-start">
-        <div className="md:col-span-5 order-2 md:order-1 mt-12 md:mt-0">
-          <h2 className="reveal serif text-[1.9rem] md:text-[2.5rem] leading-[1.05]">{contact.title}</h2>
-          <p className="reveal mt-4 text-ink-soft text-[0.95rem] md:text-base leading-relaxed max-w-[26rem]">{contact.body}</p>
+    <section id="contatti" className="relative px-5 md:px-10 pt-14 md:pt-[14vh] pb-[max(7.5rem,calc(16vh+env(safe-area-inset-bottom)))] md:pb-[max(9.5rem,calc(22vh+env(safe-area-inset-bottom)))] overflow-x-clip" aria-label="Контакты">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-6 items-start">
+        <div className="lg:col-span-5 order-2 lg:order-1 mt-8 lg:mt-0">
+          <h2 className="reveal serif text-[1.7rem] md:text-[2.5rem] leading-[1.05]">{contact.title}</h2>
+          <p className="reveal mt-3 md:mt-4 text-ink-soft text-[0.9rem] md:text-base leading-relaxed max-w-[26rem]">{contact.body}</p>
 
           {status === "sent" ? (
             <p className="mt-12 serif italic text-[1.6rem] md:text-[2rem] text-pompei" role="status">
@@ -90,12 +90,12 @@ export function Contact() {
           )}
         </div>
 
-        <div className="md:col-span-7 order-1 md:order-2 md:text-right md:pr-[6vw] md:-translate-x-[4vw]">
+        <div className="lg:col-span-7 order-1 lg:order-2 lg:text-right lg:pr-[6vw] lg:-translate-x-[4vw] overflow-x-clip">
           <ScriptWrite
             text={contact.script}
             data-menu-word="Scrivimi"
-            className="text-pompei whitespace-nowrap"
-            style={{ fontSize: "clamp(5rem, 18vw, 22rem)" }}
+            className="text-pompei whitespace-nowrap max-w-full"
+            style={{ fontSize: "clamp(3.2rem, 18vw, 22rem)" }}
           />
         </div>
       </div>

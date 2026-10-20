@@ -1,9 +1,21 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { ArrowDownRight } from "@phosphor-icons/react/dist/ssr";
-import { gsap, REDUCED } from "@/lib/gsap";
+import { gsap, REDUCED, MOTION_OK, PHONE } from "@/lib/gsap";
 import { hero, site } from "@/lib/content";
+
+function LetterRow({ text, className = "", style }: { text: string; className?: string; style?: CSSProperties }) {
+  return (
+    <span className={`block overflow-hidden ${className}`} style={style}>
+      {text.split("").map((ch, i) => (
+        <span key={`${ch}-${i}`} className="inline-block overflow-hidden align-bottom">
+          <span className="h-letter inline-block will-change-transform">{ch}</span>
+        </span>
+      ))}
+    </span>
+  );
+}
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -16,26 +28,40 @@ export function Hero() {
       return;
     }
     const ctx = gsap.context(() => {
+      const visible = <T extends Element>(sel: string) =>
+        gsap.utils.toArray<T>(sel).filter((el) => (el as HTMLElement).getClientRects().length > 0);
+
       gsap
         .timeline({ defaults: { ease: "power4.out" } })
-        .fromTo(".h-letter", { yPercent: 110 }, { yPercent: 0, duration: 1.3, stagger: 0.055 }, 0.2)
-        .to(".h-script", { "--w": 0, duration: 1.6, ease: "power2.inOut" }, 0.9)
-        .fromTo(".h-label", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.12 }, 1.4)
-        .fromTo(".h-title", { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 1.1, stagger: 0.1 }, 1.6);
+        .fromTo(visible(".h-letter"), { yPercent: 110 }, { yPercent: 0, duration: 1.3, stagger: 0.055 }, 0.2)
+        .to(visible(".h-script"), { "--w": 0, duration: 1.6, ease: "power2.inOut" }, 0.9)
+        .fromTo(visible(".h-label"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.12 }, 1.4)
+        .fromTo(visible(".h-title"), { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 1.1, stagger: 0.1 }, 1.6);
 
-      // Лёгкий параллакс заголовка при уходе
-      gsap.to(".h-word", {
+      gsap.to(visible(".h-word"), {
         yPercent: -18,
         ease: "none",
         scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: true },
       });
-      gsap.to(".h-script", {
+      gsap.to(visible(".h-script"), {
         yPercent: 30,
         ease: "none",
         scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: true },
       });
     }, root);
-    return () => ctx.revert();
+
+    const mm = gsap.matchMedia();
+    mm.add(`${MOTION_OK} and ${PHONE}`, () => {
+      gsap.to(root.querySelector(".h-stack"), {
+        yPercent: -8,
+        ease: "none",
+        scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: 0.75 },
+      });
+    });
+    return () => {
+      mm.revert();
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -46,11 +72,34 @@ export function Hero() {
       className="relative min-h-[100dvh] overflow-hidden"
       aria-label="Начало"
     >
-      {/* Гигантская капитель, уходит за края */}
+      {/* Phone: ITA / LI / ANO / con Giacomo — строки на всю ширину */}
+      <div className="h-stack absolute inset-x-0 top-[9svh] px-0 md:hidden">
+        <h1 data-menu-word="ITALIANO" className="h-word caps text-ink select-none leading-[0.74] pl-[0.02em]">
+          <LetterRow text="ITA" style={{ fontSize: "48vw", letterSpacing: "-0.055em" }} />
+          <LetterRow
+            text="LI"
+            className="-mt-[0.06em]"
+            style={{ fontSize: "72vw", letterSpacing: "-0.06em" }}
+          />
+          <LetterRow
+            text="ANO"
+            className="-mt-[0.07em]"
+            style={{ fontSize: "48vw", letterSpacing: "-0.055em" }}
+          />
+        </h1>
+        <p
+          className="h-script script write mt-2 ml-[7vw] text-pompei select-none"
+          style={{ fontSize: "clamp(2.5rem, 14vw, 4rem)", display: "block" }}
+        >
+          {hero.script}
+        </p>
+      </div>
+
+      {/* Desktop: one-line ITALIANO + script */}
       <h1
         data-menu-word="ITALIANO"
-        className="h-word caps absolute left-1/2 -translate-x-1/2 top-[13vh] md:top-[11vh] whitespace-nowrap text-ink select-none"
-        style={{ fontSize: "clamp(4.25rem, 19.6vw, 25rem)" }}
+        className="h-word caps absolute left-1/2 -translate-x-1/2 top-[11vh] hidden md:block whitespace-nowrap text-ink select-none"
+        style={{ fontSize: "clamp(3.7rem, 21vw, 25rem)" }}
       >
         {hero.word.split("").map((ch, i) => (
           <span key={i} className="inline-block overflow-hidden align-bottom">
@@ -59,15 +108,13 @@ export function Hero() {
         ))}
       </h1>
 
-      {/* Каллиграфия, пишется при загрузке */}
       <p
-        className="h-script script write absolute right-[4vw] md:right-[6vw] top-[36vh] md:top-[34vh] text-pompei whitespace-nowrap select-none"
-        style={{ fontSize: "clamp(3.75rem, 11.5vw, 15rem)" }}
+        className="h-script script write absolute right-[6vw] top-[34vh] hidden md:block text-pompei whitespace-nowrap select-none"
+        style={{ fontSize: "clamp(2.15rem, 11vw, 15rem)" }}
       >
         {hero.script}
       </p>
 
-      {/* Рассыпанные подписи */}
       {hero.labels.map((l) => (
         <span
           key={l.text}
@@ -78,14 +125,13 @@ export function Hero() {
         </span>
       ))}
 
-      {/* Заголовок и действие */}
-      <div className="absolute left-5 md:left-10 bottom-[18vh] md:bottom-[16vh] max-w-[34rem]">
-        <h2 className="h-title serif text-[1.75rem] md:text-[2.5rem] leading-[1.05]">
+      <div className="h-copy absolute left-5 right-5 md:left-10 md:right-auto bottom-[max(6.5rem,calc(11svh+env(safe-area-inset-bottom)))] md:bottom-[16vh] max-w-[34rem]">
+        <h2 className="h-title hidden md:block serif text-[2.5rem] leading-[1.05] pb-1">
           {hero.title}
           <br />
           <em className="text-ink-soft">{hero.subtitle}</em>
         </h2>
-        <a href="#contatti" className="h-title btn btn-primary mt-8">
+        <a href="#contatti" className="h-title btn btn-primary md:mt-8">
           {site.cta}
           <ArrowDownRight size={14} weight="light" />
         </a>
