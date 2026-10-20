@@ -5,7 +5,13 @@ export function Footer() {
   return (
     <footer className="relative overflow-hidden pt-8 pb-[max(5.5rem,calc(10vh+env(safe-area-inset-bottom)))] md:pt-[6vh] md:pb-[12vh]" aria-label="Подвал">
       <PhoneDrift from={16} to={-12}>
-        <div data-menu-word="A PRESTO" className="caps w-full text-center whitespace-nowrap select-none text-ink leading-[0.8]" style={{ fontSize: "clamp(4.2rem, 22vw, 30rem)" }} aria-hidden>
+        <div
+          data-menu-word="A PRESTO"
+          data-menu-solid
+          className="caps w-full text-center whitespace-nowrap select-none text-ink leading-[0.8]"
+          style={{ fontSize: "clamp(4.2rem, 22vw, 30rem)" }}
+          aria-hidden
+        >
           {footer.word}
         </div>
       </PhoneDrift>

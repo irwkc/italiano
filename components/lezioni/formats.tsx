@@ -45,9 +45,11 @@ export function Formats() {
       aria-label="Форматы уроков"
     >
       {/* Phone: стартует справа, параллаксом к центру */}
-      <div className="l-word-m absolute top-[1vh] left-1/2 -translate-x-1/2 will-change-transform md:hidden">
+      <div
+        data-menu-word="LEZIONI"
+        className="l-word-m absolute top-[1vh] left-1/2 -translate-x-1/2 will-change-transform md:hidden"
+      >
         <span
-          data-menu-word="LEZIONI"
           className="caps block text-ink select-none whitespace-nowrap leading-[0.8]"
           style={{ fontSize: "clamp(3.4rem, 22vw, 6rem)" }}
           aria-hidden

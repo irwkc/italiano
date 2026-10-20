@@ -135,6 +135,7 @@ export function Roma() {
 
           <div
             data-menu-word="ROMA"
+            data-menu-solid
             className="caps absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 select-none whitespace-nowrap"
             style={{ fontSize: "clamp(4.6rem, 34vw, 8rem)" }}
             aria-hidden

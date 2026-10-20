@@ -7,7 +7,7 @@ import { hero, site } from "@/lib/content";
 
 function LetterRow({ text, className = "", style }: { text: string; className?: string; style?: CSSProperties }) {
   return (
-    <span className={`block overflow-hidden ${className}`} style={style}>
+    <span data-menu-line className={`block overflow-hidden ${className}`} style={style}>
       {text.split("").map((ch, i) => (
         <span key={`${ch}-${i}`} className="inline-block overflow-hidden align-bottom">
           <span className="h-letter inline-block will-change-transform">{ch}</span>
@@ -28,8 +28,8 @@ export function Hero() {
       return;
     }
     const ctx = gsap.context(() => {
-      const visible = <T extends Element>(sel: string) =>
-        gsap.utils.toArray<T>(sel).filter((el) => (el as HTMLElement).getClientRects().length > 0);
+      const visible = (sel: string) =>
+        gsap.utils.toArray<HTMLElement>(sel).filter((el) => el.getClientRects().length > 0);
 
       gsap
         .timeline({ defaults: { ease: "power4.out" } })
@@ -74,7 +74,11 @@ export function Hero() {
     >
       {/* Phone: ITA / LI / ANO / con Giacomo — строки на всю ширину */}
       <div className="h-stack absolute inset-x-0 top-[9svh] px-0 md:hidden">
-        <h1 data-menu-word="ITALIANO" className="h-word caps text-ink select-none leading-[0.74] pl-[0.02em]">
+        <h1
+          data-menu-word="ITALIANO"
+          className="h-word caps text-ink select-none leading-[0.74] pl-[0.02em]"
+          style={{ fontSize: "48vw" }}
+        >
           <LetterRow text="ITA" style={{ fontSize: "48vw", letterSpacing: "-0.055em" }} />
           <LetterRow
             text="LI"

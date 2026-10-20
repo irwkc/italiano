@@ -7,6 +7,7 @@ import { site } from "@/lib/content";
 import {
   clampMenuNav,
   cloneFit,
+  menuCloneSize,
   menuFitSize,
   menuStackHeight,
   type MenuSource,
@@ -21,6 +22,18 @@ type Props = {
   onTravelEnd: () => void;
 };
 
+/**
+ * Калибровка стека ITA/LI/ANO в клоне меню (не line-height).
+ * Hero тянет строки отрицательным margin (−0.06em / −0.07em).
+ * STACK_MARGIN_PULL — доля этого pull:
+ *   1    = как в DOM hero (плотнее)
+ *   0.55 = свободнее (дефолт)
+ *   0    = без отрицательного margin (максимальный зазор)
+ * STACK_LEADING — высота бокса буквы; на зазор между строками почти не влияет.
+ */
+const STACK_MARGIN_PULL = 1;
+const STACK_LEADING = 0.82;
+
 export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTravelStart, onTravelEnd }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
   const lettersRef = useRef<HTMLDivElement>(null);
@@ -31,8 +44,11 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
   const longest = site.nav.reduce((n, item) => Math.max(n, item.label.length), 0);
   const fit = menuFitSize(source, longest);
   const phone = typeof window !== "undefined" && window.innerWidth < 768;
-  const solid = source.script || (phone && /[0-9]/.test(source.text));
-  const letters = source.text ? [...source.text] : [];
+  const stacked = Boolean(source.lines?.length);
+  const solid =
+    !stacked && (source.solid || source.script || (phone && /[0-9]/.test(source.text)));
+  const cloneSize = menuCloneSize(source);
+  const letters = source.text ? [...source.text.replace(/\s/g, "")] : [];
 
   useLayoutEffect(() => {
     document.documentElement.classList.add("menu-open");
@@ -96,14 +112,28 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
       let snap: gsap.core.Tween | undefined;
       if (clone && source.el) {
         tl.add(() => {
-          const sx = Number(gsap.getProperty(clone, "scaleX")) || 1;
-          const sy = Number(gsap.getProperty(clone, "scaleY")) || 1;
-          snap = gsap.to(clone, {
-            transformOrigin: "0 0",
-            ...cloneFit(clone.getBoundingClientRect(), source.el!, sx, sy),
-            duration: 0.22,
-            ease: "power2.inOut",
-          });
+          if (stacked) {
+            const to = source.el!.getBoundingClientRect();
+            snap = gsap.to(clone, {
+              left: to.left,
+              top: to.top,
+              scaleX: 1,
+              scaleY: 1,
+              x: 0,
+              y: 0,
+              duration: 0.22,
+              ease: "power2.inOut",
+            });
+          } else {
+            const sx = Number(gsap.getProperty(clone, "scaleX")) || 1;
+            const sy = Number(gsap.getProperty(clone, "scaleY")) || 1;
+            snap = gsap.to(clone, {
+              transformOrigin: "0 0",
+              ...cloneFit(clone.getBoundingClientRect(), source.el!, sx, sy),
+              duration: 0.22,
+              ease: "power2.inOut",
+            });
+          }
         });
         tl.to({}, { duration: 0.24 });
       }
@@ -125,7 +155,12 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
     const clone = lettersRef.current;
     if (clone && source.el) {
       gsap.set(clone, { transformOrigin: "0 0", scaleX: 1, scaleY: 1, x: 0, y: 0 });
-      gsap.set(clone, cloneFit(clone.getBoundingClientRect(), source.el, 1, 1));
+      if (stacked) {
+        const to = source.el.getBoundingClientRect();
+        gsap.set(clone, { left: to.left, top: to.top });
+      } else {
+        gsap.set(clone, cloneFit(clone.getBoundingClientRect(), source.el, 1, 1));
+      }
     }
 
     const tl = gsap.timeline();
@@ -162,7 +197,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
     return () => {
       tl.kill();
     };
-  }, [closing, onClosed, source.el, source.script, solid]);
+  }, [closing, onClosed, source.el, source.script, source.solid, stacked, solid]);
 
   const go = (href: string) => {
     if (traveling.current || closing) return;
@@ -249,23 +284,50 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
         aria-label="Закрыть меню"
         onClick={onRequestClose}
       />
-      {letters.length > 0 && (
+      {(letters.length > 0 || stacked) && (
         <div
           ref={lettersRef}
-          className={`pointer-events-none fixed whitespace-nowrap select-none ${typeClass}`}
+          className={`pointer-events-none fixed select-none ${typeClass} ${stacked ? "" : "whitespace-nowrap"}`}
           style={{
             left: source.left,
             top: source.top,
-            fontSize: source.fontSize,
+            fontSize: stacked ? source.lines![0].fontSize : cloneSize,
             fontFamily: source.fontFamily,
             fontWeight: source.fontWeight,
             letterSpacing: source.letterSpacing,
             color: source.color,
-            lineHeight: source.script ? 0.9 : 0.82,
+            lineHeight: stacked ? STACK_LEADING : source.script ? 0.9 : 0.82,
+            paddingLeft: stacked ? source.paddingLeft : undefined,
+            width: stacked ? source.width : undefined,
+            boxSizing: "border-box",
           }}
           aria-hidden
         >
-          {solid ? (
+          {stacked ? (
+            source.lines!.map((line, i) => (
+              <span
+                key={`${line.text}-${i}`}
+                className="block overflow-hidden"
+                style={{
+                  fontSize: line.fontSize,
+                  letterSpacing: line.letterSpacing,
+                  lineHeight: STACK_LEADING,
+                  marginTop:
+                    i === 0 || !line.marginTopEm
+                      ? undefined
+                      : `${line.marginTopEm * STACK_MARGIN_PULL}em`,
+                }}
+              >
+                {[...line.text].map((ch, j) => (
+                  <span key={`${ch}-${j}`} className="inline-block overflow-hidden align-bottom">
+                    <span data-letter className="inline-block will-change-transform">
+                      {ch}
+                    </span>
+                  </span>
+                ))}
+              </span>
+            ))
+          ) : solid ? (
             <span data-letter className="inline-block will-change-transform">
               {source.text}
             </span>
