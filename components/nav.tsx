@@ -7,7 +7,7 @@ export function Nav() {
         <a href="#top" className="label block text-ink">
           Giacomo
           <br />
-          <span className="text-ink-soft">italiano con un romano</span>
+          <span className="text-ink-soft">{site.origin}</span>
         </a>
       </div>
       <div className="hidden md:block md:col-span-6 text-center">

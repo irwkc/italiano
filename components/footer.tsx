@@ -10,7 +10,7 @@ export function Footer() {
         <div className="col-span-6 md:col-span-3">
           Giacomo
           <br />
-          <span className="text-ink-soft/70">italiano con un romano</span>
+          <span className="text-ink-soft/70">{site.origin}</span>
         </div>
         <div className="col-span-6 md:col-span-3 md:col-start-7">
           <a href={site.instagram} target="_blank" rel="noreferrer" className="link">

@@ -20,7 +20,7 @@ const script = Italianno({
 });
 
 export const metadata: Metadata = {
-  title: "Giacomo. Итальянский с носителем из Рима",
+  title: "Giacomo. Итальянский с носителем из Новары",
   description:
     "Путь от латыни до вашей первой фразы по-итальянски. Индивидуальные онлайн-уроки с носителем.",
 };

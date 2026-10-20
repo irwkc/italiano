@@ -27,7 +27,7 @@ export function Oggi() {
         </span>
       ))}
 
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-[18vh] w-[min(90vw,42rem)] text-center">
+      <div className="absolute left-[8%] top-[58%] w-[min(84vw,34rem)] md:left-[24%] md:top-[60%] md:w-[min(36vw,28rem)]">
         <h2 className="reveal serif text-[1.9rem] md:text-[3rem] leading-[1.03]">{oggi.title}</h2>
         <p className="reveal mt-5 serif italic text-[1.4rem] md:text-[1.9rem] text-pompei">{oggi.body}</p>
       </div>

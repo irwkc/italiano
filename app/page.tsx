@@ -27,9 +27,9 @@ export default function Page() {
         <Colosseo />
         <Volgare />
         <Oggi />
-        <Formats />
         <About />
         <Method />
+        <Formats />
         <Testimonials />
         <Faq />
         <Contact />

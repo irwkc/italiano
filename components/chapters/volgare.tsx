@@ -74,7 +74,7 @@ export function Volgare() {
           >
             {volgare.outro.word}
           </span>
-          <div className="absolute left-[8%] top-[12vh] w-[40vw] md:left-[12%] md:top-[8vh] md:w-[20vw]">
+          <div className="absolute left-[10%] top-[12vh] w-[40vw] md:left-[14%] md:top-[8vh] md:w-[20vw]">
             <Sketch
               src="/sketch/sketch-dante.jpg"
               alt="Карандашный профиль Данте"
