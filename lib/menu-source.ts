@@ -126,12 +126,6 @@ export function cloneFit(
   };
 }
 
-export function findMenuDest(href: string): HTMLElement | null {
-  const section = document.querySelector(href);
-  if (!section) return null;
-  return section.querySelector("[data-menu-word]");
-}
-
 /** Высота четырёх пунктов с русскими подписями. У script глифы выше line-height. */
 export function menuStackHeight(fit: number, script = false) {
   return script ? fit * 7.6 + 80 : fit * 5.28 + 60;

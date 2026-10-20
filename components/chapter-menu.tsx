@@ -7,8 +7,6 @@ import { site } from "@/lib/content";
 import {
   clampMenuNav,
   cloneFit,
-  findMenuDest,
-  inkBox,
   menuFitSize,
   menuStackHeight,
   type MenuSource,
@@ -166,46 +164,45 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
 
   const go = (href: string) => {
     if (traveling.current || closing) return;
-    const nav = navRef.current;
-    const holder = rootRef.current;
-    const chosen = nav?.querySelector<HTMLElement>(`[data-href="${href}"]`);
-    const others = nav?.querySelectorAll<HTMLElement>(`[data-item]:not([data-href="${href}"])`);
-    const gloss = nav?.querySelectorAll<HTMLElement>("[data-gloss]");
-    if (!chosen || !holder) return;
+    const items = navRef.current?.querySelectorAll<HTMLElement>("[data-item]");
+    const gloss = navRef.current?.querySelectorAll<HTMLElement>("[data-gloss]");
     traveling.current = true;
     onTravelStart();
 
     const reduced = window.matchMedia(REDUCED).matches;
     const finish = () => {
       document.documentElement.classList.remove("menu-open");
-      document.documentElement.classList.remove("menu-travel");
+      document.documentElement.classList.remove("menu-undim");
       onTravelEnd();
     };
 
-    const scrollThenLand = () => {
-      document.documentElement.classList.remove("menu-open");
-      document.documentElement.classList.add("menu-travel");
+    const scrollTo = () => {
       getLenis()?.start();
       const lenis = getLenis();
-      const afterScroll = () => land(chosen, href, holder, finish);
-      if (lenis) lenis.scrollTo(href, { duration: reduced ? 0 : 1.25, onComplete: afterScroll });
-      else {
-        document.querySelector(href)?.scrollIntoView();
-        afterScroll();
-      }
+      if (lenis) lenis.scrollTo(href, { duration: reduced ? 0 : 1.2 });
+      else document.querySelector(href)?.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
     };
 
     if (reduced) {
-      scrollThenLand();
+      scrollTo();
+      finish();
       return;
     }
 
-    const tl = gsap.timeline({ onComplete: scrollThenLand });
+    const clone = lettersRef.current;
+    const veil = veilRef.current;
+    const tl = gsap.timeline({ onComplete: finish });
     tl.to(gloss ?? [], { opacity: 0, duration: 0.22, ease: "power2.inOut" }, 0);
-    if (others?.length) {
-      tl.to(others, { yPercent: 115, opacity: 0, duration: 0.48, stagger: 0.06, ease: "power2.inOut" }, 0);
+    if (items?.length) {
+      tl.to(items, { yPercent: 115, opacity: 0, duration: 0.48, stagger: 0.05, ease: "power2.inOut" }, 0);
     }
-    if (veilRef.current) tl.to(veilRef.current, { opacity: 0, duration: 0.4, ease: "power2.inOut" }, 0);
+    if (clone) tl.to(clone, { autoAlpha: 0, duration: 0.35, ease: "power2.inOut" }, 0);
+    tl.add(() => {
+      document.documentElement.classList.add("menu-undim");
+      document.documentElement.classList.remove("menu-open");
+      scrollTo();
+    });
+    if (veil) tl.to(veil, { opacity: 0, duration: 0.45, ease: "power2.inOut" }, "<");
   };
 
   const stackH = menuStackHeight(fit, source.script);
@@ -313,57 +310,4 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
       </nav>
     </div>
   );
-}
-
-function land(chosen: HTMLElement, href: string, holder: HTMLElement, done: () => void) {
-  const dest = findMenuDest(href);
-  const word = chosen.querySelector<HTMLElement>(":scope > span:first-child");
-  if (!dest || !word) {
-    gsap.to(chosen, { opacity: 0, duration: 0.2, onComplete: done });
-    return;
-  }
-  if (window.matchMedia(REDUCED).matches) {
-    done();
-    return;
-  }
-
-  const from = word.getBoundingClientRect();
-  const to = inkBox(dest);
-  const destStyle = getComputedStyle(dest);
-  const destText = (dest.dataset.menuWord || dest.textContent || "").replace(/\s+/g, " ").trim();
-
-  gsap.set(word, {
-    position: "fixed",
-    left: from.left,
-    top: from.top,
-    margin: 0,
-    zIndex: 58,
-    whiteSpace: "nowrap",
-  });
-  holder.appendChild(word);
-
-  const tl = gsap.timeline({
-    onComplete: done,
-  });
-  tl.to(
-    word,
-    {
-      left: to.left,
-      top: to.top,
-      fontSize: to.fontSize,
-      color: destStyle.color,
-      duration: 0.75,
-      ease: "power2.inOut",
-    },
-    0,
-  );
-  tl.add(() => {
-    if (destText && destText.toLowerCase() !== (word.textContent || "").trim().toLowerCase()) {
-      word.textContent = destText;
-    }
-    if (dest.classList.contains("script")) {
-      word.classList.add("script");
-      word.classList.remove("caps", "caps-outline");
-    }
-  }, 0.38);
 }
