@@ -56,7 +56,7 @@ export function Nav() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-[70] grid grid-cols-12 gap-4 bg-ivory px-5 pt-[calc(env(safe-area-inset-top)+0.35rem)] md:px-10 md:pt-[max(1.75rem,env(safe-area-inset-top))] pointer-events-none">
+      <header className="fixed inset-x-0 top-0 z-[70] grid grid-cols-12 gap-4 px-5 pt-[calc(env(safe-area-inset-top)+0.35rem)] md:px-10 md:pt-[max(1.75rem,env(safe-area-inset-top))] pointer-events-none">
         <div className="col-span-5 md:col-span-3 pointer-events-auto">
           <a href="#top" className="label flex min-h-11 items-center text-ink">
             <span>
