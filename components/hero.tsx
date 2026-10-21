@@ -99,11 +99,13 @@ export function Hero() {
             style={{ fontSize: PHONE_ITA, letterSpacing: "-0.055em" }}
           />
         </h1>
-        <p
-          className="h-script script write mt-2 mr-[14vw] text-right text-pompei select-none"
-          style={{ fontSize: "clamp(2.5rem, 14vw, 4rem)", display: "block" }}
-        >
-          {hero.script}
+        <p className="mt-2 pr-[12vw] text-right">
+          <span
+            className="h-script script write inline-block text-pompei select-none"
+            style={{ fontSize: "clamp(2.5rem, 14vw, 4rem)" }}
+          >
+            {hero.script}
+          </span>
         </p>
       </div>
 
