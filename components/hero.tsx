@@ -100,7 +100,7 @@ export function Hero() {
           />
         </h1>
         <p
-          className="h-script script write mt-2 mr-[10vw] text-right text-pompei select-none"
+          className="h-script script write mt-2 mr-[14vw] text-right text-pompei select-none"
           style={{ fontSize: "clamp(2.5rem, 14vw, 4rem)", display: "block" }}
         >
           {hero.script}
@@ -137,7 +137,7 @@ export function Hero() {
         </span>
       ))}
 
-      <div className="h-copy absolute left-5 right-5 md:left-10 md:right-auto bottom-[max(0.7rem,env(safe-area-inset-bottom))] md:bottom-[16vh] max-w-[34rem]">
+      <div className="h-copy absolute left-5 right-5 md:left-10 md:right-auto bottom-[max(0.35rem,env(safe-area-inset-bottom))] md:bottom-[16vh] max-w-[34rem]">
         <h2 className="h-title hidden md:block serif text-[2.5rem] leading-[1.05] pb-1">
           {hero.title}
           <br />
