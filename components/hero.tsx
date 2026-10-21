@@ -18,9 +18,9 @@ function LetterRow({ text, className = "", style }: { text: string; className?: 
 }
 
 const PHONE_ITA =
-  "min(48vw, calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 9.5rem) / 2.55))";
+  "min(48vw, calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 7rem) / 2.55))";
 const PHONE_LI =
-  "min(72vw, calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 9.5rem) / 1.7))";
+  "min(72vw, calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 7rem) / 1.7))";
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -134,7 +134,7 @@ export function Hero() {
         </span>
       ))}
 
-      <div className="h-copy absolute left-5 right-5 md:left-10 md:right-auto bottom-[max(6.5rem,calc(11svh+env(safe-area-inset-bottom)))] md:bottom-[16vh] max-w-[34rem]">
+      <div className="h-copy absolute left-5 right-5 md:left-10 md:right-auto bottom-[max(1.5rem,calc(env(safe-area-inset-bottom)+0.75rem))] md:bottom-[16vh] max-w-[34rem]">
         <h2 className="h-title hidden md:block serif text-[2.5rem] leading-[1.05] pb-1">
           {hero.title}
           <br />
