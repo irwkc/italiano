@@ -100,7 +100,7 @@ export function Hero() {
           />
         </h1>
         <p
-          className="h-script script write mt-2 mr-[6vw] text-right text-pompei select-none"
+          className="h-script script write mt-2 mr-[10vw] text-right text-pompei select-none"
           style={{ fontSize: "clamp(2.5rem, 14vw, 4rem)", display: "block" }}
         >
           {hero.script}
