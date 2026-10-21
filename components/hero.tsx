@@ -73,27 +73,27 @@ export function Hero() {
       aria-label="Начало"
     >
       {/* Phone: ITA / LI / ANO / con Giacomo — строки на всю ширину */}
-      <div className="h-stack absolute inset-x-0 top-[9svh] px-0 md:hidden">
+      <div className="h-stack absolute inset-x-0 top-[calc(env(safe-area-inset-top)+2.7rem)] px-0 md:hidden">
         <h1
           data-menu-word="ITALIANO"
           className="h-word caps text-ink select-none leading-[0.74] pl-[0.02em]"
-          style={{ fontSize: "48vw" }}
+          style={{ fontSize: "min(48vw, 16.5svh)" }}
         >
-          <LetterRow text="ITA" style={{ fontSize: "48vw", letterSpacing: "-0.055em" }} />
+          <LetterRow text="ITA" style={{ fontSize: "min(48vw, 16.5svh)", letterSpacing: "-0.055em" }} />
           <LetterRow
             text="LI"
             className="-mt-[0.06em]"
-            style={{ fontSize: "72vw", letterSpacing: "-0.06em" }}
+            style={{ fontSize: "min(72vw, 24.5svh)", letterSpacing: "-0.06em" }}
           />
           <LetterRow
             text="ANO"
             className="-mt-[0.07em]"
-            style={{ fontSize: "48vw", letterSpacing: "-0.055em" }}
+            style={{ fontSize: "min(48vw, 16.5svh)", letterSpacing: "-0.055em" }}
           />
         </h1>
         <p
-          className="h-script script write mt-2 ml-[7vw] text-pompei select-none"
-          style={{ fontSize: "clamp(2.5rem, 14vw, 4rem)", display: "block" }}
+          className="h-script script write mt-1 ml-[7vw] text-pompei select-none"
+          style={{ fontSize: "min(14vw, 4.2svh, 3.2rem)", display: "block" }}
         >
           {hero.script}
         </p>
@@ -129,7 +129,7 @@ export function Hero() {
         </span>
       ))}
 
-      <div className="h-copy absolute left-5 right-5 md:left-10 md:right-auto bottom-[max(6.5rem,calc(11svh+env(safe-area-inset-bottom)))] md:bottom-[16vh] max-w-[34rem]">
+      <div className="h-copy absolute left-5 right-5 md:left-10 md:right-auto bottom-[max(5.5rem,calc(8svh+env(safe-area-inset-bottom)))] md:bottom-[16vh] max-w-[34rem]">
         <h2 className="h-title hidden md:block serif text-[2.5rem] leading-[1.05] pb-1">
           {hero.title}
           <br />
