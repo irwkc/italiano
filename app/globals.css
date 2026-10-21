@@ -229,6 +229,15 @@ html.menu-travel [data-menu-word] {
   opacity: 0 !important;
   transition: none !important;
 }
+/* VOLGARE под Данте: оригинал виден, пока клон не вышел вперёд. */
+html.menu-open.menu-rise:not(.menu-clone-ready) main,
+html.menu-open.menu-rise:not(.menu-clone-ready) footer {
+  opacity: 1;
+}
+html.menu-open.menu-rise:not(.menu-clone-ready) [data-menu-word] {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
 /* Сбор italia: чёрные буквы гаснут с страницей, прячем только красные. */
 html.menu-open.menu-gather [data-menu-word],
 html.menu-travel.menu-gather [data-menu-word] {

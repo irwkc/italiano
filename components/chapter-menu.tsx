@@ -81,18 +81,23 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
   const scriptPad = source.script && !gathering ? gatherInkPad(cloneSize) : 0;
   const letters = source.text ? [...source.text.replace(/\s/g, "")] : [];
   const inkOutline = Boolean(source.outline && !source.script);
+  const rise = Boolean(source.under) && !gathering;
+  const riseDur = rise ? 0.5 : 0;
   // Сбор italia — script только у клонов букв; пункты меню остаются caps.
   const typeClass = source.script && !gathering ? "script" : "caps";
 
   useLayoutEffect(() => {
     document.documentElement.classList.add("menu-open");
     if (gathering) document.documentElement.classList.add("menu-gather");
+    if (rise) document.documentElement.classList.add("menu-rise");
     return () => {
       document.documentElement.classList.remove("menu-open");
       document.documentElement.classList.remove("menu-travel");
       document.documentElement.classList.remove("menu-gather");
+      document.documentElement.classList.remove("menu-rise");
+      document.documentElement.classList.remove("menu-clone-ready");
     };
-  }, [gathering]);
+  }, [gathering, rise]);
 
   useLayoutEffect(() => {
     const letterNodes = lettersRef.current?.querySelectorAll<HTMLElement>("[data-letter]");
@@ -173,38 +178,35 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
           );
         }
       }
-      if (!gathering && clone && source.el) {
+      if (!gathering && clone && source.el && stacked) {
         tl.add(() => {
-          if (stacked) {
-            const to = source.el!.getBoundingClientRect();
-            snap = gsap.to(clone, {
-              left: to.left,
-              top: to.top,
-              scaleX: 1,
-              scaleY: 1,
-              x: 0,
-              y: 0,
-              duration: 0.22,
-              ease: "power2.inOut",
-            });
-          } else {
-            const sx = Number(gsap.getProperty(clone, "scaleX")) || 1;
-            const sy = Number(gsap.getProperty(clone, "scaleY")) || 1;
-            snap = gsap.to(clone, {
-              transformOrigin: "0 0",
-              ...cloneFit(clone.getBoundingClientRect(), source.el!, sx, sy),
-              duration: 0.22,
-              ease: "power2.inOut",
-            });
-          }
+          const to = source.el!.getBoundingClientRect();
+          snap = gsap.to(clone, {
+            left: to.left,
+            top: to.top,
+            scaleX: 1,
+            scaleY: 1,
+            x: 0,
+            y: 0,
+            duration: 0.22,
+            ease: "power2.inOut",
+          });
         });
         tl.to({}, { duration: 0.24 });
       }
-      if (!gathering) tl.add(() => document.documentElement.classList.add("menu-undim"));
+      if (rise && clone) {
+        tl.add(() => {
+          document.documentElement.classList.remove("menu-clone-ready");
+          document.documentElement.classList.add("menu-undim");
+        });
+        tl.to(clone, { autoAlpha: 0, duration: 0.48, ease: "power2.inOut" });
+      } else if (!gathering) {
+        tl.add(() => document.documentElement.classList.add("menu-undim"));
+      }
       if (veil) {
         tl.to(
           veil,
-          { opacity: 0, duration: gathering ? 0.8 : 0.45, ease: "power2.inOut" },
+          { opacity: 0, duration: gathering ? 0.8 : rise ? 0.48 : 0.45, ease: "power2.inOut" },
           gathering ? 0.28 : "<",
         );
       }
@@ -224,7 +226,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
     gsap.set(gloss ?? [], { opacity: 0 });
     const clone = lettersRef.current;
     if (clone && !gathering) {
-      gsap.set(clone, { scaleX: 1, scaleY: 1, x: 0, y: 0, xPercent: 0, yPercent: 0, autoAlpha: 1 });
+      gsap.set(clone, { scaleX: 1, scaleY: 1, x: 0, y: 0, xPercent: 0, yPercent: 0, autoAlpha: rise ? 0 : 1 });
       if (source.el) {
         if (stacked) {
           const to = source.el.getBoundingClientRect();
@@ -240,7 +242,11 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
     }
 
     const tl = gsap.timeline();
-    if (veilRef.current) tl.to(veilRef.current, { opacity: 0.88, duration: 0.45, ease: "power2.inOut" }, 0);
+    if (rise && clone) {
+      tl.to(clone, { autoAlpha: 1, duration: riseDur, ease: "power2.out" }, 0);
+      tl.add(() => document.documentElement.classList.add("menu-clone-ready"), riseDur);
+    }
+    if (veilRef.current) tl.to(veilRef.current, { opacity: 0.88, duration: 0.45, ease: "power2.inOut" }, riseDur);
 
     if (gathering && gatherNodes?.length && homes?.length) {
       const flight = gatherFlight(homes, source.top, window.innerWidth);
@@ -262,12 +268,12 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
           autoRound: false,
           force3D: true,
         },
-        0.08,
-      );
+          0.08,
+        );
       tl.to(gatherNodes, { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 1.5);
     } else if (letterNodes?.length) {
       if (solid) {
-        tl.to(letterNodes, { y: -36, opacity: 0, duration: 0.9, ease: "power2.inOut" }, 0);
+        tl.to(letterNodes, { y: -36, opacity: 0, duration: 0.9, ease: "power2.inOut" }, riseDur);
       } else {
         const n = letterNodes.length;
         tl.to(
@@ -281,11 +287,11 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
             stagger: 0.04,
             ease: "power2.inOut",
           },
-          0,
+          riseDur,
         );
       }
     }
-    const namesAt = gathering ? 2.1 : letterNodes?.length ? 0.55 : 0.12;
+    const namesAt = gathering ? 2.1 : letterNodes?.length ? riseDur + 0.55 : 0.12;
     tl.to(
       items,
       { yPercent: 0, opacity: 1, duration: 1.05, stagger: 0.14, ease: "power2.out" },
@@ -297,7 +303,7 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
     return () => {
       tl.kill();
     };
-  }, [closing, onClosed, source.el, source.script, source.solid, source.color, source.top, source.gather, stacked, solid, gathering]);
+  }, [closing, onClosed, source.el, source.script, source.solid, source.color, source.top, source.gather, stacked, solid, gathering, rise, riseDur]);
 
   const go = (href: string) => {
     if (traveling.current || closing) return;
@@ -474,19 +480,21 @@ export function ChapterMenu({ source, closing, onClosed, onRequestClose, onTrave
               {source.fillClip ? <InkCaps text={source.text} fillClip={source.fillClip} /> : source.text}
             </span>
           ) : (
-            letters.map((ch, i) => (
-              <span key={`${ch}-${i}`} className="inline-block overflow-visible align-bottom p-[0.15em] -m-[0.15em]">
-                <span data-letter className="inline-block overflow-visible will-change-transform">
-                  {ch === " " ? (
-                    "\u00a0"
-                  ) : inkOutline ? (
-                    <InkCaps text={ch} fillClip={source.fillClip} />
-                  ) : (
-                    ch
-                  )}
+            <span className="inline-block overflow-visible p-[0.08em] -m-[0.08em]">
+              {letters.map((ch, i) => (
+                <span key={`${ch}-${i}`} className="inline-block overflow-visible align-bottom">
+                  <span data-letter className="inline-block overflow-visible will-change-transform">
+                    {ch === " " ? (
+                      "\u00a0"
+                    ) : inkOutline ? (
+                      <InkCaps text={ch} fillClip={source.fillClip} />
+                    ) : (
+                      ch
+                    )}
+                  </span>
                 </span>
-              </span>
-            ))
+              ))}
+            </span>
           )}
         </div>
       )}

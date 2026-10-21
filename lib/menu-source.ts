@@ -44,6 +44,8 @@ export type MenuSource = {
   lines?: MenuLine[];
   /** Красные акценты метода: клоны слетаются в italia. */
   gather?: MenuGatherLetter[];
+  /** Слово под картинкой: сначала вывести вперёд, потом разлёт. */
+  under?: boolean;
 };
 
 function clamp(n: number, a: number, b: number) {
@@ -380,6 +382,7 @@ export function findMenuSource(): MenuSource {
     solid,
     lines,
     gather: undefined,
+    under: el.dataset.menuUnder !== undefined || typeEl.dataset.menuUnder !== undefined,
   };
 }
 
@@ -387,7 +390,7 @@ export function findMenuSource(): MenuSource {
  * Посадка клона на видимый глиф.
  * AVE масштабируется с центра — клон тоже. Write остаётся от левого верхнего чернил.
  */
-export function cloneFit(cloneRect: DOMRect, orig: HTMLElement, _scaleX = 1, _scaleY = 1) {
+export function cloneFit(cloneRect: DOMRect, orig: HTMLElement, scaleX = 1, scaleY = 1) {
   const to = orig.classList.contains("write") ? inkBox(orig) : orig.getBoundingClientRect();
   if (orig.classList.contains("write")) {
     return {
@@ -400,8 +403,9 @@ export function cloneFit(cloneRect: DOMRect, orig: HTMLElement, _scaleX = 1, _sc
       transformOrigin: "0 0",
     };
   }
-  const sx = cloneRect.width ? to.width / cloneRect.width : 1;
-  const sy = cloneRect.height ? to.height / cloneRect.height : 1;
+  // cloneRect уже с текущим scale — умножаем, иначе close ставит 1 и AVE прыгает.
+  const sx = cloneRect.width ? scaleX * (to.width / cloneRect.width) : scaleX;
+  const sy = cloneRect.height ? scaleY * (to.height / cloneRect.height) : scaleY;
   const scale = Math.abs(sx - sy) < 0.12 ? (sx + sy) / 2 : sx;
   return {
     left: to.left + to.width / 2,

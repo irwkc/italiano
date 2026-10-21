@@ -78,10 +78,11 @@ export function Volgare() {
           vita
         </p>
 
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-visible">
           <PhoneDrift from={-10} to={24} xFrom={14} xTo={-18} className="absolute -left-[8vw] top-0 z-0">
             <span
               data-menu-word="VOLGARE"
+              data-menu-under
               className="caps text-ink select-none whitespace-nowrap"
               style={{ fontSize: "clamp(4rem, 28vw, 7rem)" }}
               aria-hidden

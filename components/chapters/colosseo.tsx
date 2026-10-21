@@ -68,7 +68,7 @@ export function Colosseo() {
       <div className="c-pin relative h-[100dvh] overflow-hidden">
         <div
           data-menu-word="AVE"
-          className="c-ave caps caps-outline absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none will-change-transform whitespace-nowrap"
+          className="c-ave caps caps-outline absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none will-change-transform whitespace-nowrap overflow-visible"
           style={{ fontSize: "clamp(4.8rem, 28vw, 40rem)" }}
           aria-hidden
         >
