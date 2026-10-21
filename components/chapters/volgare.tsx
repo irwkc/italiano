@@ -44,7 +44,7 @@ export function Volgare() {
       gsap.to(".v-verse", {
         "--w": 0,
         ease: "none",
-        scrollTrigger: { trigger: ".v-verse", start: "top 90%", end: "top 48%", scrub: 0.4 },
+        scrollTrigger: { trigger: ".v-verse", start: "top 90%", end: "top 48%", scrub: true },
       });
     });
     mm.add("(prefers-reduced-motion: reduce)", () => {

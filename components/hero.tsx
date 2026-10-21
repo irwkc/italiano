@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, type CSSProperties } from "react";
 import { ArrowDownRight } from "@phosphor-icons/react/dist/ssr";
-import { gsap, REDUCED, MOTION_OK, PHONE } from "@/lib/gsap";
+import { gsap, REDUCED, MOTION_OK, PHONE, DESK } from "@/lib/gsap";
 import { hero, site } from "@/lib/content";
 
 function LetterRow({ text, className = "", style }: { text: string; className?: string; style?: CSSProperties }) {
@@ -43,23 +43,26 @@ export function Hero() {
         .fromTo(visible(".h-label"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.12 }, 1.4)
         .fromTo(visible(".h-title"), { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 1.1, stagger: 0.1 }, 1.6);
 
-      gsap.to(visible(".h-word"), {
+    }, root);
+
+    const mm = gsap.matchMedia();
+    mm.add(`${MOTION_OK} and ${DESK}`, () => {
+      gsap.to(root.querySelectorAll(".h-word"), {
         yPercent: -18,
         ease: "none",
         scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: true },
       });
-      gsap.to(visible(".h-script"), {
+      gsap.to(root.querySelectorAll(".h-script"), {
         yPercent: 30,
         ease: "none",
         scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: true },
       });
-    }, root);
-
-    const mm = gsap.matchMedia();
+    });
     mm.add(`${MOTION_OK} and ${PHONE}`, () => {
       gsap.to(root.querySelector(".h-stack"), {
         yPercent: -8,
         ease: "none",
+        force3D: true,
         scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: true },
       });
     });

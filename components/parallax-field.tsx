@@ -32,6 +32,8 @@ export function ParallaxField({ children, className, range = 220, ...rest }: Pro
           {
             y: (1 - speed) * travel,
             ease: "none",
+            force3D: true,
+            autoRound: false,
             scrollTrigger: { trigger: root, start: "top bottom", end: "bottom top", scrub: true },
           },
         );

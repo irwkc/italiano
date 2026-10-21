@@ -9,9 +9,14 @@ export function SmoothScroll() {
   useEffect(() => {
     if (window.matchMedia(REDUCED).matches) return;
 
-    // Safari прячет тулбар — ресайз дёргает pin/parallax. На телефоне Lenis ещё и спорит с нативным скроллом.
+    // Safari прячет тулбар — ресайз дёргает pin/parallax. На телефоне Lenis спорит с пальцем.
     ScrollTrigger.config({ ignoreMobileResize: true });
-    if (window.matchMedia("(max-width: 767px)").matches) return;
+    if (window.matchMedia("(max-width: 767px)").matches) {
+      ScrollTrigger.normalizeScroll(true);
+      return () => {
+        ScrollTrigger.normalizeScroll(false);
+      };
+    }
 
     const lenis = new Lenis({ lerp: 0.085, smoothWheel: true });
     setLenis(lenis);

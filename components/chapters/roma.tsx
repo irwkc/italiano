@@ -62,9 +62,10 @@ export function Roma() {
           trigger: root.querySelector(".r-phone"),
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.55,
+          scrub: true,
           pin: pin,
           pinSpacing: false,
+          pinType: "fixed",
         },
       });
       tl.fromTo(

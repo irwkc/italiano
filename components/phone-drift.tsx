@@ -13,13 +13,15 @@ type Props = {
   xTo?: number;
 };
 
-/** Параллакс только на телефоне. Десктопный DOM этот компонент не двигает. */
+/** Параллакс только на телефоне. Двигаем внутренний слой, триггер — неподвижная обёртка. */
 export function PhoneDrift({ children, className, style, from = 48, to = -48, xFrom = 0, xTo = 0 }: Props) {
-  const ref = useRef<HTMLDivElement>(null);
+  const wrap = useRef<HTMLDivElement>(null);
+  const layer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const trigger = wrap.current;
+    const el = layer.current;
+    if (!trigger || !el) return;
     const mm = gsap.matchMedia();
     mm.add(`${MOTION_OK} and ${PHONE}`, () => {
       gsap.fromTo(
@@ -30,7 +32,13 @@ export function PhoneDrift({ children, className, style, from = 48, to = -48, xF
           x: xTo,
           ease: "none",
           force3D: true,
-          scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
+          autoRound: false,
+          scrollTrigger: {
+            trigger,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
         },
       );
     });
@@ -38,8 +46,8 @@ export function PhoneDrift({ children, className, style, from = 48, to = -48, xF
   }, [from, to, xFrom, xTo]);
 
   return (
-    <div ref={ref} className={className} style={{ ...style, willChange: "transform" }}>
-      {children}
+    <div ref={wrap} className={className} style={style}>
+      <div ref={layer}>{children}</div>
     </div>
   );
 }

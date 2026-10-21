@@ -35,7 +35,7 @@ export function Oggi() {
           trigger: field,
           start: "top 78%",
           end: "bottom 12%",
-          scrub: 0.5,
+          scrub: true,
         },
       });
       tl.fromTo(allora, { opacity: 0 }, { opacity: 1, duration: 0.22 });
