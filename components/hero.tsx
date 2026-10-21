@@ -60,7 +60,7 @@ export function Hero() {
       gsap.to(root.querySelector(".h-stack"), {
         yPercent: -8,
         ease: "none",
-        scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: 0.75 },
+        scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: true },
       });
     });
     return () => {
@@ -134,7 +134,7 @@ export function Hero() {
         </span>
       ))}
 
-      <div className="h-copy absolute left-5 right-5 md:left-10 md:right-auto bottom-[max(1.5rem,calc(env(safe-area-inset-bottom)+0.75rem))] md:bottom-[16vh] max-w-[34rem]">
+      <div className="h-copy absolute left-5 right-5 md:left-10 md:right-auto bottom-[max(0.7rem,env(safe-area-inset-bottom))] md:bottom-[16vh] max-w-[34rem]">
         <h2 className="h-title hidden md:block serif text-[2.5rem] leading-[1.05] pb-1">
           {hero.title}
           <br />

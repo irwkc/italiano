@@ -9,6 +9,10 @@ export function SmoothScroll() {
   useEffect(() => {
     if (window.matchMedia(REDUCED).matches) return;
 
+    // Safari прячет тулбар — ресайз дёргает pin/parallax. На телефоне Lenis ещё и спорит с нативным скроллом.
+    ScrollTrigger.config({ ignoreMobileResize: true });
+    if (window.matchMedia("(max-width: 767px)").matches) return;
+
     const lenis = new Lenis({ lerp: 0.085, smoothWheel: true });
     setLenis(lenis);
 

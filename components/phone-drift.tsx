@@ -29,7 +29,8 @@ export function PhoneDrift({ children, className, style, from = 48, to = -48, xF
           y: to,
           x: xTo,
           ease: "none",
-          scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 0.7 },
+          force3D: true,
+          scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
         },
       );
     });
@@ -37,7 +38,7 @@ export function PhoneDrift({ children, className, style, from = 48, to = -48, xF
   }, [from, to, xFrom, xTo]);
 
   return (
-    <div ref={ref} className={className} style={style}>
+    <div ref={ref} className={className} style={{ ...style, willChange: "transform" }}>
       {children}
     </div>
   );
