@@ -1,0 +1,8 @@
+node_modules
+.next
+.git
+.impeccable
+*.pem
+.env*
+learn/data/store.json
+README.md

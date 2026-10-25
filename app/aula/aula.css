@@ -1,0 +1,952 @@
+.aula {
+  min-height: 100svh;
+  background: var(--ivory);
+  color: var(--ink);
+}
+
+.aula-bar {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  padding: 0.9rem 1.25rem;
+  background: transparent;
+  position: sticky;
+  top: 0;
+  z-index: 8;
+}
+
+.aula-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--line);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.28s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.aula-bar.is-scrolled::after {
+  opacity: 0;
+}
+
+.aula-g {
+  font-family: var(--font-script);
+  color: var(--pompei);
+  font-size: 2.15rem;
+  line-height: 0.7;
+}
+
+.aula-who {
+  margin-left: auto;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.aula-out {
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.2rem 0;
+}
+
+.aula-out:hover {
+  color: var(--pompei);
+}
+
+.aula-shell {
+  width: min(44rem, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+}
+
+.aula-wide {
+  width: min(56rem, calc(100% - 2rem));
+}
+
+.aula-login {
+  min-height: calc(100svh - 4rem);
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+}
+
+.aula-login form {
+  width: min(22rem, 100%);
+  display: grid;
+  gap: 1.25rem;
+}
+
+.aula-login h1 {
+  font-family: var(--font-script);
+  font-size: 3.4rem;
+  font-weight: 400;
+  line-height: 0.9;
+  margin: 0;
+}
+
+.aula-err {
+  color: var(--pompei);
+  font-size: 0.9rem;
+}
+
+.aula-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.5rem;
+  margin: 0 0 2rem;
+}
+
+.aula-tabs a {
+  font-family: var(--font-script);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--ink-soft);
+}
+
+.aula-tabs a.is-on {
+  color: var(--ink);
+  box-shadow: inset 0 -1px var(--pompei);
+}
+
+.aula-teacher-nav {
+  width: min(56rem, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.75rem 0 0;
+}
+
+.aula-teacher-nav .aula-tabs {
+  margin-bottom: 0;
+}
+
+.aula-teacher .aula-shell {
+  padding-top: 1.2rem;
+}
+
+.aula-kicker {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 0.4rem;
+}
+
+.aula-h {
+  font-family: var(--font-script);
+  font-size: 2.6rem;
+  font-weight: 400;
+  line-height: 1;
+  margin: 0 0 1rem;
+}
+
+.aula-block {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.aula-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.aula-list a,
+.aula-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.aula-muted {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.aula-meet {
+  display: flex;
+  gap: 0.75rem;
+  align-items: end;
+  margin-bottom: 1.75rem;
+}
+
+.aula-meet .field {
+  flex: 1;
+}
+
+.aula-copy {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+}
+
+.aula-copy code {
+  font-size: 0.82rem;
+  word-break: break-all;
+  color: var(--ink-soft);
+}
+
+.aula-live-wait {
+  padding: 2.5rem 0;
+  color: var(--ink-soft);
+  opacity: 0.7;
+}
+
+.aula-live-top {
+  display: grid;
+  gap: 1rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 1.75rem;
+}
+
+@media (min-width: 720px) {
+  .aula-live-top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) auto;
+    align-items: end;
+  }
+}
+
+.aula-board {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.aula-board-title {
+  font-family: var(--font-script);
+  font-size: 2.4rem;
+  font-weight: 400;
+  line-height: 1;
+  margin: 0;
+}
+
+.aula-illu {
+  width: min(18rem, 70%);
+  justify-self: start;
+}
+
+.aula-task {
+  font-family: var(--font-sans);
+}
+
+.aula-prompt,
+.aula-cloze {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  margin: 0 0 1rem;
+}
+
+.aula-lead {
+  color: var(--ink-soft);
+  margin: 0 0 0.75rem;
+}
+
+.aula-opts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.aula-opt,
+.aula-chip,
+.aula-gap {
+  font-family: var(--font-sans);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.aula-opt:disabled,
+.aula-chip:disabled,
+.aula-gap:disabled {
+  cursor: default;
+}
+
+.aula-opt {
+  width: 100%;
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line);
+}
+
+.aula-opt.is-on {
+  border-left-color: var(--pompei);
+  background: var(--ivory-2);
+}
+
+.aula-opt.is-right,
+.aula-gap.is-right,
+.aula-chip.is-on {
+  border-color: var(--ink);
+  border-left-color: var(--ink);
+  background: var(--ivory-2);
+}
+
+.aula-opt.is-wrong,
+.aula-gap.is-wrong {
+  border-color: var(--pompei);
+  border-left-color: var(--pompei);
+  color: var(--pompei);
+}
+
+.aula-cloze {
+  display: block;
+}
+
+.aula-gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 6.5ch;
+  margin: 0 0.2em;
+  padding: 0 0.35em;
+  border: 0;
+  border-bottom: 2px solid var(--ink);
+  min-height: 1.6em;
+  vertical-align: baseline;
+}
+
+.aula-gap.is-on {
+  border-bottom-color: var(--pompei);
+  color: var(--pompei);
+}
+
+.aula-bank {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.aula-chip {
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--ink);
+}
+
+.aula-check {
+  justify-self: start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.aula-word-wrap {
+  position: relative;
+  display: inline;
+}
+
+.aula-word {
+  appearance: none;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.aula-word:hover,
+.aula-word.is-on {
+  color: var(--pompei);
+}
+
+.aula-gloss {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 0.35rem);
+  transform: translateX(-50%);
+  z-index: 20;
+  display: grid;
+  gap: 0.12rem;
+  min-width: 7rem;
+  padding: 0.5rem 0.7rem 0.55rem;
+  background: var(--ivory);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--ink) 10%, transparent);
+  white-space: nowrap;
+}
+
+.aula-gloss-it {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.aula-gloss-ru {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.aula-form-row {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+
+@media (min-width: 640px) {
+  .aula-form-row {
+    grid-template-columns: 1fr 1fr auto;
+    align-items: end;
+  }
+
+  .aula-form-row.is-compact {
+    grid-template-columns: 1fr auto;
+  }
+
+  .aula-form-row.is-lesson {
+    grid-template-columns: 8.5rem 8.5rem minmax(0, 1fr) auto;
+  }
+
+  .aula-meet .btn {
+    flex-shrink: 0;
+  }
+}
+
+.aula-time {
+  display: flex;
+  align-items: baseline;
+  gap: 0.15rem;
+}
+
+.aula-time select {
+  width: auto;
+  min-width: 3.2rem;
+  appearance: none;
+  cursor: pointer;
+}
+
+.aula-select,
+.aula-date,
+.aula-label input,
+.aula-label textarea {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 0.7rem 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  outline: none;
+}
+
+.aula-label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.aula-pill {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pompei);
+}
+
+.aula-stack {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.aula-stack.is-pending,
+.is-pending {
+  opacity: 0.55;
+}
+
+.aula-filter {
+  margin: 0 0 1.5rem;
+}
+
+.aula-pick {
+  position: relative;
+}
+
+.aula-pick-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 0.7rem 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.aula-pick-btn::after {
+  content: "";
+  flex-shrink: 0;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  transform: rotate(45deg);
+  opacity: 0.45;
+}
+
+.aula-pick-btn.is-open::after {
+  transform: rotate(-135deg);
+}
+
+.aula-pick-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 1px);
+  z-index: 20;
+  margin: 0;
+  padding: 0.3rem 0;
+  list-style: none;
+  background: var(--ivory);
+  border: 1px solid var(--line);
+  max-height: 16rem;
+  overflow: auto;
+}
+
+.aula-pick-list button {
+  width: 100%;
+  border: 0;
+  border-left: 3px solid transparent;
+  background: none;
+  padding: 0.65rem 0.9rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.aula-pick-list button.is-on,
+.aula-pick-list button:hover {
+  background: var(--ivory-2);
+  border-left-color: var(--pompei);
+}
+
+.aula-acc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.aula-acc-head {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 0;
+  padding: 0.9rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: 1.05rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.aula-acc-head.is-on {
+  box-shadow: inset 3px 0 var(--pompei);
+  padding-left: 0.75rem;
+}
+
+.aula-acc-body {
+  padding: 1rem 0 1.4rem;
+}
+
+.aula-cal-who {
+  color: var(--ink-soft);
+}
+
+.aula-cal-lesson {
+  padding: 0.4rem 0 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.aula-meet-block {
+  margin: 0 0 2rem;
+}
+
+.aula-cal {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.aula-cal-nav {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.aula-cal-month {
+  flex: 1;
+  margin: 0;
+  font-family: var(--font-script);
+  font-size: 2.2rem;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+}
+
+.aula-cal-nav button {
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3rem 0;
+  cursor: pointer;
+}
+
+.aula-cal-nav button:hover {
+  color: var(--pompei);
+}
+
+.aula-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.aula-cal-dow,
+.aula-cal-day {
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.aula-cal-dow {
+  text-align: center;
+  padding: 0.5rem 0.15rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.aula-cal-day {
+  min-height: 5.2rem;
+  padding: 0.4rem 0.4rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  background: var(--ivory);
+  color: var(--ink);
+  text-align: left;
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+
+.aula-cal-day.is-out {
+  color: color-mix(in srgb, var(--ink-soft) 55%, var(--ivory));
+}
+
+.aula-cal-day.is-on {
+  background: var(--ivory-2);
+}
+
+.aula-cal-day.is-today .aula-cal-num {
+  color: var(--pompei);
+}
+
+.aula-cal-num {
+  font-size: 0.85rem;
+}
+
+.aula-cal-mark {
+  display: grid;
+  font-size: 0.68rem;
+  line-height: 1.25;
+  color: var(--pompei);
+}
+
+.aula-cal-time {
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+
+.aula-cal-detail {
+  padding-top: 0.25rem;
+}
+
+@media (max-width: 720px) {
+  .aula-cal-day {
+    min-height: 3.4rem;
+    padding: 0.3rem 0.25rem;
+  }
+
+  .aula-cal-mark {
+    width: 0.35rem;
+    height: 0.35rem;
+    overflow: hidden;
+    color: transparent;
+    background: var(--pompei);
+  }
+
+  .aula-cal-time {
+    display: none;
+  }
+}
+
+.aula-schede-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.aula-schede-head .aula-h {
+  margin-bottom: 0;
+}
+
+.aula-schede {
+  display: grid;
+  gap: 2.5rem;
+}
+
+@media (min-width: 860px) {
+  .aula-schede {
+    grid-template-columns: 16.5rem minmax(0, 1fr);
+    align-items: start;
+    gap: 3rem;
+  }
+
+  .aula-schede.is-edit {
+    grid-template-columns: 19rem minmax(0, 1fr);
+  }
+}
+
+.aula-topic {
+  margin-top: 1.75rem;
+}
+
+.aula-schede.is-edit .aula-topic {
+  margin-top: 1.85rem;
+}
+
+.aula-schede.is-edit .aula-topic:first-of-type {
+  margin-top: 1.15rem;
+}
+
+.aula-topic-lead {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.15rem;
+}
+
+.aula-topic-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--pompei);
+  font-family: var(--font-sans);
+  font-size: 1.35rem;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-align: left;
+  cursor: text;
+}
+
+.aula-topic-rename,
+.aula-topic-rename-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.7rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.aula-topic-title-input {
+  flex: 1;
+  min-width: 8rem;
+  margin: 0;
+  padding: 0.15rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--pompei);
+  background: none;
+  color: var(--pompei);
+  font-family: var(--font-sans);
+  font-size: 1.35rem;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+  outline: none;
+}
+
+.aula-text-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.aula-text-btn:hover {
+  color: var(--pompei);
+}
+
+.aula-plus {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--pompei);
+  border-radius: 50%;
+  background: none;
+  color: var(--pompei);
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.aula-plus:hover {
+  background: var(--pompei);
+  color: var(--ivory);
+}
+
+.aula-plus-line {
+  display: block;
+  width: 100%;
+  margin: 1.35rem 0 0;
+  padding: 0.35rem 0;
+  border: 0;
+  background: none;
+  color: var(--pompei);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.aula-plus-line:hover {
+  color: var(--ink);
+}
+
+.aula-grip {
+  flex: 0 0 auto;
+  width: 0.7rem;
+  height: 0.85rem;
+  margin-right: 0.15rem;
+  background: radial-gradient(circle, var(--ink-soft) 1.1px, transparent 1.2px) 0 0 / 0.35rem 0.35rem;
+  opacity: 0.55;
+}
+
+.aula-schede.is-edit .aula-acc-head {
+  align-items: center;
+  cursor: grab;
+}
+
+.aula-acc-head.is-drag {
+  opacity: 0.38;
+}
+
+.aula-acc-head.is-over {
+  box-shadow: inset 0 2px var(--pompei);
+}
+
+.aula-acc-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.aula-label textarea {
+  min-height: 6.5rem;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.aula-schede-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.aula-schede-bar .aula-kicker {
+  margin: 0;
+}
+
+.aula-ask,
+.aula-ask-form {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0 0 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.aula-ask {
+  grid-template-columns: 1fr 1fr;
+}
+
+.aula-ask button {
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 0.7rem 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.aula-ask button:hover,
+.aula-ask button.is-on {
+  color: var(--pompei);
+}
+
+.aula-ask-form .btn {
+  justify-self: start;
+}
