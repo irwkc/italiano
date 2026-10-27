@@ -22,7 +22,7 @@ async function TeacherStudents({
   searchParams: Promise<{ alunno?: string }>;
 }) {
   const { alunno } = await searchParams;
-  const store = readStore();
+  const store = await readStore();
   const origin = await aulaOrigin();
 
   const students: StudentCard[] = store.students.map((student) => {

@@ -45,12 +45,12 @@ function revalidateStudent(token: string) {
   revalidatePath(`/aula/s/${token}/compiti`);
 }
 
-function bumpTeacher(studentId?: string) {
+async function bumpTeacher(studentId?: string) {
   revalidatePath("/aula/insegnante");
   revalidatePath("/aula/insegnante/schede");
   revalidatePath("/aula/insegnante/studenti");
   revalidatePath("/aula/insegnante/orario");
-  const store = readStore();
+  const store = await readStore();
   if (studentId) {
     revalidatePath(`/aula/insegnante/${studentId}/live`);
     const student = store.students.find((s) => s.id === studentId);
@@ -85,7 +85,7 @@ export async function addStudentAction(formData: FormData) {
     });
   });
   const student = store.students.find((s) => s.id === created);
-  bumpTeacher(created);
+  await bumpTeacher(created);
   redirect(`/aula/insegnante/studenti?alunno=${student?.id ?? created}`);
 }
 
@@ -98,7 +98,29 @@ export async function updateStudentAction(formData: FormData) {
     const student = store.students.find((s) => s.id === studentId);
     if (student) student.name = name;
   });
-  bumpTeacher(studentId);
+  await bumpTeacher(studentId);
+}
+
+export async function deleteStudentAction(formData: FormData) {
+  await requireTeacher();
+  const studentId = String(formData.get("studentId") ?? "");
+  if (!studentId) return;
+  let token = "";
+  await mutateStore((store) => {
+    const student = store.students.find((s) => s.id === studentId);
+    if (!student) return;
+    token = student.token;
+    const lessonIds = new Set(store.lessons.filter((lesson) => lesson.studentId === studentId).map((lesson) => lesson.id));
+    store.assignments = store.assignments.filter((item) => !lessonIds.has(item.lessonId));
+    store.lessons = store.lessons.filter((lesson) => lesson.studentId !== studentId);
+    store.live = store.live.filter((live) => live.studentId !== studentId);
+    if (store.liveStudentId === studentId) store.liveStudentId = null;
+    store.students = store.students.filter((item) => item.id !== studentId);
+  });
+  if (token) revalidateStudent(token);
+  revalidatePath(`/aula/insegnante/${studentId}`);
+  revalidatePath(`/aula/insegnante/${studentId}/live`);
+  await bumpTeacher();
 }
 
 export async function setMeetUrlAction(formData: FormData) {
@@ -107,7 +129,7 @@ export async function setMeetUrlAction(formData: FormData) {
   await mutateStore((store) => {
     store.meetUrl = url;
   });
-  bumpTeacher();
+  await bumpTeacher();
 }
 
 function timesFromForm(formData: FormData) {
@@ -137,7 +159,7 @@ export async function createLessonAction(formData: FormData) {
       endsAt: times.end.toISOString(),
     });
   });
-  bumpTeacher(studentId);
+  await bumpTeacher(studentId);
 }
 
 export async function moveLessonAction(formData: FormData) {
@@ -154,11 +176,10 @@ export async function moveLessonAction(formData: FormData) {
     lesson.endsAt = times.end.toISOString();
     if (title) lesson.title = title;
   });
-  bumpTeacher(studentId);
+  await bumpTeacher(studentId);
 }
 
-function nextLessonFor(studentId: string, startsAtMin: number) {
-  const store = readStore();
+function nextLessonFor(store: Store, studentId: string, startsAtMin: number) {
   return store.lessons
     .filter((l) => l.studentId === studentId && new Date(l.startsAt).getTime() >= startsAtMin)
     .sort((a, b) => a.startsAt.localeCompare(b.startsAt))[0] ?? null;
@@ -184,7 +205,7 @@ export async function focusLiveAction(formData: FormData) {
     }
     ensureLive(store, studentId);
   });
-  bumpTeacher(studentId || undefined);
+  await bumpTeacher(studentId || undefined);
 }
 
 export async function assignHomeworkAction(formData: FormData): Promise<{ error?: string; ok?: string }> {
@@ -192,7 +213,7 @@ export async function assignHomeworkAction(formData: FormData): Promise<{ error?
   const studentId = String(formData.get("studentId") ?? "");
   const activityId = String(formData.get("activityId") ?? "");
   if (!studentId || !activityId) return { error: "Выберите ученика." };
-  const next = nextLessonFor(studentId, Date.now());
+  const next = nextLessonFor(await readStore(), studentId, Date.now());
   if (!next) return { error: "Нет ближайшего урока. Поставьте занятие в календаре." };
   await mutateStore((store) => {
     const exists = store.assignments.some((a) => a.lessonId === next.id && a.activityId === activityId);
@@ -204,7 +225,7 @@ export async function assignHomeworkAction(formData: FormData): Promise<{ error?
       kind: "homework",
     });
   });
-  bumpTeacher(studentId);
+  await bumpTeacher(studentId);
   return { ok: `На дом к «${next.title}»` };
 }
 
@@ -219,7 +240,7 @@ export async function openLiveAction(formData: FormData): Promise<{ error?: stri
     out.status = appendLive(live, activityId);
     out.count = live.queue.length;
   });
-  bumpTeacher(studentId);
+  await bumpTeacher(studentId);
   if (out.status === "already") return { ok: "Уже в очереди live" };
   return { ok: `В live · ${out.count}` };
 }
@@ -238,7 +259,7 @@ export async function addTopicAction(formData: FormData) {
   await mutateStore((store) => {
     if (!store.topics.includes(topic)) store.topics.push(topic);
   });
-  bumpTeacher();
+  await bumpTeacher();
 }
 
 export async function renameTopicAction(formData: FormData) {
@@ -253,7 +274,7 @@ export async function renameTopicAction(formData: FormData) {
       if (activity.topic === from) activity.topic = to;
     }
   });
-  bumpTeacher();
+  await bumpTeacher();
 }
 
 export async function deleteTopicAction(formData: FormData) {
@@ -266,7 +287,7 @@ export async function deleteTopicAction(formData: FormData) {
     store.activities = store.activities.filter((activity) => activity.topic !== topic);
     store.topics = store.topics.filter((item) => item !== topic);
   });
-  bumpTeacher();
+  await bumpTeacher();
 }
 
 export async function createActivityAction(formData: FormData): Promise<{ error?: string; id?: string }> {
@@ -310,7 +331,7 @@ export async function createActivityAction(formData: FormData): Promise<{ error?
     if (last === -1) store.activities.push(created);
     else store.activities.splice(last + 1, 0, created);
   });
-  bumpTeacher();
+  await bumpTeacher();
   return { id };
 }
 
@@ -339,7 +360,7 @@ export async function reorderActivitiesAction(topic: string, orderedIds: string[
     next.push(...leftover.filter((activity) => !store.topics.includes(activity.topic)));
     store.activities = next;
   });
-  bumpTeacher();
+  await bumpTeacher();
 }
 
 export async function deleteActivityAction(formData: FormData) {
@@ -350,6 +371,6 @@ export async function deleteActivityAction(formData: FormData) {
     removeActivityRefs(store, activityId);
     store.activities = store.activities.filter((activity) => activity.id !== activityId);
   });
-  bumpTeacher();
+  await bumpTeacher();
 }
 

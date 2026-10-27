@@ -12,7 +12,7 @@ export default function TeacherLiveTab() {
 }
 
 async function TeacherLiveHome() {
-  const store = readStore();
+  const store = await readStore();
 
   return (
     <>

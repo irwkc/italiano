@@ -1,12 +1,34 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
   app:
     image: italiano:latest
     restart: unless-stopped
     env_file: .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
     volumes:
       - aula-data:/app/learn/data
     expose:
       - "3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   caddy:
     image: caddy:2-alpine
@@ -23,6 +45,7 @@ services:
       - app
 
 volumes:
+  pg-data:
   aula-data:
   caddy-data:
   caddy-config:

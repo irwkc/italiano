@@ -27,7 +27,7 @@ async function StudentShell({
 }) {
   await cookies();
   const { token } = await params;
-  const student = studentByToken(token);
+  const student = await studentByToken(token);
   if (!student) notFound();
   return (
     <>

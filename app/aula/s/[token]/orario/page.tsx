@@ -23,9 +23,9 @@ async function StudentOrario({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
-  const student = studentByToken(token);
+  const student = await studentByToken(token);
   if (!student) notFound();
-  const store = readStore();
+  const store = await readStore();
   const lessons = store.lessons
     .filter((l) => l.studentId === student.id)
     .sort((a, b) => a.startsAt.localeCompare(b.startsAt));

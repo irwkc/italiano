@@ -12,7 +12,7 @@ export default function TeacherSchedePage() {
 }
 
 async function TeacherSchede() {
-  const store = readStore();
+  const store = await readStore();
 
   return (
     <>

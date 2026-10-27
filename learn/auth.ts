@@ -13,7 +13,7 @@ const cookieBase = {
 };
 
 export async function loginTeacher(name: string, password: string): Promise<boolean> {
-  const store = readStore();
+  const store = await readStore();
   const expected = process.env.AULA_PASSWORD;
   if (!expected) return false;
   if (name.trim().toLowerCase() !== store.teacher.name.toLowerCase()) return false;
@@ -40,7 +40,7 @@ export async function getTeacherSession(): Promise<Teacher | null> {
   const jar = await cookies();
   const id = jar.get(TEACHER_COOKIE)?.value;
   if (!id) return null;
-  const store = readStore();
+  const store = await readStore();
   return store.teacher.id === id ? store.teacher : null;
 }
 
@@ -48,18 +48,18 @@ export async function getStudentSession(): Promise<Student | null> {
   const jar = await cookies();
   const token = jar.get(STUDENT_COOKIE)?.value;
   if (!token) return null;
-  const store = readStore();
+  const store = await readStore();
   return store.students.find((s) => s.token === token) ?? null;
 }
 
-export function studentByToken(token: string): Student | null {
-  const store = readStore();
+export async function studentByToken(token: string): Promise<Student | null> {
+  const store = await readStore();
   return store.students.find((s) => s.token === token) ?? null;
 }
 
 export async function apiActor() {
   const jar = await cookies();
-  const store = readStore();
+  const store = await readStore();
   const teacherId = jar.get(TEACHER_COOKIE)?.value;
   if (teacherId === store.teacher.id) {
     return { role: "teacher" as const, store };

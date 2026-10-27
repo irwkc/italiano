@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { addStudentAction, updateStudentAction } from "@/learn/actions";
+import { addStudentAction, deleteStudentAction, updateStudentAction } from "@/learn/actions";
 import { formatLessonWhen } from "@/learn/format";
 import { CopyLink } from "@/learn/ui/copy-link";
 
@@ -84,6 +84,18 @@ export function StudentsPanel({
                     </label>
                     <button className="btn" type="submit">
                       Сохранить
+                    </button>
+                  </form>
+                  <form action={deleteStudentAction}>
+                    <input type="hidden" name="studentId" value={student.id} />
+                    <button
+                      className="aula-text-btn"
+                      type="submit"
+                      onClick={(event) => {
+                        if (!window.confirm("Удалить ученика, занятия и ссылку?")) event.preventDefault();
+                      }}
+                    >
+                      Удалить
                     </button>
                   </form>
                   <CopyLink url={`${origin}/aula/s/${student.token}`} />

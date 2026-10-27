@@ -22,7 +22,7 @@ async function StudentHome({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
-  const student = studentByToken(token);
+  const student = await studentByToken(token);
   if (!student) notFound();
 
   return (

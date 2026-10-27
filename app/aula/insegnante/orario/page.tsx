@@ -13,7 +13,7 @@ export default function TeacherOrarioPage() {
 }
 
 async function TeacherOrario() {
-  const store = readStore();
+  const store = await readStore();
   const lessons = [...store.lessons].sort((a, b) => a.startsAt.localeCompare(b.startsAt));
 
   return (
