@@ -14,6 +14,7 @@ import { Testimonials } from "@/components/lezioni/testimonials";
 import { Faq } from "@/components/lezioni/faq";
 import { Contact } from "@/components/lezioni/contact";
 import { Footer } from "@/components/footer";
+import { showPrices } from "@/lib/content";
 
 export default function Page() {
   return (
@@ -29,7 +30,7 @@ export default function Page() {
         <Oggi />
         <About />
         <Method />
-        <Formats />
+        {showPrices ? <Formats /> : null}
         <Testimonials />
         <Faq />
         <Contact />

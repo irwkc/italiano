@@ -3,7 +3,10 @@
 import type { MouseEvent } from "react";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import { PhoneDrift } from "@/components/phone-drift";
+import Link from "next/link";
+import { CookieSettingsLink } from "@/components/cookie-banner";
 import { footer } from "@/lib/content";
+import { legalNav } from "@/lib/legal";
 import { getLenis } from "@/lib/lenis-store";
 import { REDUCED } from "@/lib/gsap";
 
@@ -29,6 +32,19 @@ export function Footer() {
           {footer.word}
         </div>
       </PhoneDrift>
+      <div className="footer-legal px-5 md:px-10 mt-10 md:mt-14">
+        <p className="footer-offer">
+          Сайт носит ознакомительный характер и не является публичной офертой.
+        </p>
+        <nav className="footer-docs" aria-label="Юридическая информация">
+          {legalNav.map((item) => (
+            <Link key={item.href} href={item.href} className="link">
+              {item.label}
+            </Link>
+          ))}
+          <CookieSettingsLink />
+        </nav>
+      </div>
       <div className="grid grid-cols-12 gap-4 px-5 md:px-10 mt-8 md:mt-12 label items-center">
         <div className="col-span-3">MMXXVI</div>
         <div className="col-span-6 md:col-span-3 md:col-start-7">

@@ -9,7 +9,7 @@ type Status = "idle" | "sending" | "sent";
 
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
-  const [errors, setErrors] = useState<{ name?: string; handle?: string }>({});
+  const [errors, setErrors] = useState<{ name?: string; handle?: string; consent?: string }>({});
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -19,6 +19,7 @@ export function Contact() {
     const next: typeof errors = {};
     if (!name) next.name = "Как к вам обращаться?";
     if (!handle) next.handle = "Нужен Telegram или почта, чтобы ответить.";
+    if (!data.get("consent")) next.consent = "Нужно согласие на обработку данных.";
     setErrors(next);
     if (Object.keys(next).length) return;
 
@@ -82,6 +83,16 @@ export function Contact() {
                 </label>
                 <textarea id="goal" name="goal" rows={2} className="field resize-none" />
               </div>
+              <label className="cookie-opt contact-consent">
+                <input type="checkbox" name="consent" value="yes" />
+                <span>
+                  Согласен на обработку персональных данных по{" "}
+                  <a href="/legal/privacy" className="link">
+                    политике
+                  </a>
+                </span>
+              </label>
+              {errors.consent ? <p className="text-pompei text-sm">{errors.consent}</p> : null}
               <button type="submit" className="btn btn-primary justify-self-start" disabled={status === "sending"}>
                 {status === "sending" ? "Отправляю" : site.cta}
                 <ArrowRight size={14} weight="light" />

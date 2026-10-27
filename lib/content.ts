@@ -90,6 +90,8 @@ export const oggi = {
   body: "До вашей первой фразы: один урок.",
 };
 
+export const showPrices = false;
+
 // MOCK: форматы и цены
 export const formats = {
   word: "LEZIONI",

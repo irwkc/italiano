@@ -13,6 +13,7 @@ const placeDesk = [
 export function Method() {
   return (
     <section
+      id="lezioni"
       data-menu-gather="ITALIA"
       className="relative overflow-visible px-5 md:px-10 py-14 md:py-[14vh]"
       aria-label="Как проходит урок"
