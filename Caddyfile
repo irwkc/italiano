@@ -1,0 +1,12 @@
+www.giacomoschiavon.ru {
+	redir https://giacomoschiavon.ru{uri}
+}
+
+www.giacomoschiavon.online {
+	redir https://giacomoschiavon.online{uri}
+}
+
+giacomoschiavon.ru, giacomoschiavon.online {
+	encode gzip
+	reverse_proxy app:3000
+}

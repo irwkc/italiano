@@ -1,0 +1,48 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: italiano:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy
+          chmod 600 ~/.ssh/deploy
+          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Ship compose
+        run: |
+          scp -i ~/.ssh/deploy -o IdentitiesOnly=yes docker-compose.yml Caddyfile \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/italiano/"
+
+      - name: Ship image
+        run: |
+          docker save italiano:latest | gzip | ssh -i ~/.ssh/deploy -o IdentitiesOnly=yes \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" 'gunzip | sudo docker load'
+
+      - name: Restart
+        run: |
+          ssh -i ~/.ssh/deploy -o IdentitiesOnly=yes \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            'cd /opt/italiano && sudo docker compose up -d --remove-orphans && sudo docker image prune -f'
