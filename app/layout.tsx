@@ -41,7 +41,6 @@ export const metadata: Metadata = {
     "итальянский с носителем",
     "уроки итальянского онлайн",
     "итальянский из Новары",
-    "ita.giacomo",
   ],
   authors: [{ name: "Giacomo Schiavon" }],
   creator: "Giacomo Schiavon",

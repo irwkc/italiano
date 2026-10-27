@@ -1,11 +1,9 @@
 // Весь текст сайта в одном месте.
-// Биография из хайлайта «Кто я?» @ita.giacomo. Форматы, цены и отзывы пока мок.
+// Форматы, цены и отзывы пока мок.
 
 export const site = {
   name: "Giacomo",
   origin: "из Новары",
-  instagram: "https://www.instagram.com/ita.giacomo",
-  instagramHandle: "@ita.giacomo",
   telegram: "https://t.me/itagiacomo",
   telegramHandle: "t.me/itagiacomo",
   cta: "Записаться на урок",

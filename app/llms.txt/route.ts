@@ -6,7 +6,6 @@ export function GET() {
 Сайт: ${operator.sites[0]}
 Зеркало: ${operator.sites[1]}
 Telegram: ${operator.telegram}
-Instagram: ${operator.instagram}
 
 Giacomo Schiavon (по-русски: Джакомо Скиавон, также ищут как Джакомо Скьявон) — носитель итальянского из Новары. Преподаёт итальянский онлайн русскоязычным ученикам. Окончил СПбГУ (психология, магистратура по психологии образования).
 

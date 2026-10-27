@@ -330,14 +330,49 @@ html.menu-travel [data-menu-accent] {
 .cookie-opt {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.55rem 1rem;
   margin-top: 0.65rem;
   font-size: 0.82rem;
+  cursor: pointer;
 }
 
-.cookie-opt input {
-  accent-color: var(--pompei);
+.cookie-opt input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0.12rem 0 0;
+  border: 1px solid var(--ink);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s;
+}
+
+.cookie-opt input[type="checkbox"]:checked {
+  background: var(--ink);
+  border-color: var(--ink);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23ece6d8' stroke-width='1.6' stroke-linecap='square' stroke-linejoin='miter'><path d='M3.2 8.2 6.4 11.4 12.8 4.6'/></svg>");
+  background-size: 0.72rem 0.72rem;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.cookie-opt input[type="checkbox"]:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.cookie-opt input[type="checkbox"]:focus-visible {
+  outline: 1px solid var(--pompei);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cookie-opt:hover input[type="checkbox"]:not(:disabled):not(:checked) {
+    border-color: var(--pompei);
+  }
 }
 
 .cookie-actions {
@@ -459,10 +494,12 @@ html.menu-open .cookie-bar {
 
 .contact-consent {
   margin-top: 0;
+  max-width: 28rem;
   align-items: flex-start;
   color: var(--ink-soft);
   text-transform: none;
   letter-spacing: 0;
+  line-height: 1.4;
 }
 
 @media (prefers-reduced-motion: reduce) {

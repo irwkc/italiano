@@ -40,14 +40,6 @@ export function About() {
           <p className="reveal mt-4 md:mt-6 text-ink-soft text-[0.9rem] md:text-base leading-relaxed">{about.body}</p>
           <div className="mt-6 md:mt-8 flex flex-col items-start gap-1">
             <a
-              href={site.instagram}
-              target="_blank"
-              rel="noreferrer"
-              className="reveal link label inline-flex min-h-11 items-center text-ink"
-            >
-              Instagram {site.instagramHandle}
-            </a>
-            <a
               href={site.telegram}
               target="_blank"
               rel="noreferrer"

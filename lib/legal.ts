@@ -4,7 +4,6 @@ export const operator = {
   nameRu: "Джакомо Скиавон",
   sites: ["https://giacomoschiavon.ru", "https://giacomoschiavon.online"],
   telegram: "https://t.me/itagiacomo",
-  instagram: "https://www.instagram.com/ita.giacomo",
 };
 
 export const legalNav = [
@@ -145,7 +144,7 @@ export const terms: LegalDoc = {
     {
       heading: "5. Ответственность",
       paragraphs: [
-        "Сайт предоставляется «как есть». Оператор не отвечает за сбои связи, действия хостинга и содержание внешних ссылок (Telegram, Instagram).",
+        "Сайт предоставляется «как есть». Оператор не отвечает за сбои связи, действия хостинга и содержание внешних ссылок (Telegram).",
       ],
     },
   ],
