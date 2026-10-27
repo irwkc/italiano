@@ -213,16 +213,15 @@ export async function openLiveAction(formData: FormData): Promise<{ error?: stri
   const studentId = String(formData.get("studentId") ?? "");
   const activityId = String(formData.get("activityId") ?? "");
   if (!studentId || !activityId) return { error: "Выберите ученика." };
-  let status: "already" | "added" = "added";
-  let count = 0;
+  const out = { status: "added" as ReturnType<typeof appendLive>, count: 0 };
   await mutateStore((store) => {
     const live = ensureLive(store, studentId);
-    status = appendLive(live, activityId);
-    count = live.queue.length;
+    out.status = appendLive(live, activityId);
+    out.count = live.queue.length;
   });
   bumpTeacher(studentId);
-  if (status === "already") return { ok: "Уже в очереди live" };
-  return { ok: `В live · ${count}` };
+  if (out.status === "already") return { ok: "Уже в очереди live" };
+  return { ok: `В live · ${out.count}` };
 }
 
 function lines(raw: string) {
