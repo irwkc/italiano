@@ -53,12 +53,17 @@ async function withPg<T>(fn: (client: PoolClient) => Promise<T>): Promise<T> {
 }
 
 async function ensureSchema(client: PoolClient) {
-  await client.query(`
-    CREATE TABLE IF NOT EXISTS aula_store (
-      id integer PRIMARY KEY,
-      data jsonb NOT NULL
-    )
-  `);
+  await client.query("SELECT pg_advisory_lock(829174)");
+  try {
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS aula_store (
+        id integer PRIMARY KEY,
+        data jsonb NOT NULL
+      )
+    `);
+  } finally {
+    await client.query("SELECT pg_advisory_unlock(829174)");
+  }
 }
 
 async function readPg(): Promise<Store> {
