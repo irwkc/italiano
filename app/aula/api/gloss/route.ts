@@ -1,8 +1,12 @@
 import { lookupGloss } from "@/learn/gloss";
+import { rateLimit } from "@/learn/rate-limit";
 
 const cache = new Map<string, string>();
 
 export async function GET(request: Request) {
+  const limited = rateLimit("gloss", 60, 60_000);
+  if (!limited.ok) return Response.json({ text: "слишком часто" }, { status: 429 });
+
   const word = new URL(request.url).searchParams.get("q")?.trim() ?? "";
   if (!word) return Response.json({ text: "" });
   const local = lookupGloss(word);

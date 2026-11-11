@@ -69,6 +69,14 @@ export function timeFromIso(iso: string) {
   return toLocalInput(iso).slice(11, 16);
 }
 
-export function studentPath(token: string, suffix = "") {
-  return `/aula/s/${token}${suffix}`;
+export function mePath(suffix = "") {
+  return `/aula/me${suffix}`;
+}
+
+export function kindLabel(kind: "homework" | "classwork") {
+  return kind === "homework" ? "на дом" : "в классе";
+}
+
+export function typeLabel(type: "quiz" | "cloze") {
+  return type === "quiz" ? "квиз" : "пропуски";
 }

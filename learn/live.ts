@@ -9,6 +9,7 @@ export function emptyLive(studentId: string): LiveSession {
     picks: {},
     selected: null,
     checked: false,
+    rev: 0,
   };
 }
 

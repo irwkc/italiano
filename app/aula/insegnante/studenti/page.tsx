@@ -1,5 +1,4 @@
 import { readStore } from "@/learn/data/store";
-import { aulaOrigin } from "@/learn/origin";
 import { Dynamic } from "@/learn/ui/dynamic";
 import { StudentsPanel, type StudentCard } from "@/learn/ui/students-panel";
 import { TeacherNav } from "@/learn/ui/teacher-nav";
@@ -23,7 +22,6 @@ async function TeacherStudents({
 }) {
   const { alunno } = await searchParams;
   const store = await readStore();
-  const origin = await aulaOrigin();
 
   const students: StudentCard[] = store.students.map((student) => {
     const past = store.lessons
@@ -38,16 +36,30 @@ async function TeacherStudents({
           .flatMap((assignment) => {
             const activity = store.activities.find((act) => act.id === assignment.activityId);
             if (!activity) return [];
+            const status = assignment.progress?.checked
+              ? assignment.progress.correct
+                ? "верно"
+                : "ошибки"
+              : assignment.progress
+                ? "в работе"
+                : undefined;
             return [
               {
                 title: activity.title,
                 kind: assignment.kind,
                 type: activity.type,
+                status,
               },
             ];
           }),
       }));
-    return { id: student.id, name: student.name, token: student.token, past };
+    return {
+      id: student.id,
+      name: student.name,
+      email: student.email,
+      verified: Boolean(student.emailVerifiedAt),
+      past,
+    };
   });
 
   return (
@@ -58,7 +70,7 @@ async function TeacherStudents({
       <main className="aula-shell aula-wide">
         <p className="aula-kicker">Classe</p>
         <h1 className="aula-h">Studenti</h1>
-        <StudentsPanel students={students} origin={origin} initialId={alunno} />
+        <StudentsPanel students={students} initialId={alunno} />
       </main>
     </>
   );

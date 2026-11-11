@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
-import { createLessonAction, moveLessonAction } from "@/learn/actions";
+import { createLessonAction, deleteLessonAction, moveLessonAction } from "@/learn/actions";
 import { addHour, dayKey, formatDayKey, formatMonth, formatTimeRange, lessonDayKey, timeFromIso } from "@/learn/format";
 import type { Lesson } from "@/learn/types";
 import { AulaSelect } from "@/learn/ui/select";
@@ -54,6 +54,7 @@ function useClientReady() {
 
 function MoveLessonForm({ lesson }: { lesson: Lesson }) {
   const ready = useClientReady();
+  const [day, setDay] = useState(lessonDayKey(lesson.startsAt));
   const [edit, setEdit] = useState<{ start: string; end: string } | null>(null);
 
   if (!ready) return null;
@@ -65,7 +66,10 @@ function MoveLessonForm({ lesson }: { lesson: Lesson }) {
     <form action={moveLessonAction} className="aula-form-row is-lesson">
       <input type="hidden" name="lessonId" value={lesson.id} />
       <input type="hidden" name="studentId" value={lesson.studentId} />
-      <input type="hidden" name="day" value={lessonDayKey(lesson.startsAt)} />
+      <label className="aula-label">
+        День
+        <input className="aula-select" type="date" name="day" value={day} onChange={(e) => setDay(e.target.value)} required />
+      </label>
       <label className="aula-label">
         С
         <TimeField
@@ -83,7 +87,17 @@ function MoveLessonForm({ lesson }: { lesson: Lesson }) {
         <input className="aula-select" name="title" defaultValue={lesson.title} />
       </label>
       <button className="btn" type="submit">
-        Сдвинуть
+        Сохранить
+      </button>
+      <button
+        className="aula-text-btn"
+        type="submit"
+        formAction={deleteLessonAction}
+        onClick={(event) => {
+          if (!window.confirm("Удалить занятие и задания к нему?")) event.preventDefault();
+        }}
+      >
+        Удалить
       </button>
     </form>
   );
@@ -197,15 +211,13 @@ function Grid({
               onClick={() => setSelected(key)}
             >
               <span className="aula-cal-num">{date.getDate()}</span>
-              {!outside
-                ? marks.map((lesson) => (
-                    <span key={lesson.id} className="aula-cal-mark">
-                      <span className="aula-cal-time">{formatTimeRange(lesson.startsAt, lesson.endsAt)}</span>
-                      {who ? <span className="aula-cal-who">{who[lesson.studentId]}</span> : null}
-                      {lesson.title}
-                    </span>
-                  ))
-                : null}
+              {marks.map((lesson) => (
+                <span key={lesson.id} className="aula-cal-mark">
+                  <span className="aula-cal-time">{formatTimeRange(lesson.startsAt, lesson.endsAt)}</span>
+                  {who ? <span className="aula-cal-who">{who[lesson.studentId]}</span> : null}
+                  {lesson.title}
+                </span>
+              ))}
             </button>
           );
         })}
@@ -282,6 +294,10 @@ export function TeacherCalendar({
             <label className="aula-label">
               По
               <TimeField name="endTime" value={endTime} onChange={setEndTime} />
+            </label>
+            <label className="aula-label">
+              Тема
+              <input className="aula-select" name="title" placeholder="Тема урока" />
             </label>
             <AulaSelect
               name="studentId"

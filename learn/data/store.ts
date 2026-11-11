@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "fs";
 import path from "path";
 import { Pool, type PoolClient } from "pg";
 import { seedStore } from "@/learn/data/seed";
@@ -26,7 +26,17 @@ function hydrate(raw: Store): Store {
   if (!Array.isArray(raw.lessons)) raw.lessons = [];
   if (!Array.isArray(raw.students)) raw.students = [];
   if (!Array.isArray(raw.activities)) raw.activities = [];
-  for (const live of raw.live) normalizeLive(live);
+  if (!Array.isArray(raw.invites)) raw.invites = [];
+  if (!Array.isArray(raw.emailTokens)) raw.emailTokens = [];
+  for (const student of raw.students) {
+    if (!student.email) student.email = "";
+    if (!student.passwordHash) student.passwordHash = "";
+    if (student.emailVerifiedAt === undefined) student.emailVerifiedAt = null;
+  }
+  for (const live of raw.live) {
+    if (typeof live.rev !== "number") live.rev = 0;
+    normalizeLive(live);
+  }
   fillTopics(raw);
   return raw;
 }
@@ -38,7 +48,9 @@ function fileStore(): Store | null {
 
 function persistFile(store: Store) {
   mkdirSync(path.dirname(file), { recursive: true });
-  writeFileSync(file, JSON.stringify(store, null, 2));
+  const tmp = `${file}.${process.pid}.tmp`;
+  writeFileSync(tmp, JSON.stringify(store, null, 2));
+  renameSync(tmp, file);
 }
 
 async function withPg<T>(fn: (client: PoolClient) => Promise<T>): Promise<T> {
@@ -130,7 +142,11 @@ export async function readStore(): Promise<Store> {
   return seeded;
 }
 
+/** Prefer mutateStore — this only touches the file fallback and is not PG-safe. */
 export function writeStore(store: Store) {
+  if (pool()) {
+    throw new Error("writeStore is file-only; use mutateStore with DATABASE_URL");
+  }
   persistFile(store);
 }
 

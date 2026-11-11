@@ -10,9 +10,11 @@ type QueueItem = { id: string; title: string };
 export function TeacherLiveStudio({
   students,
   liveStudentId,
+  meetUrl,
 }: {
   students: { id: string; name: string }[];
   liveStudentId: string | null;
+  meetUrl?: string;
 }) {
   const [pending, startTransition] = useTransition();
   const [queue, setQueue] = useState<QueueItem[]>([]);
@@ -28,7 +30,7 @@ export function TeacherLiveStudio({
       cache: "no-store",
     });
     if (!res.ok) return;
-    const data = (await res.json()) as { live: { index: number }; queue: QueueItem[] };
+    const data = (await res.json()) as { live: { index: number; rev: number }; queue: QueueItem[] };
     setQueue(data.queue);
     setIndex(data.live.index);
   }, [liveStudentId]);
@@ -42,7 +44,7 @@ export function TeacherLiveStudio({
       } catch {
         /* poll */
       }
-      if (!cancelled) timer = window.setTimeout(tick, 700);
+      if (!cancelled) timer = window.setTimeout(tick, 1500);
     };
     void tick();
     return () => {
@@ -65,6 +67,7 @@ export function TeacherLiveStudio({
       body: JSON.stringify({ studentId: liveStudentId, index: next }),
     });
     setIndex(next);
+    void load();
   }
 
   async function clear() {
@@ -76,13 +79,26 @@ export function TeacherLiveStudio({
     });
     setQueue([]);
     setIndex(0);
-    pickStudent("");
+    void load();
   }
 
   const current = queue[index]?.id ?? "";
+  const who = students.find((s) => s.id === liveStudentId)?.name;
 
   return (
     <div className={pending ? "is-pending" : undefined}>
+      <div className="aula-schede-head">
+        <div>
+          <p className="aula-kicker">In diretta</p>
+          <h1 className="aula-h">Live</h1>
+          {who ? <p className="aula-muted">Сейчас: {who}</p> : null}
+        </div>
+        {meetUrl ? (
+          <a className="btn" href={meetUrl} target="_blank" rel="noreferrer">
+            Meet
+          </a>
+        ) : null}
+      </div>
       <div className="aula-live-top">
         <AulaSelect
           label="Ученик"
@@ -99,7 +115,7 @@ export function TeacherLiveStudio({
               ? [{ value: "", label: "Пусто" }]
               : queue.map((item, i) => ({
                   value: item.id,
-                  label: queue.length > 1 ? `${i + 1}. ${item.title}` : item.title,
+                  label: queue.length > 1 ? `${i + 1}/${queue.length}. ${item.title}` : item.title,
                 }))
           }
         />
@@ -111,6 +127,7 @@ export function TeacherLiveStudio({
         <LiveBoard
           key={`${liveStudentId}-${current || "empty"}`}
           studentId={liveStudentId}
+          meetUrl={meetUrl}
           waitingLabel="Очередь пуста — задание берётся из Schede."
         />
       ) : (

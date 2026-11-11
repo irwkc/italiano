@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { studentPath } from "@/learn/format";
+import { mePath } from "@/learn/format";
 
-export function StudentNav({ token, current }: { token: string; current: "home" | "orario" | "compiti" }) {
+export function StudentNav({ current }: { current: "home" | "orario" | "compiti" }) {
   const items = [
-    { id: "home" as const, href: studentPath(token), label: "Live" },
-    { id: "orario" as const, href: studentPath(token, "/orario"), label: "Orario" },
-    { id: "compiti" as const, href: studentPath(token, "/compiti"), label: "Compiti" },
+    { id: "home" as const, href: mePath(), label: "Live" },
+    { id: "orario" as const, href: mePath("/orario"), label: "Orario" },
+    { id: "compiti" as const, href: mePath("/compiti"), label: "Compiti" },
   ];
   return (
     <nav className="aula-tabs" aria-label="Кабинет">

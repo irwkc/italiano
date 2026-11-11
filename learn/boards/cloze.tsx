@@ -8,12 +8,14 @@ type Props = {
   activity: ClozeActivity;
   state: BoardState;
   onChange: (partial: Partial<BoardState>) => void;
+  correctOverride?: boolean | null;
 };
 
-export function ClozeBoard({ activity, state, onChange }: Props) {
+export function ClozeBoard({ activity, state, onChange, correctOverride }: Props) {
   const parts = splitCloze(activity.text);
   const left = remainingBank(activity.bank, state.picks);
   const checked = state.checked;
+  const reveal = activity.answers.some(Boolean);
 
   function place(index: number) {
     if (checked) return;
@@ -49,7 +51,11 @@ export function ClozeBoard({ activity, state, onChange }: Props) {
           const filled = state.picks[key];
           let tone = filled ? "is-on" : "";
           if (checked && gap) {
-            tone = isClozeSlotCorrect(activity, state.picks, index) ? "is-right" : "is-wrong";
+            if (!reveal && correctOverride != null) {
+              tone = correctOverride ? "is-right" : filled ? "is-wrong" : "";
+            } else {
+              tone = isClozeSlotCorrect(activity, state.picks, index) ? "is-right" : "is-wrong";
+            }
           }
           return (
             <span key={`p-${index}`}>

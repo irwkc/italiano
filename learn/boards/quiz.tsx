@@ -8,13 +8,16 @@ type Props = {
   activity: QuizActivity;
   state: BoardState;
   onChange: (partial: Partial<BoardState>) => void;
+  correctOverride?: boolean | null;
 };
 
-export function QuizBoard({ activity, state, onChange }: Props) {
+export function QuizBoard({ activity, state, onChange, correctOverride }: Props) {
   const key = quizKey(activity.id);
   const chosen = state.picks[key];
   const checked = state.checked;
-  const ok = checked && isQuizCorrect(activity, state.picks);
+  const localOk = isQuizCorrect(activity, state.picks);
+  const ok = correctOverride == null ? localOk : correctOverride;
+  const reveal = activity.answer >= 0;
 
   return (
     <div className="aula-task">
@@ -25,9 +28,10 @@ export function QuizBoard({ activity, state, onChange }: Props) {
         {activity.options.map((option, index) => {
           const value = String(index);
           const selected = chosen === value;
-          const isAnswer = index === activity.answer;
+          const isAnswer = reveal && index === activity.answer;
           let tone = "";
           if (checked && isAnswer) tone = "is-right";
+          else if (checked && selected && ok) tone = "is-right";
           else if (checked && selected && !ok) tone = "is-wrong";
           else if (selected) tone = "is-on";
           return (

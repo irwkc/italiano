@@ -14,7 +14,7 @@ async function AulaRedirect() {
   const teacher = await getTeacherSession();
   if (teacher) redirect("/aula/insegnante");
   const student = await getStudentSession();
-  if (student) redirect(`/aula/s/${student.token}`);
+  if (student) redirect("/aula/me");
   redirect("/aula/login");
   return null;
 }

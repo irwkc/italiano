@@ -4,16 +4,27 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   getTeacherSession,
+  loginStudentSession,
   loginTeacher,
   logoutStudent,
   logoutTeacher,
 } from "@/learn/auth";
+import { hashPassword, hashToken, randomToken, verifyPassword } from "@/learn/crypto";
 import { mutateStore, readStore } from "@/learn/data/store";
 import { addHour } from "@/learn/format";
 import { appendLive, emptyLive, removeActivityRefs } from "@/learn/live";
+import { appUrl, sendMail } from "@/learn/mail";
+import { rateLimit } from "@/learn/rate-limit";
 import type { Activity, Store } from "@/learn/types";
+import { isBoardCorrect } from "@/learn/boards/score";
+
+const INVITE_DAYS = 7;
+const CONFIRM_HOURS = 48;
 
 export async function loginTeacherAction(_prev: { error: string } | null, formData: FormData) {
+  const ip = "login-teacher";
+  const limited = rateLimit(ip, 20, 60_000);
+  if (!limited.ok) return { error: "Слишком много попыток. Подождите минуту." };
   const name = String(formData.get("name") ?? "");
   const password = String(formData.get("password") ?? "");
   const ok = await loginTeacher(name, password);
@@ -23,6 +34,26 @@ export async function loginTeacherAction(_prev: { error: string } | null, formDa
   redirect("/aula/insegnante");
 }
 
+export async function loginStudentAction(_prev: { error: string } | null, formData: FormData) {
+  const limited = rateLimit("login-student", 20, 60_000);
+  if (!limited.ok) return { error: "Слишком много попыток. Подождите минуту." };
+  const email = String(formData.get("email") ?? "")
+    .trim()
+    .toLowerCase();
+  const password = String(formData.get("password") ?? "");
+  if (!email || !password) return { error: "Укажите email и пароль." };
+  const store = await readStore();
+  const student = store.students.find((s) => s.email === email);
+  if (!student || !student.passwordHash || !verifyPassword(password, student.passwordHash)) {
+    return { error: "Email или пароль не подошли." };
+  }
+  if (!student.emailVerifiedAt) {
+    return { error: "Сначала подтвердите email — ссылка в письме." };
+  }
+  await loginStudentSession(student);
+  redirect("/aula/me");
+}
+
 export async function logoutTeacherAction() {
   await logoutTeacher();
   redirect("/aula/login");
@@ -30,7 +61,7 @@ export async function logoutTeacherAction() {
 
 export async function logoutStudentAction() {
   await logoutStudent();
-  redirect("/aula");
+  redirect("/aula/login");
 }
 
 async function requireTeacher() {
@@ -39,10 +70,10 @@ async function requireTeacher() {
   return teacher;
 }
 
-function revalidateStudent(token: string) {
-  revalidatePath(`/aula/s/${token}`);
-  revalidatePath(`/aula/s/${token}/orario`);
-  revalidatePath(`/aula/s/${token}/compiti`);
+function revalidateMe() {
+  revalidatePath("/aula/me");
+  revalidatePath("/aula/me/orario");
+  revalidatePath("/aula/me/compiti");
 }
 
 async function bumpTeacher(studentId?: string) {
@@ -50,43 +81,99 @@ async function bumpTeacher(studentId?: string) {
   revalidatePath("/aula/insegnante/schede");
   revalidatePath("/aula/insegnante/studenti");
   revalidatePath("/aula/insegnante/orario");
-  const store = await readStore();
+  revalidateMe();
   if (studentId) {
     revalidatePath(`/aula/insegnante/${studentId}/live`);
-    const student = store.students.find((s) => s.id === studentId);
-    if (student) revalidateStudent(student.token);
-    return;
   }
-  for (const student of store.students) revalidateStudent(student.token);
 }
 
-function studentToken(name: string) {
-  const slug = name
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-zа-яё0-9]+/gi, "")
-    .slice(0, 12) || "s";
-  return `${slug}.${crypto.randomUUID().replace(/-/g, "").slice(0, 22)}`;
-}
-
-export async function addStudentAction(formData: FormData) {
+export async function createInviteAction(): Promise<{ error?: string; url?: string; expiresAt?: string }> {
   await requireTeacher();
-  const name = String(formData.get("name") ?? "").trim();
-  if (!name) return;
-  let created = "";
-  const store = await mutateStore((draft) => {
-    const id = `st-${crypto.randomUUID()}`;
-    created = id;
-    draft.students.push({
-      id,
-      teacherId: draft.teacher.id,
-      name,
-      token: studentToken(name),
+  const token = randomToken();
+  const expiresAt = new Date(Date.now() + INVITE_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  await mutateStore((draft) => {
+    draft.invites.push({
+      id: `inv-${crypto.randomUUID()}`,
+      tokenHash: hashToken(token),
+      expiresAt,
+      usedAt: null,
+      createdAt: new Date().toISOString(),
     });
   });
-  const student = store.students.find((s) => s.id === created);
-  await bumpTeacher(created);
-  redirect(`/aula/insegnante/studenti?alunno=${student?.id ?? created}`);
+  await bumpTeacher();
+  return { url: `${appUrl()}/aula/invite/${token}`, expiresAt };
+}
+
+export async function registerInviteAction(
+  _prev: { error?: string; ok?: string } | null,
+  formData: FormData,
+): Promise<{ error?: string; ok?: string }> {
+  const inviteToken = String(formData.get("inviteToken") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
+  const email = String(formData.get("email") ?? "")
+    .trim()
+    .toLowerCase();
+  const password = String(formData.get("password") ?? "");
+  if (!inviteToken || !name || !email || password.length < 8) {
+    return { error: "Имя, email и пароль от 8 символов." };
+  }
+  const inviteHash = hashToken(inviteToken);
+  let confirmRaw = "";
+  let fail: string | null = null;
+
+  await mutateStore((draft) => {
+    const invite = draft.invites.find((item) => item.tokenHash === inviteHash);
+    if (!invite) {
+      fail = "Ссылка недействительна.";
+      return;
+    }
+    if (invite.usedAt) {
+      fail = "Ссылка уже использована.";
+      return;
+    }
+    if (new Date(invite.expiresAt).getTime() < Date.now()) {
+      fail = "Срок приглашения истёк.";
+      return;
+    }
+    if (draft.students.some((s) => s.email === email)) {
+      fail = "Этот email уже зарегистрирован.";
+      return;
+    }
+    const studentId = `st-${crypto.randomUUID()}`;
+    draft.students.push({
+      id: studentId,
+      teacherId: draft.teacher.id,
+      name,
+      email,
+      passwordHash: hashPassword(password),
+      emailVerifiedAt: null,
+    });
+    invite.usedAt = new Date().toISOString();
+    confirmRaw = randomToken();
+    draft.emailTokens.push({
+      id: `et-${crypto.randomUUID()}`,
+      studentId,
+      tokenHash: hashToken(confirmRaw),
+      kind: "confirm",
+      expiresAt: new Date(Date.now() + CONFIRM_HOURS * 60 * 60 * 1000).toISOString(),
+      usedAt: null,
+    });
+  });
+
+  if (fail) return { error: fail };
+  const link = `${appUrl()}/aula/confirm/${confirmRaw}`;
+  const mailed = await sendMail(
+    email,
+    "Подтвердите email — Aula Giacomo",
+    `Ciao, ${name}!\n\nПодтвердите почту, чтобы войти в кабинет:\n${link}\n\nСсылка действует ${CONFIRM_HOURS} часов.`,
+  );
+  revalidatePath("/aula/insegnante/studenti");
+  if (!mailed.ok) {
+    return {
+      ok: `Аккаунт создан. Письмо не ушло (${mailed.error}). Откройте ссылку: ${link}`,
+    };
+  }
+  return { ok: "Проверьте почту — пришло письмо со ссылкой подтверждения." };
 }
 
 export async function updateStudentAction(formData: FormData) {
@@ -105,19 +192,17 @@ export async function deleteStudentAction(formData: FormData) {
   await requireTeacher();
   const studentId = String(formData.get("studentId") ?? "");
   if (!studentId) return;
-  let token = "";
   await mutateStore((store) => {
     const student = store.students.find((s) => s.id === studentId);
     if (!student) return;
-    token = student.token;
     const lessonIds = new Set(store.lessons.filter((lesson) => lesson.studentId === studentId).map((lesson) => lesson.id));
     store.assignments = store.assignments.filter((item) => !lessonIds.has(item.lessonId));
     store.lessons = store.lessons.filter((lesson) => lesson.studentId !== studentId);
     store.live = store.live.filter((live) => live.studentId !== studentId);
+    store.emailTokens = store.emailTokens.filter((item) => item.studentId !== studentId);
     if (store.liveStudentId === studentId) store.liveStudentId = null;
     store.students = store.students.filter((item) => item.id !== studentId);
   });
-  if (token) revalidateStudent(token);
   revalidatePath(`/aula/insegnante/${studentId}`);
   revalidatePath(`/aula/insegnante/${studentId}/live`);
   await bumpTeacher();
@@ -148,13 +233,14 @@ function timesFromForm(formData: FormData) {
 export async function createLessonAction(formData: FormData) {
   await requireTeacher();
   const studentId = String(formData.get("studentId") ?? "");
+  const title = String(formData.get("title") ?? "").trim() || "Lezione";
   const times = timesFromForm(formData);
   if (!studentId || !times) return;
   await mutateStore((store) => {
     store.lessons.push({
       id: `l-${crypto.randomUUID()}`,
       studentId,
-      title: "Lezione",
+      title,
       startsAt: times.start.toISOString(),
       endsAt: times.end.toISOString(),
     });
@@ -179,10 +265,27 @@ export async function moveLessonAction(formData: FormData) {
   await bumpTeacher(studentId);
 }
 
+export async function deleteLessonAction(formData: FormData) {
+  await requireTeacher();
+  const lessonId = String(formData.get("lessonId") ?? "");
+  if (!lessonId) return;
+  let studentId = "";
+  await mutateStore((store) => {
+    const lesson = store.lessons.find((l) => l.id === lessonId);
+    if (!lesson) return;
+    studentId = lesson.studentId;
+    store.assignments = store.assignments.filter((a) => a.lessonId !== lessonId);
+    store.lessons = store.lessons.filter((l) => l.id !== lessonId);
+  });
+  await bumpTeacher(studentId || undefined);
+}
+
 function nextLessonFor(store: Store, studentId: string, startsAtMin: number) {
-  return store.lessons
-    .filter((l) => l.studentId === studentId && new Date(l.startsAt).getTime() >= startsAtMin)
-    .sort((a, b) => a.startsAt.localeCompare(b.startsAt))[0] ?? null;
+  return (
+    store.lessons
+      .filter((l) => l.studentId === studentId && new Date(l.startsAt).getTime() >= startsAtMin)
+      .sort((a, b) => a.startsAt.localeCompare(b.startsAt))[0] ?? null
+  );
 }
 
 function ensureLive(store: Store, studentId: string) {
@@ -212,21 +315,30 @@ export async function assignHomeworkAction(formData: FormData): Promise<{ error?
   await requireTeacher();
   const studentId = String(formData.get("studentId") ?? "");
   const activityId = String(formData.get("activityId") ?? "");
+  const lessonId = String(formData.get("lessonId") ?? "");
   if (!studentId || !activityId) return { error: "Выберите ученика." };
-  const next = nextLessonFor(await readStore(), studentId, Date.now());
-  if (!next) return { error: "Нет ближайшего урока. Поставьте занятие в календаре." };
-  await mutateStore((store) => {
-    const exists = store.assignments.some((a) => a.lessonId === next.id && a.activityId === activityId);
-    if (exists) return;
-    store.assignments.push({
+  const store = await readStore();
+  const lesson =
+    (lessonId ? store.lessons.find((l) => l.id === lessonId && l.studentId === studentId) : null) ??
+    nextLessonFor(store, studentId, Date.now());
+  if (!lesson) return { error: "Нет ближайшего урока. Поставьте занятие в календаре." };
+  let duplicate = false;
+  await mutateStore((draft) => {
+    const exists = draft.assignments.some((a) => a.lessonId === lesson.id && a.activityId === activityId);
+    if (exists) {
+      duplicate = true;
+      return;
+    }
+    draft.assignments.push({
       id: `as-${crypto.randomUUID()}`,
-      lessonId: next.id,
+      lessonId: lesson.id,
       activityId,
       kind: "homework",
     });
   });
   await bumpTeacher(studentId);
-  return { ok: `На дом к «${next.title}»` };
+  if (duplicate) return { error: "Это задание уже повешено на этот урок." };
+  return { ok: `На дом к «${lesson.title}»` };
 }
 
 export async function openLiveAction(formData: FormData): Promise<{ error?: string; ok?: string }> {
@@ -238,6 +350,7 @@ export async function openLiveAction(formData: FormData): Promise<{ error?: stri
   await mutateStore((store) => {
     const live = ensureLive(store, studentId);
     out.status = appendLive(live, activityId);
+    live.rev += 1;
     out.count = live.queue.length;
   });
   await bumpTeacher(studentId);
@@ -262,19 +375,25 @@ export async function addTopicAction(formData: FormData) {
   await bumpTeacher();
 }
 
-export async function renameTopicAction(formData: FormData) {
+export async function renameTopicAction(formData: FormData): Promise<{ error?: string }> {
   await requireTeacher();
   const from = String(formData.get("from") ?? "").trim();
   const to = String(formData.get("to") ?? "").trim();
-  if (!from || !to || from === to) return;
+  if (!from || !to || from === to) return {};
+  let clash = false;
   await mutateStore((store) => {
-    if (store.topics.includes(to)) return;
+    if (store.topics.includes(to)) {
+      clash = true;
+      return;
+    }
     store.topics = store.topics.map((topic) => (topic === from ? to : topic));
     for (const activity of store.activities) {
       if (activity.topic === from) activity.topic = to;
     }
   });
   await bumpTeacher();
+  if (clash) return { error: "Такой раздел уже есть." };
+  return {};
 }
 
 export async function deleteTopicAction(formData: FormData) {
@@ -290,15 +409,12 @@ export async function deleteTopicAction(formData: FormData) {
   await bumpTeacher();
 }
 
-export async function createActivityAction(formData: FormData): Promise<{ error?: string; id?: string }> {
-  await requireTeacher();
+function parseActivityForm(formData: FormData, id: string): { error?: string; activity?: Activity } {
   const type = String(formData.get("type") ?? "");
   const topic = String(formData.get("topic") ?? "").trim();
   const title = String(formData.get("title") ?? "").trim();
   const prompt = String(formData.get("prompt") ?? "").trim();
   if (!topic || !title) return { error: "Нужны раздел и название." };
-  const id = `act-${crypto.randomUUID()}`;
-  let activity: Activity | null = null;
   if (type === "quiz") {
     const options = String(formData.get("options") ?? "")
       .split("\n")
@@ -308,8 +424,9 @@ export async function createActivityAction(formData: FormData): Promise<{ error?
     if (options.length < 2) return { error: "Нужны хотя бы два варианта." };
     if (!prompt) return { error: "Нужен вопрос." };
     if (!Number.isInteger(answer) || answer < 0 || answer >= options.length) return { error: "Отметьте верный вариант." };
-    activity = { id, type: "quiz", title, topic, prompt, options, answer };
-  } else if (type === "cloze") {
+    return { activity: { id, type: "quiz", title, topic, prompt, options, answer } };
+  }
+  if (type === "cloze") {
     const text = String(formData.get("text") ?? "").trim();
     const answers = lines(String(formData.get("answers") ?? ""));
     const bank = lines(String(formData.get("bank") ?? ""));
@@ -320,16 +437,40 @@ export async function createActivityAction(formData: FormData): Promise<{ error?
     for (const word of answers) {
       if (!words.includes(word)) words.push(word);
     }
-    activity = { id, type: "cloze", title, topic, prompt: prompt || undefined, text, answers, bank: words };
-  } else {
-    return { error: "Выберите тип." };
+    return { activity: { id, type: "cloze", title, topic, prompt: prompt || undefined, text, answers, bank: words } };
   }
-  const created = activity;
+  return { error: "Выберите тип." };
+}
+
+export async function createActivityAction(formData: FormData): Promise<{ error?: string; id?: string }> {
+  await requireTeacher();
+  const id = `act-${crypto.randomUUID()}`;
+  const parsed = parseActivityForm(formData, id);
+  if (parsed.error || !parsed.activity) return { error: parsed.error ?? "Ошибка." };
+  const created = parsed.activity;
+  const topic = created.topic;
   await mutateStore((store) => {
     if (!store.topics.includes(topic)) store.topics.push(topic);
     const last = store.activities.findLastIndex((item) => item.topic === topic);
     if (last === -1) store.activities.push(created);
     else store.activities.splice(last + 1, 0, created);
+  });
+  await bumpTeacher();
+  return { id };
+}
+
+export async function updateActivityAction(formData: FormData): Promise<{ error?: string; id?: string }> {
+  await requireTeacher();
+  const id = String(formData.get("activityId") ?? "");
+  if (!id) return { error: "Нет задания." };
+  const parsed = parseActivityForm(formData, id);
+  if (parsed.error || !parsed.activity) return { error: parsed.error ?? "Ошибка." };
+  const next = parsed.activity;
+  await mutateStore((store) => {
+    const index = store.activities.findIndex((item) => item.id === id);
+    if (index === -1) return;
+    if (!store.topics.includes(next.topic)) store.topics.push(next.topic);
+    store.activities[index] = next;
   });
   await bumpTeacher();
   return { id };
@@ -374,3 +515,56 @@ export async function deleteActivityAction(formData: FormData) {
   await bumpTeacher();
 }
 
+export async function saveAssignmentProgressAction(formData: FormData): Promise<{ error?: string; ok?: boolean; correct?: boolean }> {
+  const { getStudentSession } = await import("@/learn/auth");
+  const student = await getStudentSession();
+  if (!student) return { error: "Войдите в кабинет." };
+  const assignmentId = String(formData.get("assignmentId") ?? "");
+  const checked = String(formData.get("checked") ?? "") === "1";
+  let picks: Record<string, string | null> = {};
+  try {
+    picks = JSON.parse(String(formData.get("picks") ?? "{}")) as Record<string, string | null>;
+  } catch {
+    return { error: "Некорректные ответы." };
+  }
+  let correct = false;
+  let error: string | undefined;
+  await mutateStore((store) => {
+    const assignment = store.assignments.find((a) => a.id === assignmentId);
+    if (!assignment) {
+      error = "Задание не найдено.";
+      return;
+    }
+    const lesson = store.lessons.find((l) => l.id === assignment.lessonId);
+    if (!lesson || lesson.studentId !== student.id) {
+      error = "Нет доступа.";
+      return;
+    }
+    const activity = store.activities.find((a) => a.id === assignment.activityId);
+    if (!activity) {
+      error = "Материал удалён.";
+      return;
+    }
+    if (checked) {
+      const answered =
+        activity.type === "quiz"
+          ? Boolean(picks[activity.id])
+          : activity.answers.every((_, i) => Boolean(picks[String(i)]));
+      if (!answered) {
+        error = "Сначала выберите ответ.";
+        return;
+      }
+      correct = isBoardCorrect(activity, picks);
+    }
+    assignment.progress = {
+      picks,
+      checked,
+      correct: checked ? correct : false,
+      updatedAt: new Date().toISOString(),
+    };
+  });
+  revalidateMe();
+  revalidatePath("/aula/insegnante/studenti");
+  if (error) return { error };
+  return { ok: true, correct };
+}

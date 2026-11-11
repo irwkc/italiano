@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { signSession, verifySession } from "@/learn/crypto";
 import { readStore } from "@/learn/data/store";
 import type { Student, Teacher } from "@/learn/types";
 
@@ -12,6 +13,9 @@ const cookieBase = {
   secure: process.env.NODE_ENV === "production",
 };
 
+const TEACHER_MAX_AGE = 60 * 60 * 24 * 30;
+const STUDENT_MAX_AGE = 60 * 60 * 24 * 30;
+
 export async function loginTeacher(name: string, password: string): Promise<boolean> {
   const store = await readStore();
   const expected = process.env.AULA_PASSWORD;
@@ -19,11 +23,29 @@ export async function loginTeacher(name: string, password: string): Promise<bool
   if (name.trim().toLowerCase() !== store.teacher.name.toLowerCase()) return false;
   if (password !== expected) return false;
   const jar = await cookies();
-  jar.set(TEACHER_COOKIE, store.teacher.id, {
-    ...cookieBase,
-    maxAge: 60 * 60 * 24 * 30,
-  });
+  jar.set(
+    TEACHER_COOKIE,
+    signSession({
+      role: "teacher",
+      id: store.teacher.id,
+      exp: Math.floor(Date.now() / 1000) + TEACHER_MAX_AGE,
+    }),
+    { ...cookieBase, maxAge: TEACHER_MAX_AGE },
+  );
   return true;
+}
+
+export async function loginStudentSession(student: Student) {
+  const jar = await cookies();
+  jar.set(
+    STUDENT_COOKIE,
+    signSession({
+      role: "student",
+      id: student.id,
+      exp: Math.floor(Date.now() / 1000) + STUDENT_MAX_AGE,
+    }),
+    { ...cookieBase, maxAge: STUDENT_MAX_AGE },
+  );
 }
 
 export async function logoutTeacher() {
@@ -38,34 +60,37 @@ export async function logoutStudent() {
 
 export async function getTeacherSession(): Promise<Teacher | null> {
   const jar = await cookies();
-  const id = jar.get(TEACHER_COOKIE)?.value;
-  if (!id) return null;
+  const payload = verifySession(jar.get(TEACHER_COOKIE)?.value);
+  if (!payload || payload.role !== "teacher") return null;
   const store = await readStore();
-  return store.teacher.id === id ? store.teacher : null;
+  return store.teacher.id === payload.id ? store.teacher : null;
 }
 
 export async function getStudentSession(): Promise<Student | null> {
   const jar = await cookies();
-  const token = jar.get(STUDENT_COOKIE)?.value;
-  if (!token) return null;
+  const payload = verifySession(jar.get(STUDENT_COOKIE)?.value);
+  if (!payload || payload.role !== "student") return null;
   const store = await readStore();
-  return store.students.find((s) => s.token === token) ?? null;
+  const student = store.students.find((s) => s.id === payload.id) ?? null;
+  if (!student?.emailVerifiedAt) return null;
+  return student;
 }
 
-export async function studentByToken(token: string): Promise<Student | null> {
-  const store = await readStore();
-  return store.students.find((s) => s.token === token) ?? null;
+export async function requireStudentSession() {
+  return getStudentSession();
 }
 
 export async function apiActor() {
   const jar = await cookies();
   const store = await readStore();
-  const teacherId = jar.get(TEACHER_COOKIE)?.value;
-  if (teacherId === store.teacher.id) {
+  const teacherPayload = verifySession(jar.get(TEACHER_COOKIE)?.value);
+  if (teacherPayload?.role === "teacher" && teacherPayload.id === store.teacher.id) {
     return { role: "teacher" as const, store };
   }
-  const token = jar.get(STUDENT_COOKIE)?.value;
-  const student = store.students.find((s) => s.token === token);
-  if (student) return { role: "student" as const, store, student };
+  const studentPayload = verifySession(jar.get(STUDENT_COOKIE)?.value);
+  if (studentPayload?.role === "student") {
+    const student = store.students.find((s) => s.id === studentPayload.id);
+    if (student?.emailVerifiedAt) return { role: "student" as const, store, student };
+  }
   return { role: "none" as const, store };
 }

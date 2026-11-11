@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { addStudentAction, deleteStudentAction, updateStudentAction } from "@/learn/actions";
-import { formatLessonWhen } from "@/learn/format";
+import { useEffect, useState, useTransition } from "react";
+import { createInviteAction, deleteStudentAction, updateStudentAction } from "@/learn/actions";
+import { formatLessonWhen, kindLabel, typeLabel } from "@/learn/format";
 import { CopyLink } from "@/learn/ui/copy-link";
 
 export type PastMaterial = {
   title: string;
   kind: "homework" | "classwork";
   type: "quiz" | "cloze";
+  status?: string;
 };
 
 export type PastLesson = {
@@ -21,22 +22,24 @@ export type PastLesson = {
 export type StudentCard = {
   id: string;
   name: string;
-  token: string;
+  email: string;
+  verified: boolean;
   past: PastLesson[];
 };
 
 export function StudentsPanel({
   students,
-  origin,
   initialId,
 }: {
   students: StudentCard[];
-  origin: string;
   initialId?: string;
 }) {
   const [openId, setOpenId] = useState<string | null>(initialId ?? null);
   const [openLesson, setOpenLesson] = useState<string | null>(null);
   const [now, setNow] = useState<number | null>(null);
+  const [inviteUrl, setInviteUrl] = useState<string | null>(null);
+  const [inviteNote, setInviteNote] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
   useEffect(() => {
     setNow(Date.now());
@@ -47,17 +50,28 @@ export function StudentsPanel({
     setOpenLesson(null);
   }
 
+  function invite() {
+    startTransition(async () => {
+      const result = await createInviteAction();
+      if (result.error) {
+        setInviteNote(result.error);
+        setInviteUrl(null);
+        return;
+      }
+      setInviteUrl(result.url ?? null);
+      setInviteNote(result.expiresAt ? `Действует до ${new Date(result.expiresAt).toLocaleString("ru-RU")}` : null);
+    });
+  }
+
   return (
     <div>
-      <form action={addStudentAction} className="aula-form-row is-compact">
-        <label className="aula-label">
-          Новый ученик
-          <input className="aula-select" name="name" placeholder="Имя" required />
-        </label>
-        <button className="btn btn-primary" type="submit">
-          Добавить
+      <div className="aula-form-row is-compact">
+        <button className="btn btn-primary" type="button" disabled={pending} onClick={invite}>
+          Пригласить
         </button>
-      </form>
+        {inviteNote ? <p className="aula-muted">{inviteNote}</p> : null}
+      </div>
+      {inviteUrl ? <CopyLink url={inviteUrl} /> : null}
 
       <ul className="aula-acc-list">
         {students.map((student) => {
@@ -72,7 +86,9 @@ export function StudentsPanel({
                 onClick={() => toggleStudent(student.id)}
               >
                 <span>{student.name}</span>
-                <span className="aula-muted">{now == null ? "" : `${past.length} прошлых`}</span>
+                <span className="aula-muted">
+                  {student.verified ? student.email : `${student.email || "без email"} · не подтверждён`}
+                </span>
               </button>
               {open ? (
                 <div className="aula-acc-body">
@@ -92,13 +108,12 @@ export function StudentsPanel({
                       className="aula-text-btn"
                       type="submit"
                       onClick={(event) => {
-                        if (!window.confirm("Удалить ученика, занятия и ссылку?")) event.preventDefault();
+                        if (!window.confirm("Удалить ученика, занятия и доступ?")) event.preventDefault();
                       }}
                     >
                       Удалить
                     </button>
                   </form>
-                  <CopyLink url={`${origin}/aula/s/${student.token}`} />
                   <p className="aula-kicker" style={{ marginTop: "1.5rem" }}>
                     Пройденное
                   </p>
@@ -128,7 +143,8 @@ export function StudentsPanel({
                                     <li key={`${lesson.id}-${item.title}`} className="aula-row">
                                       <span>{item.title}</span>
                                       <span className="aula-pill">
-                                        {item.type} · {item.kind === "homework" ? "compito" : "in classe"}
+                                        {typeLabel(item.type)} · {kindLabel(item.kind)}
+                                        {item.status ? ` · ${item.status}` : ""}
                                       </span>
                                     </li>
                                   ))

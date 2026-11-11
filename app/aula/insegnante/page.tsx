@@ -23,6 +23,7 @@ async function TeacherLiveHome() {
         <TeacherLiveStudio
           students={store.students.map((s) => ({ id: s.id, name: s.name }))}
           liveStudentId={store.liveStudentId}
+          meetUrl={store.meetUrl}
         />
       </main>
     </>

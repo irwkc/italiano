@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState, useTransition, type FormEvent } from "react";
 import {
   addTopicAction,
@@ -10,9 +11,10 @@ import {
   openLiveAction,
   renameTopicAction,
   reorderActivitiesAction,
+  updateActivityAction,
 } from "@/learn/actions";
 import { PracticeBoard } from "@/learn/boards/practice-board";
-import { formatLessonWhen } from "@/learn/format";
+import { formatLessonWhen, typeLabel } from "@/learn/format";
 import type { Activity, Lesson } from "@/learn/types";
 import { AulaSelect } from "@/learn/ui/select";
 
@@ -35,9 +37,12 @@ export function SchedeBank({
   const [query, setQuery] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
   const [compose, setCompose] = useState<string | null>(null);
+  const [editing, setEditing] = useState(false);
   const [ask, setAsk] = useState<Ask>(null);
   const [who, setWho] = useState(liveStudentId ?? students[0]?.id ?? "");
+  const [lessonId, setLessonId] = useState("");
   const [note, setNote] = useState<string | null>(null);
+  const [composeError, setComposeError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [now, setNow] = useState<number | null>(null);
   const [local, setLocal] = useState<Activity[] | null>(null);
@@ -78,14 +83,21 @@ export function SchedeBank({
       });
   }, [catalog, topics, q]);
 
+  const studentLessons = useMemo(() => {
+    if (now == null) return [];
+    return lessons
+      .filter((l) => l.studentId === who)
+      .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
+  }, [lessons, who, now]);
+
   const nextLesson = useMemo(() => {
     if (now == null) return null;
-    return (
-      lessons
-        .filter((l) => l.studentId === who && new Date(l.startsAt).getTime() >= now)
-        .sort((a, b) => a.startsAt.localeCompare(b.startsAt))[0] ?? null
-    );
-  }, [lessons, who, now]);
+    return studentLessons.find((l) => new Date(l.startsAt).getTime() >= now) ?? studentLessons[0] ?? null;
+  }, [studentLessons, now]);
+
+  useEffect(() => {
+    setLessonId(nextLesson?.id ?? "");
+  }, [nextLesson?.id, who]);
 
   function resetAsk() {
     setAsk(null);
@@ -95,6 +107,8 @@ export function SchedeBank({
   function pickActivity(id: string) {
     setOpenId(id);
     setCompose(null);
+    setEditing(false);
+    setComposeError(null);
     resetAsk();
     setWho(liveStudentId ?? students[0]?.id ?? "");
   }
@@ -102,6 +116,8 @@ export function SchedeBank({
   function toggleEdit() {
     setEdit((on) => !on);
     setCompose(null);
+    setEditing(false);
+    setComposeError(null);
     setRename(null);
     setAdding(false);
     setDragId(null);
@@ -156,18 +172,20 @@ export function SchedeBank({
   }
 
   function sendHomework() {
-    if (!activity || !who) return;
+    if (!activity || !who || !lessonId) return;
     const data = new FormData();
     data.set("studentId", who);
     data.set("activityId", activity.id);
+    data.set("lessonId", lessonId);
     startTransition(async () => {
       const result = await assignHomeworkAction(data);
       setNote(result.error ?? result.ok ?? null);
+      if (result.ok) setAsk(null);
     });
   }
 
   function onAssignLive() {
-    if (liveStudentId) sendLive(liveStudentId);
+    if (liveStudentId) setAsk("live");
     else setAsk("live");
   }
 
@@ -226,7 +244,18 @@ export function SchedeBank({
                   <div className="aula-topic-lead">
                     {rename === topic ? (
                       <div className="aula-topic-rename">
-                        <form action={renameTopicAction} className="aula-topic-rename-form" onSubmit={() => setRename(null)}>
+                        <form
+                          className="aula-topic-rename-form"
+                          onSubmit={(event) => {
+                            event.preventDefault();
+                            const data = new FormData(event.currentTarget);
+                            startTransition(async () => {
+                              const result = await renameTopicAction(data);
+                              if (result.error) setNote(result.error);
+                              else setRename(null);
+                            });
+                          }}
+                        >
                           <input type="hidden" name="from" value={topic} />
                           <input className="aula-topic-title-input" name="to" defaultValue={topic} required autoFocus />
                           <button className="aula-text-btn" type="submit">
@@ -260,6 +289,8 @@ export function SchedeBank({
                       aria-label="Добавить задание"
                       onClick={() => {
                         setCompose(topic);
+                        setEditing(false);
+                        setComposeError(null);
                         setOpenId(null);
                         resetAsk();
                       }}
@@ -319,7 +350,7 @@ export function SchedeBank({
                       >
                         {edit ? <span className="aula-grip" aria-hidden /> : null}
                         <span className="aula-acc-title">{item.title}</span>
-                        <span className="aula-muted">{item.type}</span>
+                        <span className="aula-muted">{typeLabel(item.type)}</span>
                       </button>
                     </li>
                   ))}
@@ -351,17 +382,44 @@ export function SchedeBank({
             <ActivityCompose
               topic={compose}
               pending={pending}
-              onCancel={() => setCompose(null)}
+              error={composeError}
+              onCancel={() => {
+                setCompose(null);
+                setComposeError(null);
+              }}
               onCreate={(data) => {
                 startTransition(async () => {
                   const result = await createActivityAction(data);
                   if (result.error) {
-                    setNote(result.error);
+                    setComposeError(result.error);
                     return;
                   }
-                  setNote(null);
+                  setComposeError(null);
                   setCompose(null);
                   if (result.id) setOpenId(result.id);
+                });
+              }}
+            />
+          ) : edit && editing && activity ? (
+            <ActivityCompose
+              topic={activity.topic}
+              pending={pending}
+              error={composeError}
+              initial={activity}
+              onCancel={() => {
+                setEditing(false);
+                setComposeError(null);
+              }}
+              onCreate={(data) => {
+                data.set("activityId", activity.id);
+                startTransition(async () => {
+                  const result = await updateActivityAction(data);
+                  if (result.error) {
+                    setComposeError(result.error);
+                    return;
+                  }
+                  setComposeError(null);
+                  setEditing(false);
                 });
               }}
             />
@@ -369,12 +427,17 @@ export function SchedeBank({
             <>
               <div className="aula-schede-bar">
                 <p className="aula-kicker">
-                  {activity.topic} · {activity.type}
+                  {activity.topic} · {typeLabel(activity.type)}
                 </p>
                 {edit ? (
-                  <button className="btn" type="button" disabled={pending} onClick={removeActivity}>
-                    Удалить
-                  </button>
+                  <div className="aula-form-row is-compact">
+                    <button className="btn" type="button" disabled={pending} onClick={() => setEditing(true)}>
+                      Изменить
+                    </button>
+                    <button className="btn" type="button" disabled={pending} onClick={removeActivity}>
+                      Удалить
+                    </button>
+                  </div>
                 ) : ask == null ? (
                   <button className="btn btn-primary" type="button" onClick={() => setAsk("kind")}>
                     Задать
@@ -403,14 +466,20 @@ export function SchedeBank({
                     onChange={setWho}
                     options={students.map((s) => ({ value: s.id, label: s.name }))}
                   />
-                  {now == null ? null : nextLesson ? (
-                    <p className="aula-muted">
-                      к уроку {nextLesson.title} · {formatLessonWhen(nextLesson.startsAt)}
-                    </p>
+                  {studentLessons.length === 0 ? (
+                    <p className="aula-muted">Нет уроков. Поставьте занятие в календаре.</p>
                   ) : (
-                    <p className="aula-muted">Нет ближайшего урока. Поставьте занятие в календаре.</p>
+                    <AulaSelect
+                      label="К уроку"
+                      value={lessonId}
+                      onChange={setLessonId}
+                      options={studentLessons.map((l) => ({
+                        value: l.id,
+                        label: `${l.title} · ${formatLessonWhen(l.startsAt)}`,
+                      }))}
+                    />
                   )}
-                  <button className="btn btn-primary" type="button" disabled={!nextLesson || pending} onClick={sendHomework}>
+                  <button className="btn btn-primary" type="button" disabled={!lessonId || pending} onClick={sendHomework}>
                     Повесить
                   </button>
                 </div>
@@ -426,10 +495,15 @@ export function SchedeBank({
                   <button className="btn btn-primary" type="button" disabled={!who || pending} onClick={() => sendLive(who)}>
                     Открыть
                   </button>
+                  {note && !note.startsWith("Выберите") && !note.startsWith("Нет") ? (
+                    <p className="aula-muted">
+                      {note} · <Link href="/aula/insegnante">к Live</Link>
+                    </p>
+                  ) : null}
                 </div>
               ) : null}
               {note ? (
-                <p className={note.startsWith("Выберите") || note.startsWith("Нет") || note.startsWith("Нуж") ? "aula-err" : "aula-muted"}>
+                <p className={note.startsWith("Выберите") || note.startsWith("Нет") || note.startsWith("Нуж") || note.startsWith("Это") ? "aula-err" : "aula-muted"}>
                   {note}
                 </p>
               ) : null}
@@ -449,17 +523,23 @@ export function SchedeBank({
 function ActivityCompose({
   topic,
   pending,
+  error,
+  initial,
   onCancel,
   onCreate,
 }: {
   topic: string;
   pending: boolean;
+  error?: string | null;
+  initial?: Activity;
   onCancel: () => void;
   onCreate: (data: FormData) => void;
 }) {
-  const [type, setType] = useState<"quiz" | "cloze">("quiz");
-  const [optionsText, setOptionsText] = useState("");
-  const [answer, setAnswer] = useState("0");
+  const [type, setType] = useState<"quiz" | "cloze">(initial?.type ?? "quiz");
+  const [optionsText, setOptionsText] = useState(
+    initial?.type === "quiz" ? initial.options.join("\n") : "",
+  );
+  const [answer, setAnswer] = useState(initial?.type === "quiz" ? String(initial.answer) : "0");
   const options = optionsText
     .split("\n")
     .map((item) => item.trim())
@@ -492,11 +572,16 @@ function ActivityCompose({
       </div>
       <label className="aula-label">
         Название
-        <input className="aula-select" name="title" required />
+        <input className="aula-select" name="title" defaultValue={initial?.title} required />
       </label>
       <label className="aula-label">
         {type === "quiz" ? "Вопрос" : "Подсказка"}
-        <input className="aula-select" name="prompt" required={type === "quiz"} />
+        <input
+          className="aula-select"
+          name="prompt"
+          defaultValue={initial?.prompt ?? ""}
+          required={type === "quiz"}
+        />
       </label>
       {type === "quiz" ? (
         <>
@@ -515,18 +600,30 @@ function ActivityCompose({
         <>
           <label className="aula-label">
             Текст, пропуски как ____
-            <textarea className="aula-select" name="text" required />
+            <textarea className="aula-select" name="text" defaultValue={initial?.type === "cloze" ? initial.text : ""} required />
           </label>
           <label className="aula-label">
             Ответы по порядку
-            <input className="aula-select" name="answers" placeholder="mi, faccio" required />
+            <input
+              className="aula-select"
+              name="answers"
+              placeholder="mi, faccio"
+              defaultValue={initial?.type === "cloze" ? initial.answers.join(", ") : ""}
+              required
+            />
           </label>
           <label className="aula-label">
             Банк слов
-            <input className="aula-select" name="bank" placeholder="mi, faccio, sono" />
+            <input
+              className="aula-select"
+              name="bank"
+              placeholder="mi, faccio, sono"
+              defaultValue={initial?.type === "cloze" ? initial.bank.join(", ") : ""}
+            />
           </label>
         </>
       )}
+      {error ? <p className="aula-err">{error}</p> : null}
       <button className="btn btn-primary" type="submit" disabled={pending}>
         Сохранить
       </button>

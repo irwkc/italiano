@@ -7,7 +7,29 @@ export type Student = {
   id: string;
   teacherId: string;
   name: string;
-  token: string;
+  email: string;
+  passwordHash: string;
+  emailVerifiedAt: string | null;
+  /** @deprecated legacy magic-link; unused for routing */
+  token?: string;
+};
+
+export type Invite = {
+  id: string;
+  tokenHash: string;
+  expiresAt: string;
+  usedAt: string | null;
+  createdAt: string;
+  nameHint?: string;
+};
+
+export type EmailToken = {
+  id: string;
+  studentId: string;
+  tokenHash: string;
+  kind: "confirm" | "reset";
+  expiresAt: string;
+  usedAt: string | null;
 };
 
 export type Lesson = {
@@ -20,11 +42,19 @@ export type Lesson = {
 
 export type AssignmentKind = "homework" | "classwork";
 
+export type AssignmentProgress = {
+  picks: Record<string, string | null>;
+  checked: boolean;
+  correct: boolean;
+  updatedAt: string;
+};
+
 export type Assignment = {
   id: string;
   lessonId: string;
   activityId: string;
   kind: AssignmentKind;
+  progress?: AssignmentProgress | null;
 };
 
 export type QuizActivity = {
@@ -60,11 +90,14 @@ export type LiveSession = {
   picks: Record<string, string | null>;
   selected: string | null;
   checked: boolean;
+  rev: number;
 };
 
 export type Store = {
   teacher: Teacher;
   students: Student[];
+  invites: Invite[];
+  emailTokens: EmailToken[];
   lessons: Lesson[];
   assignments: Assignment[];
   activities: Activity[];
