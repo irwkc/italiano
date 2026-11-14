@@ -7,8 +7,6 @@ final class HTTPAulaClient: AulaClient, @unchecked Sendable {
     private let tokenStore: TokenStore
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
-    private let lock = NSLock()
-    private var refreshing = false
 
     init(baseURL: URL, tokenStore: TokenStore, session: URLSession = .shared) {
         self.baseURL = baseURL
@@ -188,16 +186,6 @@ final class HTTPAulaClient: AulaClient, @unchecked Sendable {
     }
 
     private func refreshTokens() async throws {
-        lock.lock()
-        let already = refreshing
-        lock.unlock()
-        if already {
-            try await Task.sleep(nanoseconds: 200_000_000)
-            if tokenStore.accessToken == nil { throw AulaAPIError.unauthorized }
-            return
-        }
-        lock.lock(); refreshing = true; lock.unlock()
-        defer { lock.lock(); refreshing = false; lock.unlock() }
         guard let refresh = tokenStore.refreshToken else { throw AulaAPIError.unauthorized }
         struct Body: Encodable { var refreshToken: String }
         let body = try encoder.encode(Body(refreshToken: refresh))

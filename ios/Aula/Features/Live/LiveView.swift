@@ -41,12 +41,7 @@ struct LiveView: View {
                 onNext: payload.live.index + 1 < payload.live.queue.count
                     ? nil
                     : {
-                        doneLocal = true
-                        if var current = payload {
-                            current.activity = nil
-                            current.done = true
-                            self.payload = current
-                        }
+                        finishQueue(payload)
                     }
             )
         } else if payload != nil || doneLocal {
@@ -79,6 +74,14 @@ struct LiveView: View {
         } catch {
             self.error = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
         }
+    }
+
+    private func finishQueue(_ current: LivePayload) {
+        doneLocal = true
+        var next = current
+        next.activity = nil
+        next.done = true
+        payload = next
     }
 
     private func patch(_ patch: LivePatch) async {
