@@ -159,7 +159,6 @@
   width: min(56rem, calc(100% - 2rem));
   margin: 0 auto;
   padding: 1.75rem 0 0;
-  overflow: hidden;
 }
 
 .aula-teacher-nav .aula-tabs {
@@ -525,6 +524,83 @@
 
   .aula-cal-month {
     font-size: clamp(1.55rem, 7vw, 2.2rem);
+  }
+
+  .aula-row,
+  .aula-acc-head {
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+  }
+
+  .aula-live-top .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .aula .btn {
+    max-width: 100%;
+    white-space: normal;
+    height: auto;
+    min-height: 2.75rem;
+    padding: 0.65rem 1rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 360px) {
+  .aula-shell,
+  .aula-wide,
+  .aula-teacher-nav {
+    width: min(56rem, calc(100% - 1rem));
+  }
+
+  .aula-bar {
+    gap: 0.5rem;
+    padding-left: max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
+  }
+
+  .aula-who {
+    max-width: 36vw;
+    font-size: 0.68rem;
+  }
+
+  .aula-out {
+    font-size: 0.64rem;
+  }
+
+  .aula-tabs {
+    gap: 0.45rem 0.9rem;
+  }
+
+  .aula-tabs a {
+    font-size: clamp(1.35rem, 8vw, 1.7rem);
+  }
+
+  .aula-cal-day {
+    min-height: 2.8rem;
+    padding: 0.2rem 0.15rem;
+  }
+
+  .aula-cal-num {
+    font-size: 0.72rem;
+  }
+
+  .aula-ask {
+    grid-template-columns: 1fr;
+  }
+
+  .aula-form-row.is-lesson {
+    grid-template-columns: 1fr;
+  }
+
+  .aula-topic-title,
+  .aula-topic-title-input {
+    font-size: 1.15rem;
+  }
+
+  .aula-topic-title-input {
+    min-width: 0;
   }
 }
 

@@ -10,6 +10,7 @@ export const operator = {
   nameRu: "Джакомо Скиавон",
   sites: ["https://giacomoschiavon.ru", "https://giacomoschiavon.online"] as const,
   telegram: "https://t.me/itagiacomo",
+  /** Пустые плейсхолдеры — подставит владелец. Не заполнять выдуманными данными. */
   email: "",
   phone: "",
   inn: "",

@@ -288,7 +288,7 @@ html.menu-travel [data-menu-accent] {
   bottom: max(0.65rem, env(safe-area-inset-bottom));
   left: auto;
   z-index: 80;
-  width: min(17.5rem, calc(100vw - 1.3rem));
+  width: min(16.5rem, calc(100vw - 1.5rem));
   padding: 0.7rem 0.8rem 0.75rem;
   background: color-mix(in srgb, var(--ivory) 88%, transparent);
   border: 1px solid var(--line);
