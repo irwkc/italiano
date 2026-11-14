@@ -106,5 +106,7 @@ export function seedStore(): Store {
     lessons: [],
     assignments: [],
     live: [],
+    mobileSessions: [],
+    deviceTokens: [],
   };
 }

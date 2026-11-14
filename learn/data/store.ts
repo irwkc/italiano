@@ -28,6 +28,8 @@ function hydrate(raw: Store): Store {
   if (!Array.isArray(raw.activities)) raw.activities = [];
   if (!Array.isArray(raw.invites)) raw.invites = [];
   if (!Array.isArray(raw.emailTokens)) raw.emailTokens = [];
+  if (!Array.isArray(raw.mobileSessions)) raw.mobileSessions = [];
+  if (!Array.isArray(raw.deviceTokens)) raw.deviceTokens = [];
   for (const student of raw.students) {
     if (!student.email) student.email = "";
     if (!student.passwordHash) student.passwordHash = "";

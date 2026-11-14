@@ -2,5 +2,6 @@
 
 ## Запросы к бэкенду
 
-1. **Согласие на ПД при регистрации по инвайту** — в форме `/aula/invite/[token]` добавлен checkbox `consent=yes` (required в UI). Нужна серверная проверка в `registerInviteAction`: без согласия не создавать аккаунт.
-2. **Прод-env кабинета** — `SESSION_SECRET`, `SMTP_*`, `APP_URL` на сервере настраивает **бэкенд-агент** (см. `docs/aula-ops.md`). Фронт их не трогает.
+1. **Согласие на ПД при регистрации по инвайту** — ✅ серверная проверка: веб `registerInviteAction` и mobile `POST /auth/register` требуют `consent=yes` / `consent: true`.
+2. **Прод-env кабинета** — `SESSION_SECRET`, `SMTP_*`, `APP_URL` на сервере (`/opt/italiano/.env`). Бэкенд-агент без SSH deploy-ключа не может править файл на VPS; проверка через `GET /api/health` (флаги без значений). Недостающие значения — владельцу (см. отчёт / `.env.example`).
+3. **Mobile API для iOS** — ✅ эндпоинты по `docs/mobile-api.md` (включая `/gloss`, `/live/next`, absolute image URLs, `/devices`). Push send — позже, нужны APNs-ключи.

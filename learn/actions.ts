@@ -9,17 +9,16 @@ import {
   logoutStudent,
   logoutTeacher,
 } from "@/learn/auth";
-import { hashPassword, hashToken, randomToken, verifyPassword } from "@/learn/crypto";
+import { hashToken, randomToken, verifyPassword } from "@/learn/crypto";
 import { mutateStore, readStore } from "@/learn/data/store";
 import { addHour } from "@/learn/format";
 import { appendLive, emptyLive, removeActivityRefs } from "@/learn/live";
-import { appUrl, sendMail } from "@/learn/mail";
+import { appUrl } from "@/learn/mail";
 import { rateLimit } from "@/learn/rate-limit";
 import type { Activity, Store } from "@/learn/types";
 import { isBoardCorrect } from "@/learn/boards/score";
 
 const INVITE_DAYS = 7;
-const CONFIRM_HOURS = 48;
 
 export async function loginTeacherAction(_prev: { error: string } | null, formData: FormData) {
   const ip = "login-teacher";
@@ -108,72 +107,17 @@ export async function registerInviteAction(
   _prev: { error?: string; ok?: string } | null,
   formData: FormData,
 ): Promise<{ error?: string; ok?: string }> {
-  const inviteToken = String(formData.get("inviteToken") ?? "");
-  const name = String(formData.get("name") ?? "").trim();
-  const email = String(formData.get("email") ?? "")
-    .trim()
-    .toLowerCase();
-  const password = String(formData.get("password") ?? "");
-  if (!inviteToken || !name || !email || password.length < 8) {
-    return { error: "Имя, email и пароль от 8 символов." };
-  }
-  const inviteHash = hashToken(inviteToken);
-  let confirmRaw = "";
-  let fail: string | null = null;
-
-  await mutateStore((draft) => {
-    const invite = draft.invites.find((item) => item.tokenHash === inviteHash);
-    if (!invite) {
-      fail = "Ссылка недействительна.";
-      return;
-    }
-    if (invite.usedAt) {
-      fail = "Ссылка уже использована.";
-      return;
-    }
-    if (new Date(invite.expiresAt).getTime() < Date.now()) {
-      fail = "Срок приглашения истёк.";
-      return;
-    }
-    if (draft.students.some((s) => s.email === email)) {
-      fail = "Этот email уже зарегистрирован.";
-      return;
-    }
-    const studentId = `st-${crypto.randomUUID()}`;
-    draft.students.push({
-      id: studentId,
-      teacherId: draft.teacher.id,
-      name,
-      email,
-      passwordHash: hashPassword(password),
-      emailVerifiedAt: null,
-    });
-    invite.usedAt = new Date().toISOString();
-    confirmRaw = randomToken();
-    draft.emailTokens.push({
-      id: `et-${crypto.randomUUID()}`,
-      studentId,
-      tokenHash: hashToken(confirmRaw),
-      kind: "confirm",
-      expiresAt: new Date(Date.now() + CONFIRM_HOURS * 60 * 60 * 1000).toISOString(),
-      usedAt: null,
-    });
+  const { registerStudentByInvite } = await import("@/learn/mobile/register");
+  const result = await registerStudentByInvite({
+    inviteToken: String(formData.get("inviteToken") ?? ""),
+    name: String(formData.get("name") ?? ""),
+    email: String(formData.get("email") ?? ""),
+    password: String(formData.get("password") ?? ""),
+    consent: String(formData.get("consent") ?? "") === "yes",
   });
-
-  if (fail) return { error: fail };
-  const link = `${appUrl()}/aula/confirm/${confirmRaw}`;
-  const mailed = await sendMail(
-    email,
-    "Подтвердите email — Aula Giacomo",
-    `Ciao, ${name}!\n\nПодтвердите почту, чтобы войти в кабинет:\n${link}\n\nСсылка действует ${CONFIRM_HOURS} часов.`,
-  );
   revalidatePath("/aula/insegnante/studenti");
-  if (!mailed.ok) {
-    return {
-      ok: `Аккаунт создан. Письмо не ушло (${mailed.error}). Откройте ссылку: ${link}`,
-    };
-  }
-  return { ok: "Проверьте почту — пришло письмо со ссылкой подтверждения." };
+  if (!result.ok) return { error: result.message };
+  return { ok: result.message };
 }
 
 export async function updateStudentAction(formData: FormData) {

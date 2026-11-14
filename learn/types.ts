@@ -93,6 +93,28 @@ export type LiveSession = {
   rev: number;
 };
 
+/** Opaque mobile refresh session (hashed token stored server-side). */
+export type MobileSession = {
+  id: string;
+  studentId: string;
+  refreshHash: string;
+  createdAt: string;
+  expiresAt: string;
+  revokedAt: string | null;
+  userAgent?: string;
+};
+
+/** APNs device registration; push send is optional/later. */
+export type DeviceToken = {
+  id: string;
+  studentId: string;
+  platform: "ios";
+  apnsToken: string;
+  appVersion?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type Store = {
   teacher: Teacher;
   students: Student[];
@@ -105,6 +127,8 @@ export type Store = {
   meetUrl: string;
   liveStudentId: string | null;
   live: LiveSession[];
+  mobileSessions: MobileSession[];
+  deviceTokens: DeviceToken[];
 };
 
 export type BoardState = {
