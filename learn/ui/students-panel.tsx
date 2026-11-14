@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useState, useSyncExternalStore, useTransition } from "react";
 import { createInviteAction, deleteStudentAction, updateStudentAction } from "@/learn/actions";
 import { formatLessonWhen, kindLabel, typeLabel } from "@/learn/format";
 import { CopyLink } from "@/learn/ui/copy-link";
@@ -36,14 +36,14 @@ export function StudentsPanel({
 }) {
   const [openId, setOpenId] = useState<string | null>(initialId ?? null);
   const [openLesson, setOpenLesson] = useState<string | null>(null);
-  const [now, setNow] = useState<number | null>(null);
+  const now = useSyncExternalStore(
+    () => () => {},
+    () => Date.now(),
+    () => null as number | null,
+  );
   const [inviteUrl, setInviteUrl] = useState<string | null>(null);
   const [inviteNote, setInviteNote] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
-
-  useEffect(() => {
-    setNow(Date.now());
-  }, []);
 
   function toggleStudent(id: string) {
     setOpenId((current) => (current === id ? null : id));
