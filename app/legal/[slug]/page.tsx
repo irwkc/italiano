@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { docs, isLegalSlugPublic } from "@/lib/legal";
+import { isLegalSlugPublic, publicDocs } from "@/lib/legal";
 
-const bySlug = Object.fromEntries(docs.map((doc) => [doc.slug, doc]));
+const bySlug = Object.fromEntries(publicDocs.map((doc) => [doc.slug, doc]));
 
 export function generateStaticParams() {
-  return docs.map((doc) => ({ slug: doc.slug }));
+  return publicDocs.map((doc) => ({ slug: doc.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

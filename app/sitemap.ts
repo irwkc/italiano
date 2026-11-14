@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { docs, operator } from "@/lib/legal";
+import { docs, operator, platformDocs } from "@/lib/legal";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date("2026-11-14");
@@ -15,6 +15,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "yearly" as const,
       priority: 0.3,
+    })),
+    ...platformDocs.map((doc) => ({
+      url: `${operator.sites[0]}/legal/${doc.slug}`,
+      lastModified,
+      changeFrequency: "yearly" as const,
+      priority: 0.2,
     })),
   ];
 }

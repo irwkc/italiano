@@ -396,21 +396,39 @@ export const cookies: LegalDoc =
   legalMode === "services" ? cookiesServices : cookiesInformational;
 export const terms: LegalDoc = legalMode === "services" ? termsServices : termsInformational;
 
+/**
+ * Политика кабинета Aula — всегда полный (services) текст, не зависит от legalMode.
+ * Лендинг в informational продолжает отдавать /legal/privacy без услуг.
+ */
+export const platformPrivacy: LegalDoc = {
+  slug: "platform-privacy",
+  title: privacyServices.title,
+  updated: privacyServices.updated,
+  sections: privacyServices.sections,
+};
+
 const navBase = [
   { href: "/legal/privacy", label: "Персональные данные" },
   { href: "/legal/cookies", label: "Cookie" },
   { href: "/legal/terms", label: "Соглашение" },
 ] as const;
 
+/** Ссылки в подвале лендинга и на /legal — без platform-privacy. */
 export const legalNav =
   legalMode === "services"
     ? [...navBase, { href: "/legal/offer", label: "Условия занятий" }]
     : [...navBase];
 
-/** Публичные документы текущего режима (offer только в services). */
+/** Документы лендинга (зависят от legalMode). */
 export const docs: LegalDoc[] =
   legalMode === "services" ? [privacy, cookies, terms, offer] : [privacy, cookies, terms];
 
+/** Всегда доступные документы платформы (игнор legalMode). */
+export const platformDocs: LegalDoc[] = [platformPrivacy];
+
+/** Все slug, которые отдаёт /legal/[slug]. */
+export const publicDocs: LegalDoc[] = [...docs, ...platformDocs];
+
 export function isLegalSlugPublic(slug: string) {
-  return docs.some((doc) => doc.slug === slug);
+  return publicDocs.some((doc) => doc.slug === slug);
 }

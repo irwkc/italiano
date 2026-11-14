@@ -36,7 +36,7 @@ export function InviteForm({ token }: { token: string }) {
         <input type="checkbox" name="consent" value="yes" required />
         <span>
           Согласен на обработку персональных данных по{" "}
-          <a href="/legal/privacy" className="link">
+          <a href="/legal/platform-privacy" className="link">
             политике
           </a>
         </span>
