@@ -64,6 +64,7 @@ export function Footer() {
       <div className="footer-legal px-5 md:px-10 mt-8 md:mt-10">
         <p className="footer-offer">
           Сайт носит ознакомительный характер и не является публичной офертой.
+          Занятия — по индивидуальной договорённости.
         </p>
         <nav className="footer-docs" aria-label="Юридическая информация">
           {legalNav.map((item) => (

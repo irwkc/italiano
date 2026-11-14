@@ -31,8 +31,8 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
       {doc.sections.map((section) => (
         <section key={section.heading}>
           <h2 className="serif">{section.heading}</h2>
-          {section.paragraphs.map((paragraph) => (
-            <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+          {section.paragraphs.map((paragraph, index) => (
+            <p key={`${section.heading}-${index}`}>{paragraph}</p>
           ))}
         </section>
       ))}

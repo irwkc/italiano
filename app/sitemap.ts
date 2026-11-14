@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { docs, operator } from "@/lib/legal";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date("2026-10-27");
+  const lastModified = new Date("2026-11-14");
   return [
     {
       url: operator.sites[0],
