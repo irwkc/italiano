@@ -51,77 +51,73 @@ export function CookieBanner() {
   if (!ready || !open) return null;
 
   return (
-    <div className="cookie-bar" role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-text">
-      <div className="cookie-bar-inner">
-        <div>
-          <p id="cookie-title" className="cookie-title">
-            Cookie
-          </p>
-          <p id="cookie-text" className="cookie-text">
-            Нужны для работы сайта. Аналитические — только если разрешите.{" "}
-            <Link href="/legal/cookies" className="link">
-              Подробнее
-            </Link>
-          </p>
-          {customize ? (
-            <div className="cookie-opts">
-              <label className="cookie-opt">
-                <input type="checkbox" checked disabled />
-                Необходимые
-              </label>
-              <label className="cookie-opt">
-                <input
-                  type="checkbox"
-                  checked={analytics}
-                  onChange={(event) => setAnalytics(event.target.checked)}
-                />
-                Аналитические
-              </label>
-            </div>
-          ) : null}
+    <aside className="cookie-bar" role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-text">
+      <p id="cookie-title" className="cookie-title">
+        Cookie
+      </p>
+      <p id="cookie-text" className="cookie-text">
+        Нужны для сайта. Аналитика — только с разрешения.{" "}
+        <Link href="/legal/cookies" className="link">
+          Подробнее
+        </Link>
+      </p>
+      {customize ? (
+        <div className="cookie-opts">
+          <label className="cookie-opt">
+            <input type="checkbox" checked disabled />
+            Необходимые
+          </label>
+          <label className="cookie-opt">
+            <input
+              type="checkbox"
+              checked={analytics}
+              onChange={(event) => setAnalytics(event.target.checked)}
+            />
+            Аналитические
+          </label>
         </div>
-        <div className="cookie-actions">
+      ) : null}
+      <div className="cookie-actions">
+        <button
+          type="button"
+          className="cookie-btn"
+          onClick={() => {
+            save({ necessary: true, analytics: false });
+            setOpen(false);
+          }}
+        >
+          Нужные
+        </button>
+        {customize ? (
           <button
             type="button"
-            className="cookie-btn"
+            className="cookie-btn cookie-btn-on"
             onClick={() => {
-              save({ necessary: true, analytics: false });
+              save({ necessary: true, analytics });
               setOpen(false);
             }}
           >
-            Только необходимые
+            Ок
           </button>
-          {customize ? (
+        ) : (
+          <>
+            <button type="button" className="cookie-btn" onClick={() => setCustomize(true)}>
+              Выбор
+            </button>
             <button
               type="button"
               className="cookie-btn cookie-btn-on"
               onClick={() => {
-                save({ necessary: true, analytics });
+                save({ necessary: true, analytics: true });
                 setOpen(false);
               }}
             >
-              Сохранить
+              Все
             </button>
-          ) : (
-            <>
-              <button type="button" className="cookie-btn" onClick={() => setCustomize(true)}>
-                Настроить
-              </button>
-              <button
-                type="button"
-                className="cookie-btn cookie-btn-on"
-                onClick={() => {
-                  save({ necessary: true, analytics: true });
-                  setOpen(false);
-                }}
-              >
-                Принять все
-              </button>
-            </>
-          )}
-        </div>
+          </>
+        )}
       </div>
-    </div>
+    </aside>
   );
 }
 
