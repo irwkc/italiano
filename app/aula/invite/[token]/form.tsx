@@ -8,7 +8,7 @@ export function InviteForm({ token }: { token: string }) {
 
   if (state?.ok) {
     return (
-      <div>
+      <div className="aula-login-card">
         <h1>Aula</h1>
         <p className="aula-muted">{state.ok}</p>
       </div>
@@ -16,7 +16,7 @@ export function InviteForm({ token }: { token: string }) {
   }
 
   return (
-    <form action={action}>
+    <form action={action} className="aula-login-card">
       <h1>Aula</h1>
       <p className="aula-muted">Регистрация по приглашению.</p>
       <input type="hidden" name="inviteToken" value={token} />
@@ -31,6 +31,15 @@ export function InviteForm({ token }: { token: string }) {
       <label className="aula-label">
         Пароль (от 8 символов)
         <input className="field" name="password" type="password" required minLength={8} autoComplete="new-password" />
+      </label>
+      <label className="cookie-opt contact-consent">
+        <input type="checkbox" name="consent" value="yes" required />
+        <span>
+          Согласен на обработку персональных данных по{" "}
+          <a href="/legal/privacy" className="link">
+            политике
+          </a>
+        </span>
       </label>
       {state?.error ? <p className="aula-err">{state.error}</p> : null}
       <button className="btn btn-primary" type="submit" disabled={pending}>

@@ -3,19 +3,32 @@
 import { useActionState, useState } from "react";
 import { loginStudentAction, loginTeacherAction } from "@/learn/actions";
 
-export function LoginForm() {
+export function LoginForm({ banner = null }: { banner?: string | null }) {
   const [mode, setMode] = useState<"student" | "teacher">("student");
   const [teacherState, teacherAction, teacherPending] = useActionState(loginTeacherAction, null);
   const [studentState, studentAction, studentPending] = useActionState(loginStudentAction, null);
 
   return (
-    <div>
+    <div className="aula-login-card">
       <h1>Aula</h1>
-      <div className="aula-ask" style={{ marginBottom: "1.25rem" }}>
-        <button type="button" className={mode === "student" ? "is-on" : ""} onClick={() => setMode("student")}>
+      {banner ? <p className="aula-err">{banner}</p> : null}
+      <div className="aula-ask aula-login-mode" role="tablist" aria-label="Кто входит">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mode === "student"}
+          className={mode === "student" ? "is-on" : ""}
+          onClick={() => setMode("student")}
+        >
           Ученик
         </button>
-        <button type="button" className={mode === "teacher" ? "is-on" : ""} onClick={() => setMode("teacher")}>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mode === "teacher"}
+          className={mode === "teacher" ? "is-on" : ""}
+          onClick={() => setMode("teacher")}
+        >
           Преподаватель
         </button>
       </div>

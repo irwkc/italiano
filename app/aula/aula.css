@@ -9,7 +9,12 @@
   align-items: baseline;
   gap: 0.85rem;
   padding: 0.9rem 1.25rem;
-  background: transparent;
+  padding-top: max(0.9rem, env(safe-area-inset-top));
+  padding-left: max(1.25rem, env(safe-area-inset-left));
+  padding-right: max(1.25rem, env(safe-area-inset-right));
+  background: color-mix(in srgb, var(--ivory) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
   z-index: 8;
@@ -45,6 +50,11 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-soft);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 42vw;
 }
 
 .aula-out {
@@ -64,7 +74,7 @@
 .aula-shell {
   width: min(44rem, calc(100% - 2rem));
   margin: 0 auto;
-  padding: 2rem 0 4rem;
+  padding: 2rem 0 max(4rem, calc(2rem + env(safe-area-inset-bottom)));
 }
 
 .aula-wide {
@@ -75,21 +85,38 @@
   min-height: calc(100svh - 4rem);
   display: grid;
   place-items: center;
-  padding: 2rem 1rem;
+  padding: 2rem 1rem max(2rem, env(safe-area-inset-bottom));
 }
 
+.aula-login-card,
 .aula-login form {
   width: min(22rem, 100%);
   display: grid;
   gap: 1.25rem;
 }
 
+.aula-login-card > form {
+  width: 100%;
+}
+
+.aula-login-mode {
+  margin-bottom: 0;
+}
+
 .aula-login h1 {
   font-family: var(--font-script);
-  font-size: 3.4rem;
+  font-size: clamp(2.6rem, 12vw, 3.4rem);
   font-weight: 400;
   line-height: 0.9;
   margin: 0;
+}
+
+.aula-live-lead {
+  margin: 0 0 1.5rem;
+}
+
+.aula-live-lead .aula-h {
+  margin-bottom: 0.55rem;
 }
 
 .aula-err {
@@ -99,16 +126,28 @@
 
 .aula-tabs {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem 1.5rem;
+  flex-wrap: nowrap;
+  gap: 0.65rem 1.25rem;
   margin: 0 0 2rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 0.15rem;
+}
+
+.aula-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .aula-tabs a {
   font-family: var(--font-script);
-  font-size: 2rem;
+  font-size: clamp(1.55rem, 7vw, 2rem);
   line-height: 1;
   color: var(--ink-soft);
+  flex: 0 0 auto;
+  min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
 }
 
 .aula-tabs a.is-on {
@@ -120,6 +159,7 @@
   width: min(56rem, calc(100% - 2rem));
   margin: 0 auto;
   padding: 1.75rem 0 0;
+  overflow: hidden;
 }
 
 .aula-teacher-nav .aula-tabs {
@@ -407,6 +447,11 @@
   margin: 1rem 0;
 }
 
+.aula-form-row .btn,
+.aula-form-row .aula-text-btn {
+  justify-self: start;
+}
+
 @media (min-width: 640px) {
   .aula-form-row {
     grid-template-columns: 1fr 1fr auto;
@@ -423,6 +468,69 @@
 
   .aula-meet .btn {
     flex-shrink: 0;
+  }
+}
+
+@media (max-width: 639px) {
+  .aula-form-row.is-lesson {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .aula-form-row.is-lesson .aula-label:nth-child(n + 4),
+  .aula-form-row.is-lesson .btn,
+  .aula-form-row.is-lesson .aula-text-btn,
+  .aula-form-row.is-lesson .aula-pick {
+    grid-column: 1 / -1;
+  }
+
+  .aula-h {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+  }
+
+  .aula-board-title {
+    font-size: clamp(1.7rem, 8vw, 2.4rem);
+  }
+
+  .aula-illu {
+    width: min(14rem, 88%);
+  }
+
+  .aula-prompt,
+  .aula-cloze {
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+
+  .aula-gloss {
+    left: 0;
+    right: auto;
+    transform: none;
+    max-width: min(14rem, 70vw);
+    white-space: normal;
+  }
+
+  .aula-check {
+    width: 100%;
+  }
+
+  .aula-check .btn {
+    flex: 1 1 auto;
+  }
+
+  .aula-schede-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .aula-cal-month {
+    font-size: clamp(1.55rem, 7vw, 2.2rem);
+  }
+}
+
+@media (min-width: 720px) {
+  .aula-who {
+    max-width: 18rem;
   }
 }
 

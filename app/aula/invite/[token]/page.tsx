@@ -20,7 +20,7 @@ async function InviteGate({ params }: { params: Promise<{ token: string }> }) {
   return (
     <div className="aula-login">
       {expired || !invite ? (
-        <div>
+        <div className="aula-login-card">
           <h1>Aula</h1>
           <p className="aula-err">Ссылка устарела или уже использована. Попросите новое приглашение.</p>
         </div>

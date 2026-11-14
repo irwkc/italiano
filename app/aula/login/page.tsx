@@ -27,10 +27,13 @@ async function LoginGate({
   const { err } = await searchParams;
   return (
     <div className="aula-login">
-      {err === "confirm" ? (
-        <p className="aula-err">Ссылка подтверждения устарела. Войдите или попросите новое приглашение.</p>
-      ) : null}
-      <LoginForm />
+      <LoginForm
+        banner={
+          err === "confirm"
+            ? "Ссылка подтверждения устарела. Войдите или попросите новое приглашение."
+            : null
+        }
+      />
     </div>
   );
 }
