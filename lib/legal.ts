@@ -1,6 +1,14 @@
-/** Единая точка реквизитов и статуса. Меняется только здесь при переходе физлицо → самозанятый/ИП. */
+/** Единая точка реквизитов, статуса и режима юридических текстов. */
 
 export type OperatorStatus = "individual" | "self_employed" | "ip";
+
+/**
+ * informational — сайт только ознакомительный, без услуг/оферты занятий.
+ * services — полный набор документов под занятия (вернуть через ~неделю).
+ */
+export type LegalMode = "informational" | "services";
+
+export const legalMode = "informational" as LegalMode;
 
 export const operator = {
   /** Сейчас физлицо; через неделю — self_employed или ip. */
@@ -44,13 +52,6 @@ export function operatorContact(): string {
   return links.length ? links.join(", ") : operator.telegram;
 }
 
-export const legalNav = [
-  { href: "/legal/privacy", label: "Персональные данные" },
-  { href: "/legal/cookies", label: "Cookie" },
-  { href: "/legal/terms", label: "Соглашение" },
-  { href: "/legal/offer", label: "Условия занятий" },
-];
-
 export type LegalDoc = {
   slug: string;
   title: string;
@@ -58,12 +59,148 @@ export type LegalDoc = {
   sections: { heading: string; paragraphs: string[] }[];
 };
 
-const UPDATED = "14 ноября 2026";
+const UPDATED_INFO = "14 ноября 2026";
+const UPDATED_SERVICES = "14 ноября 2026";
 
-export const privacy: LegalDoc = {
+/* ——— informational (активный режим) ——— */
+
+const privacyInformational: LegalDoc = {
   slug: "privacy",
   title: "Политика обработки персональных данных",
-  updated: UPDATED,
+  updated: UPDATED_INFO,
+  sections: [
+    {
+      heading: "1. Кто обрабатывает данные",
+      paragraphs: [
+        `Оператор персональных данных: ${operatorIdentity()}.`,
+        `Сайты: ${operator.sites.join(", ")}.`,
+        `По вопросам персональных данных: ${operatorContact()}.`,
+      ],
+    },
+    {
+      heading: "2. Какие данные собираем",
+      paragraphs: [
+        "Имя, контакт (Telegram или электронная почта) и текст сообщения — если вы сами отправили форму на сайте.",
+        "Технические данные: IP-адрес, тип браузера, дата обращения — в объёме, необходимом для работы сервера и защиты от злоупотреблений.",
+        "Файлы cookie — как описано в политике cookie.",
+      ],
+    },
+    {
+      heading: "3. Зачем обрабатываем",
+      paragraphs: [
+        "Чтобы ответить на обращение, отправленное через форму или указанные контакты.",
+        "Чтобы сайт работал и учитывал согласие на cookie.",
+        "Данные не продаются и не передаются для рекламных рассылок третьим лицам.",
+      ],
+    },
+    {
+      heading: "4. Правовое основание",
+      paragraphs: [
+        "Согласие субъекта персональных данных (п. 1 ч. 1 ст. 6 Федерального закона от 27.07.2006 № 152-ФЗ «О персональных данных»).",
+        "Необходимые cookie обрабатываются как технически обязательные для предоставления сайта по вашему запросу.",
+      ],
+    },
+    {
+      heading: "5. Где хранятся данные",
+      paragraphs: [
+        "Данные обрабатываются на серверах в Российской Федерации. Трансграничная передача не осуществляется.",
+        "Срок хранения обращений с сайта: до отзыва согласия либо до 3 лет с последнего обращения — что наступит раньше.",
+        "Сведения о согласии на cookie — до 12 месяцев.",
+      ],
+    },
+    {
+      heading: "6. Ваши права",
+      paragraphs: [
+        "Вы можете запросить сведения об обработке, уточнение, блокирование или уничтожение данных, отозвать согласие. Для этого напишите по контактам выше.",
+        "Жалобу можно направить в Роскомнадзор.",
+      ],
+    },
+    {
+      heading: "7. Cookie",
+      paragraphs: ["Подробности, категории и способ изменить выбор — в политике cookie."],
+    },
+  ],
+};
+
+const cookiesInformational: LegalDoc = {
+  slug: "cookies",
+  title: "Политика использования cookie",
+  updated: UPDATED_INFO,
+  sections: [
+    {
+      heading: "1. Что это",
+      paragraphs: [
+        "Cookie — небольшие файлы, которые сайт сохраняет в браузере. Плашка согласия появляется до записи необязательных cookie. Вы можете принять все, только необходимые или выбрать категории.",
+      ],
+    },
+    {
+      heading: "2. Необходимые",
+      paragraphs: [
+        "Нужны, чтобы открыть страницы и запомнить согласие. Их нельзя отключить, иначе сайт не работает как задумано. Отдельное согласие на них не требуется.",
+      ],
+    },
+    {
+      heading: "3. Аналитические",
+      paragraphs: [
+        "Помогают понять, как пользуются сайтом. Сейчас такие cookie не ставятся, пока вы явно не согласитесь. Если согласие не дано, аналитика не включается.",
+      ],
+    },
+    {
+      heading: "4. Как изменить выбор",
+      paragraphs: [
+        "Повторно откройте настройки cookie в подвале сайта или очистите данные сайта в браузере. Отозвать согласие можно в любой момент.",
+      ],
+    },
+  ],
+};
+
+const termsInformational: LegalDoc = {
+  slug: "terms",
+  title: "Пользовательское соглашение",
+  updated: UPDATED_INFO,
+  sections: [
+    {
+      heading: "1. О сайте",
+      paragraphs: [
+        `Сайты ${operator.sites.join(" и ")} принадлежат ${operator.name} (${statusLabel[operator.status]}) и содержат ознакомительные материалы об итальянском языке и авторе.`,
+        "Сайт носит исключительно информационный характер.",
+      ],
+    },
+    {
+      heading: "2. Не публичная оферта",
+      paragraphs: [
+        "Материалы сайта не являются публичной офертой в смысле ст. 437 Гражданского кодекса Российской Федерации.",
+        "Через сайт нельзя оформить заказ, принять предложение или иным образом заключить договор. Размещённые тексты и описания не создают обязанностей оператора автоматически.",
+        "Отправка формы на сайте — сообщение оператору, а не акцепт оферты.",
+      ],
+    },
+    {
+      heading: "3. Пользование сайтом",
+      paragraphs: [
+        "Разрешено читать материалы для личных некоммерческих целей. Копировать тексты и изображения целиком без согласия нельзя.",
+      ],
+    },
+    {
+      heading: "4. Данные",
+      paragraphs: [
+        "Обработка данных регулируется политикой обработки персональных данных. Отправляя форму на сайте, вы даёте согласие на обработку указанных в ней сведений, чтобы вам ответили.",
+      ],
+    },
+    {
+      heading: "5. Ответственность",
+      paragraphs: [
+        "Сайт предоставляется «как есть». Оператор не отвечает за сбои связи, действия хостинга и содержание внешних ссылок (Telegram).",
+      ],
+    },
+  ],
+};
+
+/* ——— services (сохранены для переключения legalMode → "services") ——— */
+
+const privacyServices: LegalDoc = {
+  slug: "privacy",
+  title: "Политика обработки персональных данных",
+  updated: UPDATED_SERVICES,
   sections: [
     {
       heading: "1. Кто обрабатывает данные",
@@ -122,10 +259,10 @@ export const privacy: LegalDoc = {
   ],
 };
 
-export const cookies: LegalDoc = {
+const cookiesServices: LegalDoc = {
   slug: "cookies",
   title: "Политика использования cookie",
-  updated: UPDATED,
+  updated: UPDATED_SERVICES,
   sections: [
     {
       heading: "1. Что это",
@@ -154,10 +291,10 @@ export const cookies: LegalDoc = {
   ],
 };
 
-export const terms: LegalDoc = {
+const termsServices: LegalDoc = {
   slug: "terms",
   title: "Пользовательское соглашение",
-  updated: UPDATED,
+  updated: UPDATED_SERVICES,
   sections: [
     {
       heading: "1. О сайте и кабинете",
@@ -204,10 +341,11 @@ export const terms: LegalDoc = {
   ],
 };
 
+/** Условия занятий — только в режиме services; в informational скрыты (404). */
 export const offer: LegalDoc = {
   slug: "offer",
   title: "Условия занятий",
-  updated: UPDATED,
+  updated: UPDATED_SERVICES,
   sections: [
     {
       heading: "1. Исполнитель",
@@ -252,4 +390,27 @@ export const offer: LegalDoc = {
   ],
 };
 
-export const docs = [privacy, cookies, terms, offer];
+export const privacy: LegalDoc =
+  legalMode === "services" ? privacyServices : privacyInformational;
+export const cookies: LegalDoc =
+  legalMode === "services" ? cookiesServices : cookiesInformational;
+export const terms: LegalDoc = legalMode === "services" ? termsServices : termsInformational;
+
+const navBase = [
+  { href: "/legal/privacy", label: "Персональные данные" },
+  { href: "/legal/cookies", label: "Cookie" },
+  { href: "/legal/terms", label: "Соглашение" },
+] as const;
+
+export const legalNav =
+  legalMode === "services"
+    ? [...navBase, { href: "/legal/offer", label: "Условия занятий" }]
+    : [...navBase];
+
+/** Публичные документы текущего режима (offer только в services). */
+export const docs: LegalDoc[] =
+  legalMode === "services" ? [privacy, cookies, terms, offer] : [privacy, cookies, terms];
+
+export function isLegalSlugPublic(slug: string) {
+  return docs.some((doc) => doc.slug === slug);
+}
