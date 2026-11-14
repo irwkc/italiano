@@ -63,10 +63,12 @@ async function MeCompiti({
       <div>
         <p className="aula-kicker">Lavoro</p>
         <h1 className="aula-h">Compiti</h1>
-        <CompitiFilter lessons={lessons} current={lessonId} />
+        {lessons.length > 0 ? <CompitiFilter lessons={lessons} current={lessonId} /> : null}
       </div>
-      {assignments.length === 0 ? (
-        <p className="aula-muted">К этому занятию пока ничего не повесили.</p>
+      {lessons.length === 0 ? (
+        <p className="aula-empty">Занятий в расписании пока нет — домашние задания появятся здесь.</p>
+      ) : assignments.length === 0 ? (
+        <p className="aula-empty">К этому занятию пока ничего не повесили.</p>
       ) : (
         assignments.map((assignment, index) => {
           const activity = store.activities.find((a) => a.id === assignment.activityId);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 
 const KEY = "giacomo-cookie-consent";
@@ -9,6 +9,8 @@ type Consent = {
   necessary: true;
   analytics: boolean;
 };
+
+type Snap = Consent | "missing" | "pending";
 
 function read(): Consent | null {
   try {
@@ -27,28 +29,40 @@ function save(consent: Consent) {
   window.dispatchEvent(new Event("giacomo-consent"));
 }
 
+function subscribeConsent(onStoreChange: () => void) {
+  const onChange = () => onStoreChange();
+  window.addEventListener("storage", onChange);
+  window.addEventListener("giacomo-consent", onChange);
+  return () => {
+    window.removeEventListener("storage", onChange);
+    window.removeEventListener("giacomo-consent", onChange);
+  };
+}
+
+function clientSnap(): Snap {
+  return read() ?? "missing";
+}
+
 export function CookieBanner() {
-  const [ready, setReady] = useState(false);
-  const [open, setOpen] = useState(false);
+  const stored = useSyncExternalStore(subscribeConsent, clientSnap, (): Snap => "pending");
+  const [forcedOpen, setForcedOpen] = useState(false);
   const [customize, setCustomize] = useState(false);
   const [analytics, setAnalytics] = useState(false);
 
   useEffect(() => {
-    const existing = read();
-    setOpen(!existing);
-    setAnalytics(existing?.analytics ?? false);
-    setReady(true);
     const reopen = () => {
       const current = read();
       setAnalytics(current?.analytics ?? false);
       setCustomize(true);
-      setOpen(true);
+      setForcedOpen(true);
     };
     window.addEventListener("giacomo-cookies", reopen);
     return () => window.removeEventListener("giacomo-cookies", reopen);
   }, []);
 
-  if (!ready || !open) return null;
+  if (stored === "pending") return null;
+  const open = forcedOpen || stored === "missing";
+  if (!open) return null;
 
   return (
     <aside className="cookie-bar" role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-text">
@@ -56,9 +70,9 @@ export function CookieBanner() {
         Cookie
       </p>
       <p id="cookie-text" className="cookie-text">
-        Нужны для сайта. Аналитика — только с разрешения.{" "}
+        Нужны для работы сайта. Аналитика — только с вашего разрешения.{" "}
         <Link href="/legal/cookies" className="link">
-          Подробнее
+          Политика
         </Link>
       </p>
       {customize ? (
@@ -83,7 +97,8 @@ export function CookieBanner() {
           className="cookie-btn"
           onClick={() => {
             save({ necessary: true, analytics: false });
-            setOpen(false);
+            setForcedOpen(false);
+            setCustomize(false);
           }}
         >
           Нужные
@@ -94,7 +109,8 @@ export function CookieBanner() {
             className="cookie-btn cookie-btn-on"
             onClick={() => {
               save({ necessary: true, analytics });
-              setOpen(false);
+              setForcedOpen(false);
+              setCustomize(false);
             }}
           >
             Ок
@@ -109,7 +125,8 @@ export function CookieBanner() {
               className="cookie-btn cookie-btn-on"
               onClick={() => {
                 save({ necessary: true, analytics: true });
-                setOpen(false);
+                setForcedOpen(false);
+                setCustomize(false);
               }}
             >
               Все

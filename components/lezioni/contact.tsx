@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react";
 import { ScriptWrite } from "@/components/script-write";
 import { contact, site } from "@/lib/content";
@@ -87,9 +88,9 @@ export function Contact() {
                 <input type="checkbox" name="consent" value="yes" />
                 <span>
                   Согласен на обработку персональных данных по{" "}
-                  <a href="/legal/privacy" className="link">
+                  <Link href="/legal/privacy" className="link">
                     политике
-                  </a>
+                  </Link>
                 </span>
               </label>
               {errors.consent ? <p className="text-pompei text-sm">{errors.consent}</p> : null}

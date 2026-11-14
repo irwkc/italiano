@@ -73,6 +73,10 @@ export function StudentsPanel({
       </div>
       {inviteUrl ? <CopyLink url={inviteUrl} /> : null}
 
+      {students.length === 0 ? (
+        <p className="aula-empty">Пока никого нет. Создайте ссылку «Пригласить» и отправьте ученику.</p>
+      ) : null}
+
       <ul className="aula-acc-list">
         {students.map((student) => {
           const open = openId === student.id;

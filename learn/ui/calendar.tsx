@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { createLessonAction, deleteLessonAction, moveLessonAction } from "@/learn/actions";
 import { addHour, dayKey, formatDayKey, formatMonth, formatTimeRange, lessonDayKey, timeFromIso } from "@/learn/format";
 import type { Lesson } from "@/learn/types";
@@ -127,18 +127,30 @@ function cellsFor(year: number, month: number) {
 
 function useCalendar(lessons: Lesson[]) {
   const [{ year, month }, setCursor] = useState(() => monthCursor(lessons));
-  const [today, setToday] = useState<string | null>(null);
-  const [selected, setSelected] = useState<string | null>(null);
+  const today = useSyncExternalStore(
+    () => () => {},
+    () => dayKey(new Date()),
+    () => null as string | null,
+  );
+  const nowMs = useSyncExternalStore(
+    () => () => {},
+    () => Date.now(),
+    () => null as number | null,
+  );
+  const [picked, setPicked] = useState<string | null>(null);
+  const [hasPicked, setHasPicked] = useState(false);
 
-  useEffect(() => {
-    const now = dayKey(new Date());
-    setToday(now);
-    setSelected((current) => {
-      if (current) return current;
-      const upcoming = lessons.find((l) => new Date(l.startsAt).getTime() >= Date.now());
-      return upcoming ? lessonDayKey(upcoming.startsAt) : now;
-    });
-  }, [lessons]);
+  const defaultSelected = useMemo(() => {
+    if (!today || nowMs == null) return null;
+    const upcoming = lessons.find((l) => new Date(l.startsAt).getTime() >= nowMs);
+    return upcoming ? lessonDayKey(upcoming.startsAt) : today;
+  }, [lessons, today, nowMs]);
+
+  const selected = hasPicked ? picked : picked ?? defaultSelected;
+  const setSelected = (value: string | null) => {
+    setHasPicked(true);
+    setPicked(value);
+  };
 
   const byDay = useMemo(() => {
     const map = new Map<string, Lesson[]>();

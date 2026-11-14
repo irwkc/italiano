@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState, useTransition, type FormEvent } from "react";
+import { useMemo, useState, useSyncExternalStore, useTransition, type FormEvent } from "react";
 import {
   addTopicAction,
   assignHomeworkAction,
@@ -40,27 +40,29 @@ export function SchedeBank({
   const [editing, setEditing] = useState(false);
   const [ask, setAsk] = useState<Ask>(null);
   const [who, setWho] = useState(liveStudentId ?? students[0]?.id ?? "");
-  const [lessonId, setLessonId] = useState("");
+  const [pickedLessonId, setPickedLessonId] = useState<string | null>(null);
+  const [lessonTrack, setLessonTrack] = useState({ who, autoId: "" });
   const [note, setNote] = useState<string | null>(null);
   const [composeError, setComposeError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
-  const [now, setNow] = useState<number | null>(null);
+  const now = useSyncExternalStore(
+    () => () => {},
+    () => Date.now(),
+    () => null as number | null,
+  );
   const [local, setLocal] = useState<Activity[] | null>(null);
+  const [localSource, setLocalSource] = useState(activities);
   const [dragId, setDragId] = useState<string | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
   const [rename, setRename] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
 
-  useEffect(() => {
-    setNow(Date.now());
-  }, []);
+  if (activities !== localSource) {
+    setLocalSource(activities);
+    setLocal(null);
+  }
 
   const catalog = local ?? activities;
-
-  useEffect(() => {
-    setLocal(null);
-  }, [activities]);
-
   const activity = catalog.find((item) => item.id === openId) ?? null;
   const q = query.trim().toLowerCase();
 
@@ -95,9 +97,12 @@ export function SchedeBank({
     return studentLessons.find((l) => new Date(l.startsAt).getTime() >= now) ?? studentLessons[0] ?? null;
   }, [studentLessons, now]);
 
-  useEffect(() => {
-    setLessonId(nextLesson?.id ?? "");
-  }, [nextLesson?.id, who]);
+  const autoLessonId = nextLesson?.id ?? "";
+  if (who !== lessonTrack.who || autoLessonId !== lessonTrack.autoId) {
+    setLessonTrack({ who, autoId: autoLessonId });
+    setPickedLessonId(null);
+  }
+  const lessonId = pickedLessonId ?? autoLessonId;
 
   function resetAsk() {
     setAsk(null);
@@ -224,7 +229,13 @@ export function SchedeBank({
             />
           </label>
           {groups.length === 0 ? (
-            <p className="aula-muted">Ничего не нашлось.</p>
+            <p className="aula-empty">
+              {q
+                ? "Ничего не нашлось по запросу."
+                : edit
+                  ? "Добавьте раздел и задание — каталог пока пуст."
+                  : "Каталог пока пуст. Нажмите «Редактировать», чтобы добавить материалы."}
+            </p>
           ) : (
             groups.map(([topic, items]) => (
               <section
@@ -472,7 +483,7 @@ export function SchedeBank({
                     <AulaSelect
                       label="К уроку"
                       value={lessonId}
-                      onChange={setLessonId}
+                      onChange={setPickedLessonId}
                       options={studentLessons.map((l) => ({
                         value: l.id,
                         label: `${l.title} · ${formatLessonWhen(l.startsAt)}`,

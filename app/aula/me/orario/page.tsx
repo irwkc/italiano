@@ -40,6 +40,9 @@ async function MeOrario() {
         )}
       </section>
 
+      {lessons.length === 0 ? (
+        <p className="aula-empty">Расписание пока пустое. Когда преподаватель поставит урок, он появится в календаре.</p>
+      ) : null}
       <LessonCalendar lessons={lessons} />
     </main>
   );

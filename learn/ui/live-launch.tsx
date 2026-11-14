@@ -123,7 +123,11 @@ export function TeacherLiveStudio({
           Очистить
         </button>
       </div>
-      {liveStudentId ? (
+      {students.length === 0 ? (
+        <div className="aula-live-wait">
+          <p className="aula-empty">Сначала пригласите ученика во вкладке Studenti.</p>
+        </div>
+      ) : liveStudentId ? (
         <LiveBoard
           key={`${liveStudentId}-${current || "empty"}`}
           studentId={liveStudentId}
@@ -132,7 +136,7 @@ export function TeacherLiveStudio({
         />
       ) : (
         <div className="aula-live-wait">
-          <p>Выберите ученика.</p>
+          <p className="aula-muted">Выберите ученика, чтобы открыть доску.</p>
         </div>
       )}
     </div>

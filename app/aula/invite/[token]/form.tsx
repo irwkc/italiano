@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { registerInviteAction } from "@/learn/actions";
 
@@ -36,9 +37,9 @@ export function InviteForm({ token }: { token: string }) {
         <input type="checkbox" name="consent" value="yes" required />
         <span>
           Согласен на обработку персональных данных по{" "}
-          <a href="/legal/platform-privacy" className="link">
+          <Link href="/legal/platform-privacy" className="link">
             политике
-          </a>
+          </Link>
         </span>
       </label>
       {state?.error ? <p className="aula-err">{state.error}</p> : null}

@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { hashToken } from "@/learn/crypto";
 import { readStore } from "@/learn/data/store";
 import { Dynamic } from "@/learn/ui/dynamic";
@@ -12,10 +13,14 @@ export default function InvitePage({ params }: { params: Promise<{ token: string
 }
 
 async function InviteGate({ params }: { params: Promise<{ token: string }> }) {
+  await connection();
   const { token } = await params;
   const store = await readStore();
   const invite = store.invites.find((item) => item.tokenHash === hashToken(token));
-  const expired = !invite || invite.usedAt || new Date(invite.expiresAt).getTime() < Date.now();
+  // Request time after connection() — needed to judge invite expiry.
+  // eslint-disable-next-line react-hooks/purity -- dynamic request boundary
+  const now = Date.now();
+  const expired = !invite || invite.usedAt || new Date(invite.expiresAt).getTime() < now;
 
   return (
     <div className="aula-login">
