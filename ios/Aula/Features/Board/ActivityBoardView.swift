@@ -85,11 +85,17 @@ struct ActivityImage: View {
     let name: String
 
     var body: some View {
-        let key = (name as NSString).lastPathComponent
-            .replacingOccurrences(of: ".jpg", with: "")
-            .replacingOccurrences(of: ".png", with: "")
         Group {
-            if let ui = UIImage(named: key) ?? bundledJPEG(key) {
+            if let url = URL(string: name), let scheme = url.scheme, scheme.hasPrefix("http") {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image.resizable().scaledToFit()
+                    default:
+                        Color.clear.frame(height: 1)
+                    }
+                }
+            } else if let ui = bundledJPEG(fileKey) ?? UIImage(named: fileKey) {
                 Image(uiImage: ui)
                     .resizable()
                     .scaledToFit()
@@ -99,6 +105,12 @@ struct ActivityImage: View {
         .grayscale(0.15)
         .opacity(0.95)
         .accessibilityHidden(true)
+    }
+
+    private var fileKey: String {
+        (name as NSString).lastPathComponent
+            .replacingOccurrences(of: ".jpg", with: "")
+            .replacingOccurrences(of: ".png", with: "")
     }
 
     private func bundledJPEG(_ key: String) -> UIImage? {

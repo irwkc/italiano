@@ -1,5 +1,7 @@
 import Foundation
 import SwiftUI
+import UIKit
+import UserNotifications
 
 @MainActor
 final class SessionStore: ObservableObject {
@@ -9,6 +11,7 @@ final class SessionStore: ObservableObject {
 
     let client: any AulaClient
     private let tokenStore: TokenStore
+    private let apnsDefaultsKey = "aula.apnsToken"
 
     var isLoggedIn: Bool { student != nil }
 
@@ -26,6 +29,7 @@ final class SessionStore: ObservableObject {
         }
         do {
             student = try await client.me()
+            requestPushRegistration()
         } catch {
             student = nil
             tokenStore.accessToken = nil
@@ -40,6 +44,7 @@ final class SessionStore: ObservableObject {
             tokenStore.accessToken = session.accessToken
             tokenStore.refreshToken = session.refreshToken
             student = session.student
+            requestPushRegistration()
         } catch {
             lastError = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
         }
@@ -56,10 +61,28 @@ final class SessionStore: ObservableObject {
     }
 
     func logout() async {
+        if let token = UserDefaults.standard.string(forKey: apnsDefaultsKey) {
+            try? await client.unregisterDevice(apnsToken: token)
+            UserDefaults.standard.removeObject(forKey: apnsDefaultsKey)
+        }
         try? await client.logout()
         tokenStore.accessToken = nil
         tokenStore.refreshToken = nil
         student = nil
+    }
+
+    func requestPushRegistration() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in
+            DispatchQueue.main.async {
+                UIApplication.shared.registerForRemoteNotifications()
+            }
+        }
+    }
+
+    func didReceiveAPNsToken(_ hex: String) async {
+        UserDefaults.standard.set(hex, forKey: apnsDefaultsKey)
+        guard student != nil else { return }
+        try? await client.registerDevice(apnsToken: hex)
     }
 }
 

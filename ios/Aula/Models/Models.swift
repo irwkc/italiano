@@ -256,6 +256,7 @@ struct LivePayload: Equatable, Sendable {
     var queue: [QueueItem]
     var meetUrl: String?
     var done: Bool
+    var hasNext: Bool = false
 }
 
 struct OrarioPayload: Equatable, Sendable {

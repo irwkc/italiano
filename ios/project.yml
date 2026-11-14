@@ -22,7 +22,7 @@ settings:
     INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.education
     INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
     INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: UIInterfaceOrientationPortrait
-    AULA_USE_MOCK: YES
+    AULA_USE_MOCK: NO
     AULA_API_BASE_URL: "https:/$()/giacomoschiavon.ru/api/mobile/v1"
 schemes:
   Aula:
@@ -30,6 +30,23 @@ schemes:
       targets:
         Aula: all
         AulaTests: [test]
+    run:
+      config: Debug
+      environmentVariables:
+        AULA_USE_MOCK: NO
+    test:
+      gatherCoverageData: false
+      targets:
+        - AulaTests
+  AulaMock:
+    build:
+      targets:
+        Aula: all
+        AulaTests: [test]
+    run:
+      config: Debug
+      environmentVariables:
+        AULA_USE_MOCK: YES
     test:
       gatherCoverageData: false
       targets:
@@ -78,6 +95,7 @@ targets:
       properties:
         keychain-access-groups:
           - "$(AppIdentifierPrefix)ru.giacomoschiavon.aula"
+        aps-environment: development
   AulaTests:
     type: bundle.unit-test
     platform: iOS

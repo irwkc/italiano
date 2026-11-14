@@ -146,6 +146,11 @@ final class MockClientTests: XCTestCase {
 
         let live = try await client.live()
         XCTAssertEqual(live.activity?.id, "quiz-ciao")
+        XCTAssertTrue(live.hasNext)
+        let next = try await client.liveNext(rev: live.live.rev)
+        XCTAssertEqual(next.activity?.id, "cloze-mattina")
+        XCTAssertFalse(next.hasNext)
+        try await client.registerDevice(apnsToken: "abc")
 
         let compiti = try await client.compiti(lessonId: "l-anna-1")
         XCTAssertEqual(compiti.items.count, 1)

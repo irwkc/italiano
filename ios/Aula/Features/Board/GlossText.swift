@@ -3,6 +3,7 @@ import SwiftUI
 struct GlossText: View {
     let text: String
     var font: Font = .system(size: 19)
+    @EnvironmentObject private var session: SessionStore
     @State private var open: Int?
     @State private var meanings: [String: String] = [:]
 
@@ -56,8 +57,13 @@ struct GlossText: View {
             return
         }
         open = index
-        if meanings[word] == nil, let local = Gloss.lookup(word) {
+        if let local = Gloss.lookup(word) {
             meanings[word] = local
+            return
+        }
+        Task {
+            let text = (try? await session.client.gloss(word: word)) ?? "…"
+            await MainActor.run { meanings[word] = text }
         }
     }
 }

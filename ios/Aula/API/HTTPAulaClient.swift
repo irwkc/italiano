@@ -27,9 +27,10 @@ final class HTTPAulaClient: AulaClient, @unchecked Sendable {
             var name: String
             var email: String
             var password: String
+            var consent: Bool
         }
         struct OK: Decodable { var message: String?; var ok: Bool? }
-        let data = try encoder.encode(Body(inviteToken: inviteToken, name: name, email: email, password: password))
+        let data = try encoder.encode(Body(inviteToken: inviteToken, name: name, email: email, password: password, consent: true))
         let ok = try await send(OK.self, path: MobileAPIPaths.register, method: "POST", body: data, authed: false)
         return ok.message ?? "Проверьте почту — пришло письмо со ссылкой подтверждения."
     }
@@ -110,8 +111,38 @@ final class HTTPAulaClient: AulaClient, @unchecked Sendable {
         }
     }
 
+    func liveNext(rev: Int?) async throws -> LivePayload {
+        struct Body: Encodable { var rev: Int? }
+        let data = try encoder.encode(Body(rev: rev))
+        let dto = try await send(LiveStateDTO.self, path: MobileAPIPaths.liveNext, method: "POST", body: data, authed: true)
+        return dto.payload
+    }
+
     func gloss(word: String) async throws -> String {
-        Gloss.lookup(word) ?? "нет перевода"
+        struct Body: Decodable { var text: String? }
+        let dto = try await send(Body.self, path: MobileAPIPaths.gloss, method: "GET", body: nil, authed: true, query: ["q": word])
+        let text = dto.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let text, !text.isEmpty { return text }
+        return Gloss.lookup(word) ?? "нет перевода"
+    }
+
+    func registerDevice(apnsToken: String) async throws {
+        struct Body: Encodable {
+            var platform: String
+            var apnsToken: String
+            var appVersion: String
+        }
+        struct OK: Decodable { var device: DeviceDTO? }
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0.0"
+        let data = try encoder.encode(Body(platform: "ios", apnsToken: apnsToken, appVersion: version))
+        _ = try await send(OK.self, path: MobileAPIPaths.devices, method: "POST", body: data, authed: true)
+    }
+
+    func unregisterDevice(apnsToken: String) async throws {
+        struct Body: Encodable { var apnsToken: String }
+        struct OK: Decodable { var ok: Bool? }
+        let data = try encoder.encode(Body(apnsToken: apnsToken))
+        _ = try await send(OK.self, path: MobileAPIPaths.devices, method: "DELETE", body: data, authed: true)
     }
 
     private func save(_ session: AuthSession?) {
@@ -274,9 +305,13 @@ private struct LiveStateDTO: Decodable {
     var rev: Int
     var activity: Activity?
     var meetUrl: String?
+    var done: Bool?
+    var hasNext: Bool?
+    var atEnd: Bool?
 
     var payload: LivePayload {
-        LivePayload(
+        let inferredNext = index + 1 < queue.count
+        return LivePayload(
             live: LiveSession(
                 studentId: studentId,
                 activityId: activityId,
@@ -290,7 +325,12 @@ private struct LiveStateDTO: Decodable {
             activity: activity,
             queue: queue,
             meetUrl: meetUrl,
-            done: activityId == nil && !queue.isEmpty && index >= queue.count - 1
+            done: done ?? (activityId == nil && !inferredNext),
+            hasNext: hasNext ?? inferredNext
         )
     }
+}
+
+private struct DeviceDTO: Decodable {
+    var id: String?
 }

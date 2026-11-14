@@ -73,7 +73,7 @@ struct LoginView: View {
 
                 if AppConfig.useMock {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Макет: серверные эндпоинты ещё помечаются как незавершённые. Демо-вход:")
+                        Text("Режим макета (схема AulaMock). Демо-вход:")
                             .font(.system(size: 13))
                             .foregroundStyle(AulaColor.inkSoft)
                         Text("\(MockAulaClient.annaEmail) / \(MockAulaClient.demoPassword)")

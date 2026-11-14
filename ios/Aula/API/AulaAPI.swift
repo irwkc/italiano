@@ -40,6 +40,8 @@ enum MobileAPIPaths {
     static let homework = "/homework"
     static func homeworkItem(_ id: String) -> String { "/homework/\(id)" }
     static let live = "/live"
+    static let liveNext = "/live/next"
+    static let gloss = "/gloss"
     static let devices = "/devices"
 }
 
@@ -53,7 +55,10 @@ protocol AulaClient: AnyObject {
     func saveProgress(assignmentId: String, picks: [String: String?], checked: Bool) async throws -> ProgressResult
     func live() async throws -> LivePayload
     func patchLive(_ patch: LivePatch) async throws -> LivePayload
+    func liveNext(rev: Int?) async throws -> LivePayload
     func gloss(word: String) async throws -> String
+    func registerDevice(apnsToken: String) async throws
+    func unregisterDevice(apnsToken: String) async throws
 }
 
 struct LivePatch: Equatable, Sendable {
@@ -66,10 +71,17 @@ struct LivePatch: Equatable, Sendable {
 
 enum AppConfig {
     static var useMock: Bool {
-        let raw = (Bundle.main.object(forInfoDictionaryKey: "AULA_USE_MOCK") as? String ?? "YES")
+        if ProcessInfo.processInfo.arguments.contains("-AULAUseMock") {
+            return true
+        }
+        if let env = ProcessInfo.processInfo.environment["AULA_USE_MOCK"] {
+            let raw = env.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+            return raw == "YES" || raw == "1" || raw == "TRUE"
+        }
+        let raw = (Bundle.main.object(forInfoDictionaryKey: "AULA_USE_MOCK") as? String ?? "NO")
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .uppercased()
-        return raw != "NO" && raw != "0" && raw != "FALSE"
+        return raw == "YES" || raw == "1" || raw == "TRUE"
     }
 
     static var apiBaseURL: URL {

@@ -2,6 +2,7 @@ import SwiftUI
 
 @main
 struct AulaApp: App {
+    @UIApplicationDelegateAdaptor(AulaAppDelegate.self) private var appDelegate
     @StateObject private var session: SessionStore
 
     init() {
@@ -16,6 +17,7 @@ struct AulaApp: App {
             RootView()
                 .environmentObject(session)
                 .preferredColorScheme(.light)
+                .onAppear { appDelegate.session = session }
         }
     }
 }

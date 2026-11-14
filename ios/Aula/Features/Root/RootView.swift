@@ -112,3 +112,11 @@ struct AulaTabStrip: View {
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
     }
 }
+
+#Preview("Макет") {
+    let tokens = MemoryTokenStore()
+    let store = SessionStore(client: MockAulaClient(tokenStore: tokens), tokenStore: tokens)
+    return RootView()
+        .environmentObject(store)
+        .preferredColorScheme(.light)
+}

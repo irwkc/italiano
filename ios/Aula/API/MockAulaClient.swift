@@ -165,9 +165,46 @@ final class MockAulaClient: AulaClient, @unchecked Sendable {
         }
     }
 
+    func liveNext(rev: Int?) async throws -> LivePayload {
+        try await pause(ms: 80)
+        return try locked {
+            let student = try currentStudent()
+            var session = live[student.id] ?? LiveSession(
+                studentId: student.id,
+                activityId: nil,
+                queue: [],
+                index: 0,
+                picks: [:],
+                selected: nil,
+                checked: false,
+                rev: 0
+            )
+            if let rev, rev < session.rev {
+                throw AulaAPIError.conflict
+            }
+            if session.index + 1 < session.queue.count {
+                showLiveAt(&session, index: session.index + 1)
+                session.rev += 1
+                live[student.id] = session
+            } else {
+                done[student.id] = true
+            }
+            return try livePayload()
+        }
+    }
+
     func gloss(word: String) async throws -> String {
         try await pause(ms: 40)
         return Gloss.lookup(word) ?? "нет перевода"
+    }
+
+    func registerDevice(apnsToken: String) async throws {
+        try await pause(ms: 40)
+        _ = try locked { try currentStudent() }
+    }
+
+    func unregisterDevice(apnsToken: String) async throws {
+        try await pause(ms: 40)
     }
 
     private func livePayload() throws -> LivePayload {
@@ -190,12 +227,14 @@ final class MockAulaClient: AulaClient, @unchecked Sendable {
         }
         let activity = session.activityId.flatMap { activities[$0] }.map(Score.publicActivity)
         let queue = session.queue.map { QueueItem(id: $0, title: activities[$0]?.title ?? $0) }
+        let hasNext = session.activityId != nil && session.index + 1 < session.queue.count
         return LivePayload(
             live: session,
             activity: activity,
             queue: queue,
             meetUrl: meetUrl,
-            done: done[student.id] ?? false
+            done: done[student.id] ?? false,
+            hasNext: hasNext
         )
     }
 

@@ -29,20 +29,16 @@ struct LiveView: View {
     private var content: some View {
         if let error {
             AulaStatusView(kind: .error(error, retry: { Task { await loadOnce() } }))
-        } else if let payload, let activity = payload.activity, payload.live.activityId != nil {
+        } else if let payload, let activity = payload.activity, payload.live.activityId != nil, !payload.done {
             ActivityBoardView(
                 activity: activity,
                 state: payload.live.board,
                 queueLabel: payload.queue.count > 1 ? "\(payload.live.index + 1)/\(payload.queue.count)" : nil,
-                doneLabel: payload.live.index + 1 < payload.live.queue.count ? nil : "Готово",
+                doneLabel: payload.hasNext ? nil : "Готово",
                 onChange: { board in
                     Task { await patch(LivePatch(picks: board.picks, selected: Optional.some(board.selected), checked: board.checked, rev: payload.live.rev)) }
                 },
-                onNext: payload.live.index + 1 < payload.live.queue.count
-                    ? nil
-                    : {
-                        finishQueue(payload)
-                    }
+                onNext: { Task { await goNext() } }
             )
         } else if payload != nil || doneLocal {
             AulaStatusView(kind: .empty(waitingCopy))
@@ -76,12 +72,19 @@ struct LiveView: View {
         }
     }
 
-    private func finishQueue(_ current: LivePayload) {
-        doneLocal = true
-        var next = current
-        next.activity = nil
-        next.done = true
-        payload = next
+    private func goNext() async {
+        do {
+            let result = try await session.client.liveNext(rev: payload?.live.rev)
+            payload = result
+            doneLocal = result.done && !result.hasNext
+            error = nil
+        } catch AulaAPIError.conflict {
+            await loadOnce()
+        } catch AulaAPIError.unauthorized {
+            await session.logout()
+        } catch {
+            self.error = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+        }
     }
 
     private func patch(_ patch: LivePatch) async {
