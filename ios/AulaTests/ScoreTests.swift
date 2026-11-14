@@ -137,7 +137,8 @@ final class MockClientTests: XCTestCase {
 
         let session = try await client.login(email: MockAulaClient.annaEmail, password: MockAulaClient.demoPassword)
         XCTAssertEqual(session.student.name, "Anna")
-        XCTAssertEqual(try await client.me().id, "st-anna")
+        let me = try await client.me()
+        XCTAssertEqual(me.id, "st-anna")
 
         let orario = try await client.orario()
         XCTAssertGreaterThan(orario.lessons.count, 0)
@@ -155,7 +156,8 @@ final class MockClientTests: XCTestCase {
         let result = try await client.saveProgress(assignmentId: assignmentId, picks: picks, checked: true)
         XCTAssertEqual(result.correct, true)
 
-        XCTAssertEqual(try await client.gloss(word: "casa"), "дом")
+        let gloss = try await client.gloss(word: "casa")
+        XCTAssertEqual(gloss, "дом")
         try await client.logout()
         do {
             _ = try await client.me()
