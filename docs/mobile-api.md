@@ -4,6 +4,29 @@
 
 Авторизация ученика тем же способом, что и веб-кабинет `/aula`: email + пароль после приглашения и подтверждения почты. Ответы и тела — JSON (`Content-Type: application/json`).
 
+## Статус эндпоинтов
+
+| Метод | Путь | Статус | Примечание |
+|-------|------|--------|------------|
+| POST | `/auth/login` | ✅ | rate limit IP+email |
+| POST | `/auth/refresh` | ✅ | rotation refresh |
+| POST | `/auth/logout` | ✅ | revoke refresh |
+| POST | `/auth/register` | ✅ | инвайт + **consent** + confirm email |
+| GET | `/me` | ✅ | |
+| GET | `/lessons` | ✅ | + `meetUrl` |
+| GET | `/homework` | ✅ | `lessonId` / `scope=all` |
+| PUT | `/homework/{assignmentId}` | ✅ | прогресс / проверка |
+| GET | `/live` | ✅ | |
+| PATCH | `/live` | ✅ | только picks/selected/checked (+rev) |
+| POST | `/live/next` | ✅ | «Далее» как на вебе |
+| GET | `/gloss` | ✅ | `?q=` как `/aula/api/gloss` |
+| POST | `/devices` | ✅ | APNs upsert |
+| DELETE | `/devices` | ✅ | снять регистрацию |
+| GET | `/health` | ✅ | liveness v1 |
+| — | Push send (APNs) | ❌ | нет ключей на сервере |
+
+Служебный health приложения (флаги конфига без значений секретов): `GET /api/health`.
+
 ## Аутентификация
 
 | Заголовок | Значение |
@@ -11,10 +34,10 @@
 | `Authorization` | `Bearer <accessToken>` |
 
 - **Access token** — короткоживущий (15 мин), HMAC-подпись `SESSION_SECRET`.
-- **Refresh token** — непрозрачный, хранится на сервере в виде хэша, можно отозвать (`logout`). Срок 30 дней.
+- **Refresh token** — непрозрачный, хранится на сервере в виде хэша, можно отозвать (`logout`). Срок 30 дней; при `refresh` — rotation.
 - После `logout` refresh недействителен; access истекает сам.
 
-Публичные эндпоинты (без Bearer): `POST /auth/login`, `POST /auth/refresh`, `POST /auth/register`.
+Публичные эндпоинты (без Bearer): `POST /auth/login`, `POST /auth/refresh`, `POST /auth/register`, `GET /health`.
 
 ## Формат ошибок
 
@@ -40,6 +63,8 @@
 | 500 | `server_error` | Внутренняя ошибка |
 
 Поле `message` — человекочитаемый текст (RU), пригодный для UI.
+
+На `409` для live тело дополнительно содержит актуальный `LiveState` (поля рядом с `error`).
 
 ## Модели
 
@@ -81,7 +106,7 @@
 
 ### PublicActivity
 
-Ответы (ключи) **не** отдаются ученику.
+Ответы (ключи) **не** отдаются ученику. Поле `image` — **абсолютный URL** (через `APP_URL`), либо `null`.
 
 Quiz:
 
@@ -93,7 +118,7 @@ Quiz:
   "topic": "Saluti",
   "prompt": "Come saluti…?",
   "options": ["Ciao!", "…"],
-  "image": "/sketch/aula-quaderno.jpg"
+  "image": "https://giacomoschiavon.ru/sketch/aula-quaderno.jpg"
 }
 ```
 
@@ -144,7 +169,10 @@ Cloze:
   "checked": false,
   "rev": 3,
   "activity": { "…PublicActivity или null…" },
-  "meetUrl": "https://meet.google.com/…"
+  "meetUrl": "https://meet.google.com/…",
+  "done": false,
+  "hasNext": true,
+  "atEnd": false
 }
 ```
 
@@ -161,11 +189,17 @@ Cloze:
 
 Отправка push **не** реализована, пока нет APNs-ключей. Регистрация токена только сохраняется.
 
+### Gloss
+
+```json
+{ "text": "друг" }
+```
+
 ---
 
 ## Эндпоинты
 
-### `POST /auth/login`
+### `POST /auth/login` ✅
 
 Вход ученика (как `/aula/login`).
 
@@ -181,7 +215,7 @@ Response `200`: `AuthTokens`
 
 Ошибки: `validation_error`, `invalid_credentials`, `email_unverified`, `rate_limited`.
 
-### `POST /auth/refresh`
+### `POST /auth/refresh` ✅
 
 Обмен refresh → новая пара токенов (старый refresh отзывается, rotation).
 
@@ -195,9 +229,9 @@ Response `200`: `AuthTokens`
 
 Ошибки: `unauthorized`, `validation_error`.
 
-### `POST /auth/logout`
+### `POST /auth/logout` ✅
 
-Отзыв текущей сессии (refresh). Требует Bearer **или** тело с `refreshToken`.
+Отзыв текущей сессии (refresh). Принимает Bearer **и/или** тело с `refreshToken`.
 
 Request (опционально):
 
@@ -211,7 +245,7 @@ Response `200`:
 { "ok": true }
 ```
 
-### `POST /auth/register`
+### `POST /auth/register` ✅
 
 Регистрация по инвайту (как `/aula/invite/[token]`). После успеха нужно подтвердить email по ссылке из письма (веб). Мобильный логин до подтверждения вернёт `email_unverified`.
 
@@ -224,11 +258,13 @@ Request:
   "inviteToken": "…",
   "name": "Anna",
   "email": "anna@example.com",
-  "password": "secret123"
+  "password": "secret123",
+  "consent": true
 }
 ```
 
-Пароль ≥ 8 символов.
+- Пароль ≥ 8 символов.
+- `consent` обязателен (`true` / `"yes"` / `"true"`). Без согласия — `validation_error` (то же правило, что веб-форма).
 
 Response `201`:
 
@@ -240,15 +276,15 @@ Response `201`:
 }
 ```
 
-Ошибки: `validation_error`, `conflict` (email занят / инвайт использован), `not_found` (инвайт), `rate_limited`.
+Ошибки: `validation_error`, `conflict` (email занят / инвайт использован / истёк), `not_found` (инвайт), `rate_limited`.
 
-### `GET /me`
+### `GET /me` ✅
 
 Профиль текущего ученика.
 
 Response `200`: `StudentProfile`
 
-### `GET /lessons`
+### `GET /lessons` ✅
 
 Расписание ученика (свои уроки), сортировка по `startsAt`.
 
@@ -258,14 +294,14 @@ Response `200`:
 { "lessons": [ { "…Lesson…" } ], "meetUrl": "https://…" }
 ```
 
-### `GET /homework`
+### `GET /homework` ✅
 
 Домашние задания. Query:
 
 | Параметр | Описание |
 |----------|----------|
-| `lessonId` | Опционально. Без него — все homework ученика (или ближайший урок с ДЗ — см. ниже) |
-| `scope` | `lesson` (по умолчанию при `lessonId`) \| `all` |
+| `lessonId` | Опционально. Без него — урок по эвристике веба |
+| `scope` | `all` — все homework ученика |
 
 Без `lessonId` и без `scope=all`: выбирается урок по той же эвристике, что веб `/aula/me/compiti` (ближайший с ДЗ / ближайший / последний).
 
@@ -279,7 +315,7 @@ Response `200`:
 }
 ```
 
-### `PUT /homework/{assignmentId}`
+### `PUT /homework/{assignmentId}` ✅
 
 Сохранить прогресс (как server action на вебе). Только свои assignment.
 
@@ -306,13 +342,13 @@ Response `200`:
 
 Если `checked: false`, поле `correct` в progress — `false` (черновик).
 
-### `GET /live`
+### `GET /live` ✅
 
 Текущая live-сессия ученика + `meetUrl`.
 
 Response `200`: `LiveState`
 
-### `PATCH /live`
+### `PATCH /live` ✅
 
 Обновить ответы ученика в live. Только поля: `picks`, `selected`, `checked`, опционально `rev` (optimistic concurrency).
 
@@ -327,13 +363,39 @@ Request:
 }
 ```
 
-Если передан `rev` и он меньше серверного — `409 conflict`, в теле актуальный `LiveState`.
+Если передан `rev` и он меньше серверного — `409 conflict`, в теле актуальный `LiveState` (+ `error`).
 
 Response `200`: `LiveState`
 
-Ученик **не** может менять очередь / `activityId` / `index` (это преподаватель).
+Ученик **не** может менять очередь / `activityId` / `index` через PATCH. Для «Далее» — `POST /live/next`.
 
-### `POST /devices`
+### `POST /live/next` ✅
+
+Сдвинуть очередь на следующий элемент (паритет с кнопкой «Далее» на вебе).
+
+Request (опционально):
+
+```json
+{ "rev": 3 }
+```
+
+- Если есть следующий элемент — `index + 1`, сброс picks/selected/checked, `rev++`.
+- Если очередь на конце — без мутации, `done: true`.
+
+Response `200`: `LiveState`  
+Ошибки: `unauthorized`, `conflict` (устаревший `rev`).
+
+### `GET /gloss` ✅
+
+Словарь / перевод (как `/aula/api/gloss`). Требует Bearer.
+
+Query: `q` — слово.
+
+Response `200`: `{ "text": "…" }`  
+Пустой `q` → `{ "text": "" }`.  
+**Rate limit:** 60 / мин на IP.
+
+### `POST /devices` ✅
 
 Зарегистрировать APNs device token (upsert по токену).
 
@@ -355,7 +417,7 @@ Response `200`:
 
 Пуши не отправляются без ключей APNs на сервере.
 
-### `DELETE /devices`
+### `DELETE /devices` ✅
 
 Снять регистрацию.
 
@@ -373,9 +435,9 @@ Request:
 
 Response `200`: `{ "ok": true }`
 
-### `GET /health` (служебный, без auth)
+### `GET /health` ✅
 
-Проверка живости API (не путать с `/api/health` приложения).
+Проверка живости mobile API (без auth).
 
 Response `200`: `{ "ok": true, "version": "v1" }`
 
@@ -397,6 +459,16 @@ curl -sS https://giacomoschiavon.ru/api/mobile/v1/me \
 curl -sS 'https://giacomoschiavon.ru/api/mobile/v1/homework?scope=all' \
   -H "authorization: Bearer $ACCESS"
 
+# live next
+curl -sS -X POST https://giacomoschiavon.ru/api/mobile/v1/live/next \
+  -H "authorization: Bearer $ACCESS" \
+  -H 'content-type: application/json' \
+  -d '{"rev":3}'
+
+# gloss
+curl -sS 'https://giacomoschiavon.ru/api/mobile/v1/gloss?q=amico' \
+  -H "authorization: Bearer $ACCESS"
+
 # refresh
 curl -sS -X POST https://giacomoschiavon.ru/api/mobile/v1/auth/refresh \
   -H 'content-type: application/json' \
@@ -406,19 +478,17 @@ curl -sS -X POST https://giacomoschiavon.ru/api/mobile/v1/auth/refresh \
 ## Безопасность (контракт)
 
 - Доступ только к данным `studentId` из access token (IDOR запрещён).
-- Rate limit на login/register.
+- Rate limit на login/register/gloss.
 - Пароли и refresh хранятся только как хэши.
 - Ответы заданий (answer keys) не отдаются в PublicActivity.
+- Картинки заданий — абсолютные URL на тот же origin (`APP_URL`).
 - CORS для native app не требуется (не браузер); при необходимости webview — отдельно.
 
-## Статус реализации
+## Env для владельца
 
-| Область | Статус |
-|---------|--------|
-| Документ контракта | ✅ |
-| Auth login/refresh/logout/register | ⏳ |
-| Profile / lessons / homework / live | ⏳ |
-| Devices (APNs register) | ⏳ |
-| Push send | ❌ нет ключей |
+См. `docs/aula-ops.md` и `.env.example`:
 
-Документ обновляется вместе с реализацией.
+- `SESSION_SECRET` — длинная случайная строка (подписи cookie + mobile tokens)
+- `APP_URL=https://giacomoschiavon.ru`
+- `SMTP_*` — иначе письма подтверждения не уходят
+- APNs (позже): ключ/team/bundle — для отправки push, не для регистрации токена
