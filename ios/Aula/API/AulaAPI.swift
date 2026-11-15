@@ -74,6 +74,10 @@ enum AppConfig {
         ProcessInfo.processInfo.arguments.contains("-UITest")
     }
 
+    static var uiTestAutoLogin: Bool {
+        isUITest && ProcessInfo.processInfo.arguments.contains("-UITestAutoLogin")
+    }
+
     static var useMock: Bool {
         if ProcessInfo.processInfo.arguments.contains("-AULAUseMock") {
             return true

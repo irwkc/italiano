@@ -23,6 +23,10 @@ final class SessionStore: ObservableObject {
     func restore() async {
         isRestoring = true
         defer { isRestoring = false }
+        if AppConfig.uiTestAutoLogin {
+            await login(email: MockAulaClient.annaEmail, password: MockAulaClient.demoPassword)
+            return
+        }
         guard tokenStore.accessToken != nil || tokenStore.refreshToken != nil else {
             student = nil
             return

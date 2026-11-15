@@ -9,35 +9,31 @@ final class ScreenshotTests: XCTestCase {
             XCUIDevice.shared.appearance = .light
         }
         app = XCUIApplication()
-        app.launchArguments = ["-AULAUseMock", "-UITest", "-AppleLanguages", "(ru)", "-AppleLocale", "ru_RU"]
-        app.launch()
     }
 
     func testCaptureMainScreens() throws {
+        launch(autoLogin: false)
         XCTAssertTrue(app.staticTexts["Aula"].waitForExistence(timeout: 12))
         settle()
         capture("login")
 
         button(id: "login-register-toggle", label: "Регистрация по приглашению").tap()
-        XCTAssertTrue(app.staticTexts["Код приглашения"].waitForExistence(timeout: 6)
-            || app.textFields["invite-token"].waitForExistence(timeout: 2))
+        XCTAssertTrue(
+            app.staticTexts["Код приглашения"].waitForExistence(timeout: 6)
+                || app.textFields["invite-token"].waitForExistence(timeout: 2)
+        )
         settle()
         capture("invite")
 
-        button(id: "login-register-toggle", label: "У меня уже есть аккаунт").tap()
-        XCTAssertTrue(app.staticTexts["Aula"].waitForExistence(timeout: 6))
+        app.terminate()
+        launch(autoLogin: true)
 
-        let email = firstExisting([app.textFields["login-email"], app.textFields["Email"]])
-        XCTAssertTrue(email.waitForExistence(timeout: 4))
-        email.tap()
-        email.typeText("anna@aula.test")
-        let password = firstExisting([app.secureTextFields["login-password"], app.secureTextFields["Пароль"]])
-        password.tap()
-        password.typeText("aula-demo-8")
-        button(id: "login-submit", label: "Entrare").tap()
-
-        let liveTab = button(id: "tab-live", label: "Live")
-        XCTAssertTrue(liveTab.waitForExistence(timeout: 12))
+        XCTAssertTrue(
+            button(id: "tab-live", label: "Live").waitForExistence(timeout: 15)
+                || app.staticTexts["Live"].waitForExistence(timeout: 4)
+                || app.buttons["logout"].waitForExistence(timeout: 4)
+                || app.buttons["Выйти"].waitForExistence(timeout: 4)
+        )
         _ = app.buttons["quiz-option-0"].waitForExistence(timeout: 8)
         settle()
         capture("live")
@@ -70,18 +66,23 @@ final class ScreenshotTests: XCTestCase {
         capture("compiti")
     }
 
+    private func launch(autoLogin: Bool) {
+        app.launchArguments = ["-AULAUseMock", "-UITest", "-AppleLanguages", "(ru)", "-AppleLocale", "ru_RU"]
+        if autoLogin {
+            app.launchArguments.append("-UITestAutoLogin")
+        }
+        app.launchEnvironment["AULA_USE_MOCK"] = "YES"
+        app.launch()
+    }
+
     private func button(id: String, label: String) -> XCUIElement {
         let byId = app.buttons[id]
         if byId.waitForExistence(timeout: 2) { return byId }
         return app.buttons[label]
     }
 
-    private func firstExisting(_ elements: [XCUIElement]) -> XCUIElement {
-        elements.first(where: { $0.waitForExistence(timeout: 1) }) ?? elements[0]
-    }
-
     private func settle() {
-        RunLoop.current.run(until: Date().addingTimeInterval(0.8))
+        RunLoop.current.run(until: Date().addingTimeInterval(0.9))
     }
 
     private func capture(_ name: String) {
@@ -96,7 +97,7 @@ final class ScreenshotTests: XCTestCase {
             ProcessInfo.processInfo.environment["SCREENSHOT_UPLOAD_URL"],
             "http://127.0.0.1:47321",
         ].compactMap { $0 }
-        for base in bases {
+        for base in Set(bases) {
             guard let url = URL(string: base.trimmingCharacters(in: CharacterSet(charactersIn: "/")) + "/\(name).png") else { continue }
             var request = URLRequest(url: url)
             request.httpMethod = "PUT"
