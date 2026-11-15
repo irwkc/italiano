@@ -29,7 +29,7 @@ final class SessionStore: ObservableObject {
         }
         do {
             student = try await client.me()
-            requestPushRegistration()
+            if !AppConfig.isUITest { requestPushRegistration() }
         } catch {
             student = nil
             tokenStore.accessToken = nil
@@ -44,7 +44,7 @@ final class SessionStore: ObservableObject {
             tokenStore.accessToken = session.accessToken
             tokenStore.refreshToken = session.refreshToken
             student = session.student
-            requestPushRegistration()
+            if !AppConfig.isUITest { requestPushRegistration() }
         } catch {
             lastError = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
         }

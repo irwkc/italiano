@@ -7,6 +7,7 @@ struct AulaButton: View {
     let title: String
     var kind: Kind = .primary
     var enabled: Bool = true
+    var accessibilityId: String?
     let action: () -> Void
 
     var body: some View {
@@ -26,6 +27,7 @@ struct AulaButton: View {
         .opacity(enabled ? 1 : 0.45)
         .buttonStyle(.plain)
         .accessibilityAddTraits(.isButton)
+        .accessibilityIdentifier(accessibilityId ?? title)
     }
 
     private var background: Color {
@@ -54,6 +56,7 @@ struct AulaField: View {
     var textContentType: UITextContentType?
     var isSecure: Bool = false
     var submitLabel: SubmitLabel = .next
+    var accessibilityId: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -77,6 +80,7 @@ struct AulaField: View {
             .font(AulaFonts.serif(22, relativeTo: .title2))
             .foregroundStyle(AulaColor.ink)
             .submitLabel(submitLabel)
+            .accessibilityIdentifier(accessibilityId ?? label)
             AulaHairline()
         }
     }

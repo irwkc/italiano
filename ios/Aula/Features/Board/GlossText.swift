@@ -48,6 +48,7 @@ struct GlossText: View {
                 .font(font)
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("gloss-\(part)")
         .accessibilityHint("перевод")
     }
 

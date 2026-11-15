@@ -70,6 +70,10 @@ struct LivePatch: Equatable, Sendable {
 }
 
 enum AppConfig {
+    static var isUITest: Bool {
+        ProcessInfo.processInfo.arguments.contains("-UITest")
+    }
+
     static var useMock: Bool {
         if ProcessInfo.processInfo.arguments.contains("-AULAUseMock") {
             return true

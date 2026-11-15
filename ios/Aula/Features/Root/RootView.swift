@@ -46,6 +46,7 @@ struct RootView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .accessibilityIdentifier("cabinet")
         }
     }
 }
@@ -69,6 +70,7 @@ struct AulaHeaderBar: View {
             Button("Выйти") {
                 Task { await session.logout() }
             }
+            .accessibilityIdentifier("logout")
             .font(.system(size: 12))
             .tracking(1.4)
             .textCase(.uppercase)
@@ -102,6 +104,7 @@ struct AulaTabStrip: View {
                         }
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("tab-\(tab.rawValue)")
                 .accessibilityAddTraits(selection == tab ? [.isSelected] : [])
             }
             Spacer(minLength: 0)

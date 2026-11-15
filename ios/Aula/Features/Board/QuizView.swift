@@ -53,6 +53,7 @@ struct QuizView: View {
         }
         .buttonStyle(.plain)
         .disabled(state.checked)
+        .accessibilityIdentifier("quiz-option-\(index)")
         .accessibilityAddTraits(selected ? [.isSelected] : [])
     }
 

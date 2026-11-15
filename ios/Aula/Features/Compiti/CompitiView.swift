@@ -37,6 +37,7 @@ struct CompitiView: View {
             .padding(.horizontal, AulaSpace.page)
             .padding(.top, 12)
             .padding(.bottom, 48)
+            .accessibilityIdentifier("compiti-screen")
         }
         .task { await load() }
     }

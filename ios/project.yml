@@ -43,14 +43,19 @@ schemes:
       targets:
         Aula: all
         AulaTests: [test]
+        AulaUITests: [test]
     run:
       config: Debug
       environmentVariables:
         AULA_USE_MOCK: YES
     test:
       gatherCoverageData: false
+      commandLineArguments:
+        "-AULAUseMock": true
+        "-UITest": true
       targets:
         - AulaTests
+        - AulaUITests
 targets:
   Aula:
     type: application
@@ -109,4 +114,17 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Aula.app/Aula"
         BUNDLE_LOADER: "$(TEST_HOST)"
+        CODE_SIGNING_ALLOWED: NO
+  AulaUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: AulaUITests
+    dependencies:
+      - target: Aula
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ru.giacomoschiavon.aula.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Aula
         CODE_SIGNING_ALLOWED: NO

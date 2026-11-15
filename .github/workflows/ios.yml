@@ -71,3 +71,50 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY=- \
             test
+
+      - name: Screenshot server
+        run: |
+          mkdir -p screenshots
+          python3 scripts/screenshot_server.py --port 47321 --out "$PWD/screenshots" > /tmp/aula-shot-server.log 2>&1 &
+          echo $! > /tmp/aula-shot-server.pid
+          sleep 1
+
+      - name: Simulator screenshots
+        run: |
+          set -o pipefail
+          xcrun simctl boot "${{ steps.sim.outputs.name }}" || true
+          xcrun simctl bootstatus "${{ steps.sim.outputs.name }}" -b
+          xcrun simctl ui "${{ steps.sim.outputs.name }}" appearance light || true
+          xcodebuild \
+            -project Aula.xcodeproj \
+            -scheme AulaMock \
+            -only-testing:AulaUITests \
+            -destination "platform=iOS Simulator,name=${{ steps.sim.outputs.name }}" \
+            -resultBundlePath "$PWD/ScreenshotResults.xcresult" \
+            -skipPackagePluginValidation \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=- \
+            SCREENSHOT_UPLOAD_URL=http://127.0.0.1:47321 \
+            SIMCTL_CHILD_SCREENSHOT_UPLOAD_URL=http://127.0.0.1:47321 \
+            test
+          ls -la screenshots
+          test -f screenshots/login.png
+          test -f screenshots/invite.png
+          test -f screenshots/live.png
+          test -f screenshots/quiz.png
+          test -f screenshots/orario.png
+          test -f screenshots/compiti.png
+
+      - name: Stop screenshot server
+        if: always()
+        run: |
+          kill "$(cat /tmp/aula-shot-server.pid)" 2>/dev/null || true
+          cat /tmp/aula-shot-server.log || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-screenshots
+          path: ios/screenshots/*.png
+          if-no-files-found: warn

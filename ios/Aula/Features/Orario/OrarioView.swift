@@ -29,6 +29,7 @@ struct OrarioView: View {
             .padding(.horizontal, AulaSpace.page)
             .padding(.top, 12)
             .padding(.bottom, 40)
+            .accessibilityIdentifier("orario-screen")
         }
         .task { await load() }
     }

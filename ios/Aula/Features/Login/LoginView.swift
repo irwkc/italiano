@@ -26,7 +26,8 @@ struct LoginView: View {
                     text: $email,
                     keyboard: .emailAddress,
                     textContentType: .username,
-                    submitLabel: .next
+                    submitLabel: .next,
+                    accessibilityId: "login-email"
                 )
                 .focused($focus, equals: .email)
 
@@ -35,7 +36,8 @@ struct LoginView: View {
                     text: $password,
                     textContentType: .password,
                     isSecure: true,
-                    submitLabel: .go
+                    submitLabel: .go,
+                    accessibilityId: "login-password"
                 )
                 .focused($focus, equals: .password)
                 .onSubmit { Task { await submit() } }
@@ -47,7 +49,7 @@ struct LoginView: View {
                         .accessibilityIdentifier("login-error")
                 }
 
-                AulaButton(title: pending ? "…" : "Entrare", enabled: !pending && canSubmit) {
+                AulaButton(title: pending ? "…" : "Entrare", enabled: !pending && canSubmit, accessibilityId: "login-submit") {
                     Task { await submit() }
                 }
 
@@ -58,11 +60,12 @@ struct LoginView: View {
                 }
                 .font(.system(size: 13))
                 .foregroundStyle(AulaColor.pompei)
+                .accessibilityIdentifier("login-register-toggle")
 
                 if registering {
-                    AulaField(label: "Код приглашения", text: $inviteToken, textContentType: .oneTimeCode, submitLabel: .next)
-                    AulaField(label: "Имя", text: $name, textContentType: .name, submitLabel: .next)
-                    AulaButton(title: pending ? "…" : "Создать аккаунт", enabled: !pending && canRegister) {
+                    AulaField(label: "Код приглашения", text: $inviteToken, textContentType: .oneTimeCode, submitLabel: .next, accessibilityId: "invite-token")
+                    AulaField(label: "Имя", text: $name, textContentType: .name, submitLabel: .next, accessibilityId: "invite-name")
+                    AulaButton(title: pending ? "…" : "Создать аккаунт", enabled: !pending && canRegister, accessibilityId: "invite-submit") {
                         Task { await submitRegister() }
                     }
                     if let registerOk {
@@ -89,9 +92,12 @@ struct LoginView: View {
             .padding(.bottom, 40)
             .frame(maxWidth: 420)
             .frame(maxWidth: .infinity)
+            .accessibilityIdentifier(registering ? "invite-screen" : "login-screen")
         }
         .scrollDismissesKeyboard(.interactively)
-        .onAppear { focus = .email }
+        .onAppear {
+            if !AppConfig.isUITest { focus = .email }
+        }
     }
 
     private var canSubmit: Bool {

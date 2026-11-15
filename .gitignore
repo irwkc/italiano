@@ -50,3 +50,5 @@ ios/DerivedData
 ios/.build
 ios/*.xcuserstate
 ios/xcuserdata/
+ios/*.xcresult
+ios/ScreenshotResults.xcresult

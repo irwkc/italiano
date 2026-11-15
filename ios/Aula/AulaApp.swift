@@ -7,6 +7,11 @@ struct AulaApp: App {
 
     init() {
         AulaFonts.register()
+        if AppConfig.isUITest {
+            let tokens = KeychainTokenStore()
+            tokens.accessToken = nil
+            tokens.refreshToken = nil
+        }
         let pair = AulaClientFactory.make()
         let store = SessionStore(client: pair.client, tokenStore: pair.tokens)
         _session = StateObject(wrappedValue: store)
