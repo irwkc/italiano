@@ -4,7 +4,6 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 
 const KEY = "giacomo-cookie-consent";
-const SHOW_DELAY_MS = 5000;
 
 type Consent = {
   necessary: true;
@@ -13,20 +12,38 @@ type Consent = {
 
 type Snap = Consent | "missing" | "pending";
 
+/** Cache so useSyncExternalStore getSnapshot stays referentially stable (React #185). */
+let cachedRaw: string | null | undefined;
+let cachedConsent: Consent | null = null;
+
 function read(): Consent | null {
   try {
     const raw = localStorage.getItem(KEY);
-    if (!raw) return null;
+    if (raw === cachedRaw) return cachedConsent;
+    cachedRaw = raw;
+    if (!raw) {
+      cachedConsent = null;
+      return null;
+    }
     const parsed = JSON.parse(raw) as Partial<Consent>;
-    if (parsed.necessary !== true) return null;
-    return { necessary: true, analytics: Boolean(parsed.analytics) };
+    if (parsed.necessary !== true) {
+      cachedConsent = null;
+      return null;
+    }
+    cachedConsent = { necessary: true, analytics: Boolean(parsed.analytics) };
+    return cachedConsent;
   } catch {
+    cachedRaw = undefined;
+    cachedConsent = null;
     return null;
   }
 }
 
 function save(consent: Consent) {
-  localStorage.setItem(KEY, JSON.stringify({ ...consent, at: Date.now() }));
+  const raw = JSON.stringify({ ...consent, at: Date.now() });
+  localStorage.setItem(KEY, raw);
+  cachedRaw = raw;
+  cachedConsent = { necessary: true, analytics: consent.analytics };
   window.dispatchEvent(new Event("giacomo-consent"));
 }
 
@@ -49,7 +66,7 @@ export function CookieBanner() {
   const [forcedOpen, setForcedOpen] = useState(false);
   const [customize, setCustomize] = useState(false);
   const [analytics, setAnalytics] = useState(false);
-  const [delayDone, setDelayDone] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
 
   useEffect(() => {
     const reopen = () => {
@@ -63,17 +80,45 @@ export function CookieBanner() {
   }, []);
 
   useEffect(() => {
-    if (stored !== "missing" || forcedOpen) return;
-    const timer = window.setTimeout(() => setDelayDone(true), SHOW_DELAY_MS);
-    return () => window.clearTimeout(timer);
-  }, [stored, forcedOpen]);
+    const hero = document.getElementById("top");
+    if (hero) {
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          setPastHero(!entry.isIntersecting);
+        },
+        { threshold: 0, rootMargin: "0px" },
+      );
+      io.observe(hero);
+      return () => io.disconnect();
+    }
+    // No hero (legal, aula, …): show after a small scroll, or immediately if page is short.
+    const sync = () => {
+      const short = document.documentElement.scrollHeight <= window.innerHeight + 8;
+      setPastHero(short || window.scrollY > 24);
+    };
+    sync();
+    window.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", sync);
+    return () => {
+      window.removeEventListener("scroll", sync);
+      window.removeEventListener("resize", sync);
+    };
+  }, []);
 
   if (stored === "pending") return null;
-  const open = forcedOpen || (stored === "missing" && delayDone);
-  if (!open) return null;
+  const eligible = forcedOpen || stored === "missing";
+  if (!eligible) return null;
+
+  const show = forcedOpen || pastHero;
 
   return (
-    <aside className="cookie-bar" role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-text">
+    <aside
+      className={`cookie-bar ${show ? "cookie-bar-in" : "cookie-bar-out"}`}
+      role="dialog"
+      aria-labelledby="cookie-title"
+      aria-describedby="cookie-text"
+      aria-hidden={show ? undefined : true}
+    >
       <p id="cookie-title" className="cookie-title">
         Cookie
       </p>

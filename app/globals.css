@@ -59,6 +59,34 @@ body {
   line-height: 0.82;
 }
 
+/* Phone hero ITALIANO rows — keep ITA / LI / ANO on three lines at ≤360px */
+.h-stack .h-ita {
+  font-size: min(
+    48vw,
+    calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 7rem) / 2.55)
+  );
+}
+.h-stack .h-li {
+  font-size: min(
+    72vw,
+    calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 7rem) / 1.7)
+  );
+}
+@media (max-width: 360px) {
+  .h-stack .h-ita {
+    font-size: min(
+      44vw,
+      calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 7rem) / 2.55)
+    );
+  }
+  .h-stack .h-li {
+    font-size: min(
+      66vw,
+      calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 7rem) / 1.7)
+    );
+  }
+}
+
 /* Контурные капители: заливка цветом фона прячет внутренние контуры глифа */
 .caps-outline {
   color: var(--ivory);
@@ -291,15 +319,30 @@ html.menu-travel [data-menu-accent] {
   width: min(15.5rem, calc(100vw - 1.1rem));
   max-width: calc(100vw - 1.1rem);
   padding: 0.65rem 0.7rem 0.7rem;
-  background: color-mix(in srgb, var(--ivory) 90%, transparent);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
   color: var(--ink);
   display: grid;
   gap: 0.4rem;
   box-sizing: border-box;
-  animation: cookie-bar-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  pointer-events: none;
+}
+
+.cookie-bar a,
+.cookie-bar button,
+.cookie-bar label,
+.cookie-bar input {
+  pointer-events: auto;
+}
+
+.cookie-bar-in {
+  animation: cookie-bar-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cookie-bar-out {
+  animation: cookie-bar-out 0.35s cubic-bezier(0.4, 0, 1, 1) both;
+  pointer-events: none;
 }
 
 @keyframes cookie-bar-in {
@@ -313,6 +356,17 @@ html.menu-travel [data-menu-accent] {
   }
 }
 
+@keyframes cookie-bar-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
 /* Mobile: full-width fixed bottom strip — overlays content, does not shift layout. */
 @media (max-width: 430px) {
   .cookie-bar {
@@ -323,9 +377,6 @@ html.menu-travel [data-menu-accent] {
     max-width: none;
     margin: 0;
     padding: 0.45rem 0.7rem calc(0.45rem + env(safe-area-inset-bottom));
-    border-left: 0;
-    border-right: 0;
-    border-bottom: 0;
     display: flex;
     flex-wrap: wrap;
     align-items: center;

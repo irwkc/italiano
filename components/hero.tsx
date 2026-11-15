@@ -7,7 +7,7 @@ import { hero, site } from "@/lib/content";
 
 function LetterRow({ text, className = "", style }: { text: string; className?: string; style?: CSSProperties }) {
   return (
-    <span data-menu-line className={`block overflow-hidden ${className}`} style={style}>
+    <span data-menu-line className={`block overflow-hidden whitespace-nowrap ${className}`} style={style}>
       {text.split("").map((ch, i) => (
         <span key={`${ch}-${i}`} className="inline-block overflow-hidden align-bottom">
           <span className="h-letter inline-block will-change-transform">{ch}</span>
@@ -16,11 +16,6 @@ function LetterRow({ text, className = "", style }: { text: string; className?: 
     </span>
   );
 }
-
-const PHONE_ITA =
-  "min(48vw, calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 7rem) / 2.55))";
-const PHONE_LI =
-  "min(72vw, calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 7rem) / 1.7))";
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -84,20 +79,11 @@ export function Hero() {
       <div className="h-stack absolute inset-x-0 top-[calc(env(safe-area-inset-top)+3.05rem)] px-0 md:hidden">
         <h1
           data-menu-word="ITALIANO"
-          className="h-word caps text-ink select-none leading-[0.74] pl-[0.02em]"
-          style={{ fontSize: PHONE_ITA }}
+          className="h-word h-ita caps text-ink select-none leading-[0.74] pl-[0.02em]"
         >
-          <LetterRow text="ITA" style={{ fontSize: PHONE_ITA, letterSpacing: "-0.055em" }} />
-          <LetterRow
-            text="LI"
-            className="-mt-[0.06em]"
-            style={{ fontSize: PHONE_LI, letterSpacing: "-0.06em" }}
-          />
-          <LetterRow
-            text="ANO"
-            className="-mt-[0.07em]"
-            style={{ fontSize: PHONE_ITA, letterSpacing: "-0.055em" }}
-          />
+          <LetterRow text="ITA" className="h-ita" style={{ letterSpacing: "-0.055em" }} />
+          <LetterRow text="LI" className="h-li -mt-[0.06em]" style={{ letterSpacing: "-0.06em" }} />
+          <LetterRow text="ANO" className="h-ita -mt-[0.07em]" style={{ letterSpacing: "-0.055em" }} />
         </h1>
         <p className="mt-2 pr-[12vw] text-right">
           <span
