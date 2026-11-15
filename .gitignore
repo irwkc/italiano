@@ -43,3 +43,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# iOS (XcodeGen generates the project on CI / locally)
+ios/*.xcodeproj
+ios/*.xcworkspace
+ios/DerivedData
+ios/.build
+ios/*.xcuserstate
+ios/xcuserdata/
+ios/*.xcresult
+ios/ScreenshotResults.xcresult
