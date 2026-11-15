@@ -21,7 +21,22 @@ SMTP_FROM=giacomo_noreply@mail.ru
 
 `DATABASE_URL` is required for compose: the app persists aula store in Postgres (`aula_store` jsonb). File fallback under `learn/data/` is atomic (temp + rename) for local/dev only.
 
-Schema changes are additive in `hydrate()` (`mobileSessions`, `deviceTokens`, …) — no destructive migrations.
+Schema changes are additive in `hydrate()` (`mobileSessions`, `deviceTokens`, activity `level` / `chapter`, …) — no destructive migrations. `hydrate()` validates activity placement in memory and does not write the document, so tasks that omit `level` or `chapter` are left untouched.
+
+### Activity level and chapter
+
+Catalog tasks are objects in `aula_store.data` → `activities[]` (jsonb). There is no separate activities table. Optional fields (omit the property entirely when unused — do not store `null`):
+
+| Field | Allowed values |
+| --- | --- |
+| `level` | `"A1"` \| `"A2"` \| `"B1"` \| `"B2"` \| `"C1"` \| `"C2"` |
+| `chapter.number` | integer `1`–`999`, unique within a level |
+| `chapter.title` | non-empty string, trimmed, at most 160 characters |
+| `topic` | required section label (unchanged) |
+
+`chapter` is an object `{ "number", "title" }`. Both of its fields are required together. Tasks in one level that share `chapter.number` are one chapter; use a single title. Within a level, Schede groups by chapter, then by `topic`. For a flat chapter, set `topic` to `chapter.title`.
+
+Teacher tab query: `?level=A1|A2|B1|B2|C1|C2|none` and `?chapter=<number>|none`. See `learn/cefr.ts`.
 
 ## Health
 

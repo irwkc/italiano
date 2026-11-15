@@ -34,10 +34,14 @@ describe("publicActivityMobile", () => {
       options: ["a", "b"],
       answer: 1,
       image: "/sketch/aula-caffe.jpg",
+      level: "A1",
+      chapter: { number: 1, title: "Saluti" },
     };
     const pub = publicActivityMobile(activity);
     assert.equal(pub.type, "quiz");
     assert.equal("answer" in pub, false);
+    assert.equal("level" in pub, false);
+    assert.equal("chapter" in pub, false);
     assert.equal(pub.image, "https://giacomoschiavon.ru/sketch/aula-caffe.jpg");
   });
 });

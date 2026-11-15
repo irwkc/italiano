@@ -9,6 +9,7 @@ import {
   logoutStudent,
   logoutTeacher,
 } from "@/learn/auth";
+import { readActivityChapter, readActivityLevel } from "@/learn/cefr";
 import { hashToken, randomToken, verifyPassword } from "@/learn/crypto";
 import { mutateStore, readStore } from "@/learn/data/store";
 import { addHour } from "@/learn/format";
@@ -368,7 +369,7 @@ function parseActivityForm(formData: FormData, id: string): { error?: string; ac
     if (options.length < 2) return { error: "Нужны хотя бы два варианта." };
     if (!prompt) return { error: "Нужен вопрос." };
     if (!Number.isInteger(answer) || answer < 0 || answer >= options.length) return { error: "Отметьте верный вариант." };
-    return { activity: { id, type: "quiz", title, topic, prompt, options, answer } };
+    return attachPlacement({ id, type: "quiz", title, topic, prompt, options, answer }, formData);
   }
   if (type === "cloze") {
     const text = String(formData.get("text") ?? "").trim();
@@ -381,9 +382,22 @@ function parseActivityForm(formData: FormData, id: string): { error?: string; ac
     for (const word of answers) {
       if (!words.includes(word)) words.push(word);
     }
-    return { activity: { id, type: "cloze", title, topic, prompt: prompt || undefined, text, answers, bank: words } };
+    return attachPlacement(
+      { id, type: "cloze", title, topic, prompt: prompt || undefined, text, answers, bank: words },
+      formData,
+    );
   }
   return { error: "Выберите тип." };
+}
+
+function attachPlacement(activity: Activity, formData: FormData): { error?: string; activity?: Activity } {
+  const levelRead = readActivityLevel(formData.get("level"));
+  if (levelRead.error) return { error: levelRead.error };
+  const chapterRead = readActivityChapter(formData.get("chapterNumber"), formData.get("chapterTitle"));
+  if (chapterRead.error) return { error: chapterRead.error };
+  if (levelRead.level) activity.level = levelRead.level;
+  if (chapterRead.chapter) activity.chapter = chapterRead.chapter;
+  return { activity };
 }
 
 export async function createActivityAction(formData: FormData): Promise<{ error?: string; id?: string }> {
@@ -413,6 +427,8 @@ export async function updateActivityAction(formData: FormData): Promise<{ error?
   await mutateStore((store) => {
     const index = store.activities.findIndex((item) => item.id === id);
     if (index === -1) return;
+    const previous = store.activities[index];
+    if (previous.image && !next.image) next.image = previous.image;
     if (!store.topics.includes(next.topic)) store.topics.push(next.topic);
     store.activities[index] = next;
   });

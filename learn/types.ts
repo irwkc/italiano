@@ -1,3 +1,5 @@
+import type { ActivityChapter, CefrLevel } from "@/learn/cefr";
+
 export type Teacher = {
   id: string;
   name: string;
@@ -57,27 +59,32 @@ export type Assignment = {
   progress?: AssignmentProgress | null;
 };
 
-export type QuizActivity = {
+/**
+ * Shared catalog fields. `level` and `chapter` are optional — see `learn/cefr.ts`.
+ * Omit them when a task has no level or no chapter. Do not set them to null.
+ */
+type ActivityFields = {
   id: string;
-  type: "quiz";
   title: string;
   topic: string;
+  image?: string;
+  level?: CefrLevel;
+  chapter?: ActivityChapter;
+};
+
+export type QuizActivity = ActivityFields & {
+  type: "quiz";
   prompt: string;
   options: string[];
   answer: number;
-  image?: string;
 };
 
-export type ClozeActivity = {
-  id: string;
+export type ClozeActivity = ActivityFields & {
   type: "cloze";
-  title: string;
-  topic: string;
   prompt?: string;
   text: string;
   bank: string[];
   answers: string[];
-  image?: string;
 };
 
 export type Activity = QuizActivity | ClozeActivity;

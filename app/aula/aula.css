@@ -1111,6 +1111,7 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 1rem;
 }
@@ -1151,4 +1152,86 @@
 
 .aula-ask-form .btn {
   justify-self: start;
+}
+
+.aula-level-block {
+  min-width: 0;
+  max-width: 100%;
+  margin: 0.15rem 0 1rem;
+}
+
+.aula-level-block .aula-kicker {
+  margin-bottom: 0.1rem;
+}
+
+.aula-levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.85rem;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding-bottom: 0.15rem;
+}
+
+.aula-levels button {
+  flex: 0 1 auto;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  max-width: 100%;
+  min-height: 2.75rem;
+  margin: 0;
+  padding: 0.35rem 0;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: none;
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.aula-levels button:hover,
+.aula-levels button.is-on {
+  color: var(--ink);
+}
+
+.aula-levels button.is-on {
+  border-bottom-color: var(--pompei);
+}
+
+.aula-levels button:focus-visible {
+  outline: 1px solid var(--pompei);
+  outline-offset: 2px;
+}
+
+.aula-level-count {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+.aula-chapter-head {
+  margin-top: 1.65rem;
+}
+
+.aula-chapter-head .aula-kicker {
+  margin-bottom: 0.15rem;
+}
+
+.aula-chapter-title {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.aula-chapter-head + .aula-topic {
+  margin-top: 0.45rem;
 }

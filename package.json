@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx --test learn/mobile/*.test.ts",
+    "test": "tsx --test learn/mobile/*.test.ts learn/cefr.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

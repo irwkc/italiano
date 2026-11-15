@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "fs";
 import path from "path";
 import { Pool, type PoolClient } from "pg";
+import { normalizeActivityMeta } from "@/learn/cefr";
 import { seedStore } from "@/learn/data/seed";
 import { normalizeLive } from "@/learn/live";
 import type { Store } from "@/learn/types";
@@ -26,6 +27,10 @@ function hydrate(raw: Store): Store {
   if (!Array.isArray(raw.lessons)) raw.lessons = [];
   if (!Array.isArray(raw.students)) raw.students = [];
   if (!Array.isArray(raw.activities)) raw.activities = [];
+  for (const activity of raw.activities) {
+    if (!activity || typeof activity !== "object") continue;
+    normalizeActivityMeta(activity);
+  }
   if (!Array.isArray(raw.invites)) raw.invites = [];
   if (!Array.isArray(raw.emailTokens)) raw.emailTokens = [];
   if (!Array.isArray(raw.mobileSessions)) raw.mobileSessions = [];
