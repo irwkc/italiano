@@ -21,6 +21,7 @@ struct LiveView: View {
             .padding(.horizontal, AulaSpace.page)
             .padding(.top, 12)
             .padding(.bottom, 40)
+            .accessibilityElement(children: .contain)
             .accessibilityIdentifier("live-screen")
         }
         .task { await poll() }

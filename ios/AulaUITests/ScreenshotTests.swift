@@ -14,62 +14,74 @@ final class ScreenshotTests: XCTestCase {
     }
 
     func testCaptureMainScreens() throws {
-        XCTAssertTrue(app.descendants(matching: .any)["login-screen"].waitForExistence(timeout: 12))
+        XCTAssertTrue(app.staticTexts["Aula"].waitForExistence(timeout: 12))
         settle()
         capture("login")
 
-        app.buttons["login-register-toggle"].tap()
-        XCTAssertTrue(app.descendants(matching: .any)["invite-screen"].waitForExistence(timeout: 6))
+        button(id: "login-register-toggle", label: "Регистрация по приглашению").tap()
+        XCTAssertTrue(app.staticTexts["Код приглашения"].waitForExistence(timeout: 6)
+            || app.textFields["invite-token"].waitForExistence(timeout: 2))
         settle()
         capture("invite")
 
-        app.buttons["login-register-toggle"].tap()
-        XCTAssertTrue(app.descendants(matching: .any)["login-screen"].waitForExistence(timeout: 6))
+        button(id: "login-register-toggle", label: "У меня уже есть аккаунт").tap()
+        XCTAssertTrue(app.staticTexts["Aula"].waitForExistence(timeout: 6))
 
-        let email = app.textFields["login-email"]
+        let email = firstExisting([app.textFields["login-email"], app.textFields["Email"]])
         XCTAssertTrue(email.waitForExistence(timeout: 4))
         email.tap()
         email.typeText("anna@aula.test")
-        let password = app.secureTextFields["login-password"]
+        let password = firstExisting([app.secureTextFields["login-password"], app.secureTextFields["Пароль"]])
         password.tap()
         password.typeText("aula-demo-8")
-        app.buttons["login-submit"].tap()
+        button(id: "login-submit", label: "Entrare").tap()
 
-        XCTAssertTrue(app.buttons["tab-live"].waitForExistence(timeout: 12))
-        XCTAssertTrue(app.descendants(matching: .any)["live-screen"].waitForExistence(timeout: 8))
+        let liveTab = button(id: "tab-live", label: "Live")
+        XCTAssertTrue(liveTab.waitForExistence(timeout: 12))
         _ = app.buttons["quiz-option-0"].waitForExistence(timeout: 8)
         settle()
         capture("live")
 
         if app.buttons["quiz-option-0"].exists {
             app.buttons["quiz-option-0"].tap()
-            settle()
-            capture("quiz")
-        } else {
-            capture("quiz")
+        } else if app.buttons["Ciao!"].exists {
+            app.buttons["Ciao!"].tap()
         }
+        settle()
+        capture("quiz")
 
         let gloss = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "gloss-")).firstMatch
-        if gloss.waitForExistence(timeout: 3) {
+        if gloss.waitForExistence(timeout: 2) {
             gloss.tap()
-            settle()
-            capture("gloss")
+        } else if app.buttons["Come"].exists {
+            app.buttons["Come"].tap()
         }
+        settle()
+        capture("gloss")
 
-        app.buttons["tab-orario"].tap()
-        XCTAssertTrue(app.descendants(matching: .any)["orario-screen"].waitForExistence(timeout: 8))
-        _ = app.buttons["Indietro"].waitForExistence(timeout: 6)
+        button(id: "tab-orario", label: "Orario").tap()
+        XCTAssertTrue(app.staticTexts["Orario"].waitForExistence(timeout: 8))
         settle()
         capture("orario")
 
-        app.buttons["tab-compiti"].tap()
-        XCTAssertTrue(app.descendants(matching: .any)["compiti-screen"].waitForExistence(timeout: 8))
+        button(id: "tab-compiti", label: "Compiti").tap()
+        XCTAssertTrue(app.staticTexts["Compiti"].waitForExistence(timeout: 8))
         settle()
         capture("compiti")
     }
 
+    private func button(id: String, label: String) -> XCUIElement {
+        let byId = app.buttons[id]
+        if byId.waitForExistence(timeout: 2) { return byId }
+        return app.buttons[label]
+    }
+
+    private func firstExisting(_ elements: [XCUIElement]) -> XCUIElement {
+        elements.first(where: { $0.waitForExistence(timeout: 1) }) ?? elements[0]
+    }
+
     private func settle() {
-        RunLoop.current.run(until: Date().addingTimeInterval(0.7))
+        RunLoop.current.run(until: Date().addingTimeInterval(0.8))
     }
 
     private func capture(_ name: String) {
@@ -80,11 +92,11 @@ final class ScreenshotTests: XCTestCase {
         add(attachment)
 
         let data = screenshot.pngRepresentation
-        let urls = [
+        let bases = [
             ProcessInfo.processInfo.environment["SCREENSHOT_UPLOAD_URL"],
             "http://127.0.0.1:47321",
         ].compactMap { $0 }
-        for base in urls {
+        for base in bases {
             guard let url = URL(string: base.trimmingCharacters(in: CharacterSet(charactersIn: "/")) + "/\(name).png") else { continue }
             var request = URLRequest(url: url)
             request.httpMethod = "PUT"

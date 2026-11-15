@@ -92,6 +92,7 @@ struct LoginView: View {
             .padding(.bottom, 40)
             .frame(maxWidth: 420)
             .frame(maxWidth: .infinity)
+            .accessibilityElement(children: .contain)
             .accessibilityIdentifier(registering ? "invite-screen" : "login-screen")
         }
         .scrollDismissesKeyboard(.interactively)

@@ -46,7 +46,6 @@ struct RootView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .accessibilityIdentifier("cabinet")
         }
     }
 }
