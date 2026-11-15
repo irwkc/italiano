@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 
 const KEY = "giacomo-cookie-consent";
+const SHOW_DELAY_MS = 5000;
 
 type Consent = {
   necessary: true;
@@ -43,17 +44,12 @@ function clientSnap(): Snap {
   return read() ?? "missing";
 }
 
-function clearCookieOpen() {
-  document.documentElement.classList.remove("cookie-open");
-  document.documentElement.style.removeProperty("--cookie-h");
-}
-
 export function CookieBanner() {
   const stored = useSyncExternalStore(subscribeConsent, clientSnap, (): Snap => "pending");
   const [forcedOpen, setForcedOpen] = useState(false);
   const [customize, setCustomize] = useState(false);
   const [analytics, setAnalytics] = useState(false);
-  const barRef = useRef<HTMLElement>(null);
+  const [delayDone, setDelayDone] = useState(false);
 
   useEffect(() => {
     const reopen = () => {
@@ -66,41 +62,18 @@ export function CookieBanner() {
     return () => window.removeEventListener("giacomo-cookies", reopen);
   }, []);
 
-  const open = stored !== "pending" && (forcedOpen || stored === "missing");
-
   useEffect(() => {
-    if (!open) {
-      clearCookieOpen();
-      return;
-    }
-    const root = document.documentElement;
-    const el = barRef.current;
-    root.classList.add("cookie-open");
-    const sync = () => {
-      const height = el?.getBoundingClientRect().height ?? 0;
-      root.style.setProperty("--cookie-h", `${Math.ceil(height)}px`);
-    };
-    sync();
-    const ro = typeof ResizeObserver !== "undefined" && el ? new ResizeObserver(sync) : null;
-    if (el && ro) ro.observe(el);
-    window.addEventListener("resize", sync);
-    return () => {
-      ro?.disconnect();
-      window.removeEventListener("resize", sync);
-      clearCookieOpen();
-    };
-  }, [open, customize]);
+    if (stored !== "missing" || forcedOpen) return;
+    const timer = window.setTimeout(() => setDelayDone(true), SHOW_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, [stored, forcedOpen]);
 
-  if (stored === "pending" || !open) return null;
+  if (stored === "pending") return null;
+  const open = forcedOpen || (stored === "missing" && delayDone);
+  if (!open) return null;
 
   return (
-    <aside
-      ref={barRef}
-      className="cookie-bar"
-      role="dialog"
-      aria-labelledby="cookie-title"
-      aria-describedby="cookie-text"
-    >
+    <aside className="cookie-bar" role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-text">
       <p id="cookie-title" className="cookie-title">
         Cookie
       </p>

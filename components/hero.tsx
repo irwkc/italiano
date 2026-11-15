@@ -145,7 +145,7 @@ export function Hero() {
           <br />
           <em className="text-ink-soft">{hero.subtitle}</em>
         </h2>
-        <a href="#contatti" data-landing-cta className="h-title btn btn-primary md:mt-8">
+        <a href="#contatti" className="h-title btn btn-primary md:mt-8">
           {site.cta}
           <ArrowDownRight size={14} weight="light" />
         </a>
