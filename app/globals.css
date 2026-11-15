@@ -301,22 +301,57 @@ html.menu-travel [data-menu-accent] {
   box-sizing: border-box;
 }
 
-/* Keep the landing CTA (bottom-left) clear while the plaque is open. */
-@media (max-width: 390px) {
+/* Mobile: full-width bottom strip + lift landing CTA by measured strip height. */
+@media (max-width: 430px) {
   .cookie-bar {
-    width: min(10.75rem, 42vw);
-    max-width: 42vw;
-    padding: 0.55rem 0.55rem 0.6rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0.45rem 0.7rem calc(0.45rem + env(safe-area-inset-bottom));
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.55rem;
   }
 
-  .cookie-text {
+  .cookie-bar .cookie-title {
+    display: none;
+  }
+
+  .cookie-bar .cookie-text {
+    flex: 1 1 9rem;
+    min-width: 0;
     font-size: 0.66rem;
+    line-height: 1.35;
   }
 
-  .cookie-btn {
+  .cookie-bar .cookie-opts {
+    flex: 1 1 100%;
+    margin: 0;
+  }
+
+  .cookie-bar .cookie-actions {
+    margin: 0;
+    flex: 0 0 auto;
+  }
+
+  .cookie-bar .cookie-btn {
     height: 1.7rem;
-    padding: 0 0.4rem;
+    padding: 0 0.45rem;
     font-size: 0.56rem;
+  }
+
+  html.cookie-open .h-copy {
+    /* Extra 2rem covers the hero CTA entrance translateY(28px) while GSAP runs. */
+    bottom: calc(
+      max(0.35rem, env(safe-area-inset-bottom)) + var(--cookie-h, 3.5rem) + 2rem
+    );
   }
 }
 
