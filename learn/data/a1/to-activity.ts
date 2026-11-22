@@ -1,25 +1,17 @@
-import { chapterByNumber } from "@/learn/data/a1/chapters";
+import { chapterByNumber, topicFor } from "@/learn/data/a1/chapters";
 import type { A1Task } from "@/learn/data/a1/types";
 import type { Activity } from "@/learn/types";
 
-/**
- * Names of the CEFR fields written onto each stored activity.
- * The dashboard groups sections by `topic`, so the chapter label goes there too.
- * `level` and `chapter` are the expected selector fields. If the schema on main
- * uses different keys, change only these two constants.
- */
-export const A1_LEVEL_FIELD = "level";
-export const A1_CHAPTER_FIELD = "chapter";
-
+/** Store shape from `learn/cefr.ts`: level string, chapter object, topic = program section. */
 export function taskToActivity(task: A1Task): Activity {
-  const chapter = chapterByNumber(task.chapter).label;
+  const meta = chapterByNumber(task.chapter);
   const shared = {
     id: task.slug,
     title: task.title,
-    topic: chapter,
+    topic: topicFor(task.chapter, task.focus),
     prompt: task.prompt,
-    [A1_LEVEL_FIELD]: "A1" as const,
-    [A1_CHAPTER_FIELD]: chapter,
+    level: "A1" as const,
+    chapter: { number: meta.number, title: meta.title },
   };
   if (task.type === "quiz") {
     return { ...shared, type: "quiz", options: [...task.options], answer: task.answer };

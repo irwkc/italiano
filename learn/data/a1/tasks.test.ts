@@ -1,10 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { isBoardCorrect } from "@/learn/boards/score";
-import { A1_CHAPTERS } from "@/learn/data/a1/chapters";
+import { readFileSync } from "node:fs";
+import { A1_CHAPTERS, topicFor } from "@/learn/data/a1/chapters";
 import { A1_TASKS } from "@/learn/data/a1/catalog";
-import { mergeA1Activities } from "@/learn/data/a1/merge";
-import { A1_CHAPTER_FIELD, A1_LEVEL_FIELD, taskToActivity } from "@/learn/data/a1/to-activity";
+import { A1_CATALOG_ID, activitiesEqual, mergeA1Activities } from "@/learn/data/a1/merge";
+import { taskToActivity } from "@/learn/data/a1/to-activity";
 import { seedStore } from "@/learn/data/seed";
 import type { Activity } from "@/learn/types";
 
@@ -25,17 +26,17 @@ describe("A1 catalog", () => {
     assert.equal(A1_TASKS.length, 200);
     for (const chapter of A1_CHAPTERS) {
       const tasks = A1_TASKS.filter((task) => task.chapter === chapter.number);
-      assert.equal(tasks.length, 20, chapter.label);
+      assert.equal(tasks.length, 20, chapter.title);
       for (const focus of chapter.focuses) {
         assert.equal(
-          tasks.filter((task) => task.focus === focus).length,
+          tasks.filter((task) => task.focus === focus.key).length,
           5,
-          `${chapter.label} / ${focus}`,
+          `${chapter.title} / ${focus.topic}`,
         );
       }
       const quiz = tasks.filter((task) => task.type === "quiz").length;
       const cloze = tasks.filter((task) => task.type === "cloze").length;
-      assert.ok(quiz >= 6 && cloze >= 6, `${chapter.label} mix quiz=${quiz} cloze=${cloze}`);
+      assert.ok(quiz >= 6 && cloze >= 6, `${chapter.title} mix quiz=${quiz} cloze=${cloze}`);
     }
   });
 
@@ -56,13 +57,16 @@ describe("A1 catalog", () => {
   it("has a valid answer key for every task", () => {
     for (const task of A1_TASKS) {
       const activity = taskToActivity(task);
+      const meta = A1_CHAPTERS[task.chapter - 1];
       assert.equal(activity.id, task.slug);
-      assert.equal(activity.topic, A1_CHAPTERS[task.chapter - 1]?.label);
-      const stored = activity as Activity & Record<string, string>;
-      assert.equal(stored[A1_LEVEL_FIELD], "A1", task.slug);
-      assert.equal(stored[A1_CHAPTER_FIELD], activity.topic, task.slug);
-      assert.equal("note" in stored, false, task.slug);
-      assert.equal("explanation" in stored, false, task.slug);
+      assert.ok(A1_CATALOG_ID.test(activity.id), task.slug);
+      assert.equal(activity.topic, topicFor(task.chapter, task.focus), task.slug);
+      assert.equal(activity.level, "A1", task.slug);
+      assert.deepEqual(activity.chapter, { number: meta?.number, title: meta?.title }, task.slug);
+      assert.equal(activity.level === "A1" && activity.chapter != null, true);
+      assert.equal("note" in activity, false, task.slug);
+      assert.equal("explanation" in activity, false, task.slug);
+      assert.equal(JSON.stringify(activity).includes("null"), false, task.slug);
 
       if (activity.type === "quiz") {
         assert.ok(activity.options.length >= 2, task.slug);
@@ -113,6 +117,13 @@ describe("A1 catalog", () => {
     }
   });
 
+  it("matches the JSON file the production importer loads", () => {
+    const file = JSON.parse(readFileSync(new URL("./activities.json", import.meta.url), "utf8")) as Activity[];
+    const built = A1_TASKS.map(taskToActivity);
+    assert.equal(file.length, 200);
+    assert.equal(activitiesEqual(file, built), true);
+  });
+
   it("rejects a few impossible spellings in the answer key", () => {
     const correct = A1_TASKS.map((task) => {
       const answer = task.type === "quiz" ? task.options[task.answer] : `${task.text}\n${task.answers.join("\n")}`;
@@ -138,7 +149,10 @@ describe("mergeA1Activities", () => {
     for (const id of beforeIds) {
       assert.ok(store.activities.some((activity) => activity.id === id));
     }
-    for (const chapter of A1_CHAPTERS) assert.ok(store.topics.includes(chapter.label));
+    assert.deepEqual(store.topics, seedStore().topics);
+    const foreign = store.activities.find((activity) => activity.id === beforeIds[0]);
+    assert.equal(foreign && "level" in foreign, false);
+    assert.equal(foreign && "chapter" in foreign, false);
 
     const second = mergeA1Activities(store);
     assert.deepEqual(second, { inserted: 0, updated: 0, unchanged: 200 });

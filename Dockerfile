@@ -25,6 +25,8 @@ RUN addgroup --system --gid 1001 nodejs \
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/scripts/import-a1.mjs /app/a1-import/import-a1.mjs
+COPY --from=builder --chown=nextjs:nodejs /app/learn/data/a1/activities.json /app/a1-import/activities.json
 
 USER nextjs
 EXPOSE 3000

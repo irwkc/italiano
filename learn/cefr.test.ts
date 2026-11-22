@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  applyActivityPlacement,
   matchesChapter,
   matchesLevel,
   normalizeActivityMeta,
@@ -87,6 +88,26 @@ describe("form readers", () => {
     assert.deepEqual(readActivityLevel("none"), {});
     assert.deepEqual(readActivityLevel(""), {});
     assert.equal(readActivityLevel("beginner").error, "Неизвестный уровень.");
+  });
+
+  it("keeps level and chapter when the edit form resubmits them", () => {
+    const activity = {
+      id: "a1-c01-01",
+      title: "Ciao",
+      topic: "Приветствия и знакомство",
+      level: "A1" as const,
+      chapter: { number: 1, title: "Primi contatti" },
+    };
+    const form = new FormData();
+    form.set("level", "A1");
+    form.set("chapterNumber", "1");
+    form.set("chapterTitle", "Primi contatti");
+    const result = applyActivityPlacement(activity, form);
+    assert.equal(result.error, undefined);
+    assert.equal(result.activity?.level, "A1");
+    assert.deepEqual(result.activity?.chapter, { number: 1, title: "Primi contatti" });
+    assert.equal(result.activity?.topic, activity.topic);
+    assert.equal(result.activity?.id, activity.id);
   });
 
   it("reads a chapter only when number and title are both set", () => {

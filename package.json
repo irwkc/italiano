@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-"test": "tsx --test learn/mobile/*.test.ts learn/cefr.test.ts learn/data/a1/tasks.test.ts",
-    "import:a1": "tsx learn/data/a1/import-cli.ts",
+"test": "tsx --test learn/mobile/*.test.ts learn/cefr.test.ts learn/data/a1/tasks.test.ts && node --test scripts/import-a1.test.mjs",
+    "import:a1": "node scripts/import-a1.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

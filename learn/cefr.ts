@@ -100,6 +100,28 @@ export function readActivityLevel(raw: FormDataEntryValue | null): { error?: str
   return { level: value };
 }
 
+/**
+ * Apply the Schede edit form onto an activity.
+ * The form always resubmits `level`, `chapterNumber`, and `chapterTitle`
+ * (see ActivityCompose). Empty level / empty chapter clears that field.
+ * Passing the values that are already on the activity keeps them.
+ */
+export function applyActivityPlacement<T extends { level?: CefrLevel; chapter?: ActivityChapter }>(
+  activity: T,
+  formData: FormData,
+): { error?: string; activity?: T } {
+  const levelRead = readActivityLevel(formData.get("level"));
+  if (levelRead.error) return { error: levelRead.error };
+  const chapterRead = readActivityChapter(formData.get("chapterNumber"), formData.get("chapterTitle"));
+  if (chapterRead.error) return { error: chapterRead.error };
+  const next: T = { ...activity };
+  delete next.level;
+  delete next.chapter;
+  if (levelRead.level) next.level = levelRead.level;
+  if (chapterRead.chapter) next.chapter = chapterRead.chapter;
+  return { activity: next };
+}
+
 export function readActivityChapter(
   numberRaw: FormDataEntryValue | null,
   titleRaw: FormDataEntryValue | null,

@@ -1,0 +1,4130 @@
+[
+  {
+    "id": "a1-c01-01",
+    "title": "Ciao",
+    "topic": "Приветствия и знакомство",
+    "prompt": "Выберите реплику. Днём на улице вы встречаете друга.",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "quiz",
+    "options": [
+      "Ciao!",
+      "Buonanotte, signore.",
+      "Arrivederci, professore.",
+      "Piacere, dottore."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c01-02",
+    "title": "Buongiorno",
+    "topic": "Приветствия и знакомство",
+    "prompt": "Выберите приветствие. Утро, вы входите в класс к преподавателю.",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "quiz",
+    "options": [
+      "Buongiorno!",
+      "Ciao, bello!",
+      "Buonanotte!",
+      "A domani."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c01-03",
+    "title": "Arrivederci",
+    "topic": "Приветствия и знакомство",
+    "prompt": "Урок закончился, вечер. Вы прощаетесь с преподавателем. Что сказать?",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "quiz",
+    "options": [
+      "Arrivederci!",
+      "Buongiorno!",
+      "Piacere!",
+      "Come si chiama?"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c01-04",
+    "title": "Mi chiamo",
+    "topic": "Приветствия и знакомство",
+    "prompt": "Вставьте слова. Анна представляется другу и спрашивает его имя.",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "cloze",
+    "text": "Ciao! Io ____ Anna. E tu, come ti ____?",
+    "answers": [
+      "mi chiamo",
+      "chiami"
+    ],
+    "bank": [
+      "mi chiamo",
+      "chiami",
+      "si chiama",
+      "sono"
+    ]
+  },
+  {
+    "id": "a1-c01-05",
+    "title": "Come si chiama?",
+    "topic": "Приветствия и знакомство",
+    "prompt": "Вы на уроке и вежливо спрашиваете имя преподавателя. Выберите вопрос.",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "quiz",
+    "options": [
+      "Come si chiama?",
+      "Come ti chiami?",
+      "Arrivederci!",
+      "Buonanotte!"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c01-06",
+    "title": "Ciao, suono c",
+    "topic": "Фонетика и алфавит",
+    "prompt": "Как читается буква c в слове ciao?",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "quiz",
+    "options": [
+      "Как [ч]",
+      "Как [к]",
+      "Как [дж]",
+      "Не читается"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c01-07",
+    "title": "Casa e ciao",
+    "topic": "Фонетика и алфавит",
+    "prompt": "Вставьте c или ci. Сначала слово «дом» (casa), потом «привет» (ciao).",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "cloze",
+    "text": "____asa, ____ao.",
+    "answers": [
+      "c",
+      "ci"
+    ],
+    "bank": [
+      "c",
+      "ci",
+      "g",
+      "ge"
+    ]
+  },
+  {
+    "id": "a1-c01-08",
+    "title": "Gelato, suono g",
+    "topic": "Фонетика и алфавит",
+    "prompt": "Как читается буква g в слове gelato?",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "quiz",
+    "options": [
+      "Как [дж]",
+      "Как [г]",
+      "Как [к]",
+      "Не читается"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c01-09",
+    "title": "Gatto, suono g",
+    "topic": "Фонетика и алфавит",
+    "prompt": "Как читается буква g в слове gatto?",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "quiz",
+    "options": [
+      "Как [г]",
+      "Как [дж]",
+      "Как [ч]",
+      "Как [к]"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c01-10",
+    "title": "Che e ghe",
+    "topic": "Фонетика и алфавит",
+    "prompt": "Вставьте сочетание букв: звук [к] в слове «что» и звук [г] в слове spaghetti.",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "cloze",
+    "text": "«Что» — ____. Spaghetti: spa____tti.",
+    "answers": [
+      "che",
+      "ghe"
+    ],
+    "bank": [
+      "che",
+      "ghe",
+      "ce",
+      "ge"
+    ]
+  },
+  {
+    "id": "a1-c01-11",
+    "title": "Sono e sei",
+    "topic": "Базовая грамматика",
+    "prompt": "Вставьте essere. Марко говорит о себе и спрашивает Анну.",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "cloze",
+    "text": "Io ____ Marco. Tu ____ Anna?",
+    "answers": [
+      "sono",
+      "sei"
+    ],
+    "bank": [
+      "sono",
+      "sei",
+      "è",
+      "si chiama"
+    ]
+  },
+  {
+    "id": "a1-c01-12",
+    "title": "Lei è",
+    "topic": "Базовая грамматика",
+    "prompt": "Выберите верную фразу со значением «Вы итальянка». Речь вежливая, о женщине.",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "quiz",
+    "options": [
+      "Lei è italiana.",
+      "Tu sei italiano.",
+      "Io sono italiana.",
+      "Lei sei italiana."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c01-13",
+    "title": "Il libro",
+    "topic": "Базовая грамматика",
+    "prompt": "Как сказать «книга» с артиклем?",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "quiz",
+    "options": [
+      "il libro",
+      "la libro",
+      "il casa",
+      "la penna"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c01-14",
+    "title": "Il e la",
+    "topic": "Базовая грамматика",
+    "prompt": "Вставьте артикль il или la. Libro — мужской род, penna — женский.",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "cloze",
+    "text": "In classe: ____ libro e ____ penna.",
+    "answers": [
+      "il",
+      "la"
+    ],
+    "bank": [
+      "il",
+      "la",
+      "sono",
+      "ciao"
+    ]
+  },
+  {
+    "id": "a1-c01-15",
+    "title": "Si chiama",
+    "topic": "Базовая грамматика",
+    "prompt": "Вставьте chiamarsi. Анна говорит о себе и о преподавателе.",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "cloze",
+    "text": "Io ____ Anna. Il professore ____ Rossi.",
+    "answers": [
+      "mi chiamo",
+      "si chiama"
+    ],
+    "bank": [
+      "mi chiamo",
+      "si chiama",
+      "ti chiami",
+      "sei"
+    ]
+  },
+  {
+    "id": "a1-c01-16",
+    "title": "Diciotto",
+    "topic": "Первые числительные",
+    "prompt": "Как по-итальянски число 18?",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "quiz",
+    "options": [
+      "diciotto",
+      "dodici",
+      "sedici",
+      "venti"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c01-17",
+    "title": "Cinque e dodici",
+    "topic": "Первые числительные",
+    "prompt": "Вставьте числительные словами.",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "cloze",
+    "text": "5 si dice ____. 12 si dice ____.",
+    "answers": [
+      "cinque",
+      "dodici"
+    ],
+    "bank": [
+      "cinque",
+      "dodici",
+      "quattro",
+      "venti"
+    ]
+  },
+  {
+    "id": "a1-c01-18",
+    "title": "Dieci e venti",
+    "topic": "Первые числительные",
+    "prompt": "Вставьте числительные словами.",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "cloze",
+    "text": "10 è ____. 20 è ____.",
+    "answers": [
+      "dieci",
+      "venti"
+    ],
+    "bank": [
+      "dieci",
+      "venti",
+      "due",
+      "dodici"
+    ]
+  },
+  {
+    "id": "a1-c01-19",
+    "title": "Non capisco",
+    "topic": "Первые числительные",
+    "prompt": "Вставьте классные слова. Сначала «не», потом «повторить».",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "cloze",
+    "text": "____ capisco. Può ____, per favore?",
+    "answers": [
+      "Non",
+      "ripetere"
+    ],
+    "bank": [
+      "Non",
+      "ripetere",
+      "Ciao",
+      "libro"
+    ]
+  },
+  {
+    "id": "a1-c01-20",
+    "title": "Prego",
+    "topic": "Первые числительные",
+    "prompt": "На уроке вам сказали «Grazie». Что ответить?",
+    "level": "A1",
+    "chapter": {
+      "number": 1,
+      "title": "Primi contatti"
+    },
+    "type": "quiz",
+    "options": [
+      "Prego.",
+      "Arrivederci.",
+      "Buonanotte.",
+      "Diciotto."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c02-01",
+    "title": "Quanti anni hai?",
+    "topic": "Личные данные и профессии",
+    "prompt": "Друг спрашивает ваш возраст. Какой это вопрос?",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "quiz",
+    "options": [
+      "Quanti anni hai?",
+      "Dove abiti?",
+      "Come si chiama?",
+      "Chi è lui?"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c02-02",
+    "title": "Trenta anni",
+    "topic": "Личные данные и профессии",
+    "prompt": "Вставьте числительное и глагол. Марко, 30 лет, говорит о себе.",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "cloze",
+    "text": "Marco ____ trenta ____.",
+    "answers": [
+      "ha",
+      "anni"
+    ],
+    "bank": [
+      "ha",
+      "anni",
+      "sono",
+      "anno"
+    ]
+  },
+  {
+    "id": "a1-c02-03",
+    "title": "Lui è un medico",
+    "topic": "Личные данные и профессии",
+    "prompt": "Анна представляет Луку: он врач. Выберите фразу.",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "quiz",
+    "options": [
+      "Lui è un medico.",
+      "Lui sono un medico.",
+      "Lei è un medico.",
+      "Io sei un medico."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c02-04",
+    "title": "Parlo italiano",
+    "topic": "Личные данные и профессии",
+    "prompt": "Вставьте parlare. Сначала «я», потом «она».",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "cloze",
+    "text": "Io ____ italiano. Anna ____ russo e italiano.",
+    "answers": [
+      "parlo",
+      "parla"
+    ],
+    "bank": [
+      "parlo",
+      "parla",
+      "parliamo",
+      "sono"
+    ]
+  },
+  {
+    "id": "a1-c02-05",
+    "title": "Ti presento",
+    "topic": "Личные данные и профессии",
+    "prompt": "Как представить Сару? Она преподаватель.",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "quiz",
+    "options": [
+      "Ti presento Sara. Lei è insegnante.",
+      "Ti presento Sara. Io sono insegnante.",
+      "Ciao Sara. Tu è insegnante.",
+      "Lei sei Sara, io insegnante."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c02-06",
+    "title": "Parliamo",
+    "topic": "Глаголы I группы и правильные формы",
+    "prompt": "Вставьте parlare. Сначала «мы», потом «вы».",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "cloze",
+    "text": "Noi ____ italiano in classe. Voi ____ russo a casa?",
+    "answers": [
+      "parliamo",
+      "parlate"
+    ],
+    "bank": [
+      "parliamo",
+      "parlate",
+      "parlo",
+      "parla"
+    ]
+  },
+  {
+    "id": "a1-c02-07",
+    "title": "Ha venti anni",
+    "topic": "Глаголы I группы и правильные формы",
+    "prompt": "Выберите форму. «Марко двадцать лет».",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "quiz",
+    "options": [
+      "Marco ha venti anni.",
+      "Marco ho venti anni.",
+      "Marco è venti anni.",
+      "Marco sono venti anni."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c02-08",
+    "title": "Faccio l'ingegnere",
+    "topic": "Глаголы I группы и правильные формы",
+    "prompt": "Лука говорит о своей работе: «Я инженер». Выберите фразу.",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "quiz",
+    "options": [
+      "Faccio l'ingegnere.",
+      "Fai l'ingegnere.",
+      "Ho l'ingegnere.",
+      "Sono faccio ingegnere."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c02-09",
+    "title": "Sto bene",
+    "topic": "Глаголы I группы и правильные формы",
+    "prompt": "Вставьте stare. Вопрос другу и ответ «хорошо».",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "cloze",
+    "text": "— Come ____? — ____ bene, grazie.",
+    "answers": [
+      "stai",
+      "Sto"
+    ],
+    "bank": [
+      "stai",
+      "Sto",
+      "sei",
+      "Ho"
+    ]
+  },
+  {
+    "id": "a1-c02-10",
+    "title": "Abito a Roma",
+    "topic": "Глаголы I группы и правильные формы",
+    "prompt": "Как сказать «Я живу в Риме»? С городом используйте формулу abitare a.",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "quiz",
+    "options": [
+      "Io abito a Roma.",
+      "Io abiti a Roma.",
+      "Io abita a Roma.",
+      "Io abitiamo a Roma."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c02-11",
+    "title": "Uno studente",
+    "topic": "Артикли и отрицание",
+    "prompt": "Выберите верную пару. Слово studente начинается на s + согласная.",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "quiz",
+    "options": [
+      "uno studente",
+      "un studente",
+      "una studente",
+      "un' studente"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c02-12",
+    "title": "Un'amica",
+    "topic": "Артикли и отрицание",
+    "prompt": "Как сказать «подруга» с неопределённым артиклем? Amica начинается с гласной.",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "quiz",
+    "options": [
+      "un'amica",
+      "una amica",
+      "uno amica",
+      "un amica"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c02-13",
+    "title": "Un medico",
+    "topic": "Артикли и отрицание",
+    "prompt": "Вставьте un или una. Medico — мужской род, studentessa — женский.",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "cloze",
+    "text": "Luca è ____ medico. Sara è ____ studentessa.",
+    "answers": [
+      "un",
+      "una"
+    ],
+    "bank": [
+      "un",
+      "una",
+      "uno",
+      "un'"
+    ]
+  },
+  {
+    "id": "a1-c02-14",
+    "title": "Non è",
+    "topic": "Артикли и отрицание",
+    "prompt": "Вставьте отрицание и глагол. «Марко не врач. Я не говорю по-французски».",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "cloze",
+    "text": "Marco ____ è medico. Io non ____ francese.",
+    "answers": [
+      "non",
+      "parlo"
+    ],
+    "bank": [
+      "non",
+      "parlo",
+      "è",
+      "ho"
+    ]
+  },
+  {
+    "id": "a1-c02-15",
+    "title": "Non lavoro",
+    "topic": "Артикли и отрицание",
+    "prompt": "Выберите правильное отрицание: «Я не работаю».",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "quiz",
+    "options": [
+      "Non lavoro.",
+      "Lavoro non.",
+      "Non sono lavoro.",
+      "No lavoro."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c02-16",
+    "title": "Dove abiti?",
+    "topic": "Вопросительные слова и числа",
+    "prompt": "Нужно узнать город человека. Какой вопрос задать другу?",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "quiz",
+    "options": [
+      "Dove abiti?",
+      "Chi è lui?",
+      "Quanti anni hai?",
+      "Che lavoro fai?"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c02-17",
+    "title": "Chi e che",
+    "topic": "Вопросительные слова и числа",
+    "prompt": "Вставьте chi или che. Сначала «кто он», потом «какая у тебя работа».",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "cloze",
+    "text": "____ è lui? È Marco. ____ lavoro fai?",
+    "answers": [
+      "Chi",
+      "Che"
+    ],
+    "bank": [
+      "Chi",
+      "Che",
+      "Dove",
+      "Quanti"
+    ]
+  },
+  {
+    "id": "a1-c02-18",
+    "title": "Ventitré",
+    "topic": "Вопросительные слова и числа",
+    "prompt": "Как по-итальянски число 23?",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "quiz",
+    "options": [
+      "ventitré",
+      "ventitre",
+      "ventidue",
+      "trentatré"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c02-19",
+    "title": "Quaranta e cento",
+    "topic": "Вопросительные слова и числа",
+    "prompt": "Вставьте числительные словами.",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "cloze",
+    "text": "40 si dice ____. 100 si dice ____.",
+    "answers": [
+      "quaranta",
+      "cento"
+    ],
+    "bank": [
+      "quaranta",
+      "cento",
+      "cinquanta",
+      "venti"
+    ]
+  },
+  {
+    "id": "a1-c02-20",
+    "title": "Ottanta",
+    "topic": "Вопросительные слова и числа",
+    "prompt": "Какое число означает ottanta?",
+    "level": "A1",
+    "chapter": {
+      "number": 2,
+      "title": "Io e gli altri"
+    },
+    "type": "quiz",
+    "options": [
+      "80",
+      "18",
+      "8",
+      "40"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-01",
+    "title": "Scusi",
+    "topic": "Заказ в ресторане и баре",
+    "prompt": "Вам нужно позвать официанта. Что сказать?",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "quiz",
+    "options": [
+      "Scusi!",
+      "Buonanotte!",
+      "Arrivederci, subito.",
+      "Non capisco il libro."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-02",
+    "title": "Un tavolo per due",
+    "topic": "Заказ в ресторане и баре",
+    "prompt": "Вставьте слова заказа: «на двоих» и «счёт».",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "cloze",
+    "text": "Vorrei un tavolo ____ due. Il ____, per favore.",
+    "answers": [
+      "per",
+      "conto"
+    ],
+    "bank": [
+      "per",
+      "conto",
+      "con",
+      "libro"
+    ]
+  },
+  {
+    "id": "a1-c03-03",
+    "title": "Vorrei un caffè",
+    "topic": "Заказ в ресторане и баре",
+    "prompt": "Выберите самую уместную фразу, чтобы заказать кофе.",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "quiz",
+    "options": [
+      "Vorrei un caffè, per favore.",
+      "Sono un caffè.",
+      "Vado un caffè.",
+      "Dammi caffè ora."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-04",
+    "title": "Acqua",
+    "topic": "Заказ в ресторане и баре",
+    "prompt": "Вставьте тип воды: сначала негазированная, потом газированная.",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "cloze",
+    "text": "Un'acqua ____ e un'acqua ____, per favore.",
+    "answers": [
+      "naturale",
+      "frizzante"
+    ],
+    "bank": [
+      "naturale",
+      "frizzante",
+      "rosso",
+      "conto"
+    ]
+  },
+  {
+    "id": "a1-c03-05",
+    "title": "La cameriera",
+    "topic": "Заказ в ресторане и баре",
+    "prompt": "Кто приносит заказ? Речь о женщине, которая обслуживает столик.",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "quiz",
+    "options": [
+      "la cameriera",
+      "il conto",
+      "la forchetta",
+      "il menù"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-06",
+    "title": "Prendo un tè",
+    "topic": "Глаголы II группы и модальность",
+    "prompt": "Вставьте prendere. Сначала «я», потом «ты».",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "cloze",
+    "text": "Io ____ un tè. Tu cosa ____?",
+    "answers": [
+      "prendo",
+      "prendi"
+    ],
+    "bank": [
+      "prendo",
+      "prendi",
+      "prende",
+      "voglio"
+    ]
+  },
+  {
+    "id": "a1-c03-07",
+    "title": "Vuole un gelato",
+    "topic": "Глаголы II группы и модальность",
+    "prompt": "Выберите фразу: «Анна хочет мороженое».",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "quiz",
+    "options": [
+      "Anna vuole un gelato.",
+      "Anna voglio un gelato.",
+      "Anna vuoi un gelato.",
+      "Anna preferisco un gelato."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-08",
+    "title": "Preferisco",
+    "topic": "Глаголы II группы и модальность",
+    "prompt": "Вставьте preferire. Сначала «я», потом «он».",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "cloze",
+    "text": "Io ____ il tè. Marco ____ il caffè.",
+    "answers": [
+      "preferisco",
+      "preferisce"
+    ],
+    "bank": [
+      "preferisco",
+      "preferisce",
+      "preferisci",
+      "prendo"
+    ]
+  },
+  {
+    "id": "a1-c03-09",
+    "title": "Beviamo",
+    "topic": "Глаголы II группы и модальность",
+    "prompt": "Как сказать «Мы пьём воду»?",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "quiz",
+    "options": [
+      "Noi beviamo acqua.",
+      "Noi bevo acqua.",
+      "Noi bere acqua.",
+      "Noi bevete acqua."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-10",
+    "title": "Cosa prendi?",
+    "topic": "Глаголы II группы и модальность",
+    "prompt": "Вы спрашиваете друга, что он берёт из меню. Выберите вопрос.",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "quiz",
+    "options": [
+      "Cosa prendi?",
+      "Cosa prendo?",
+      "Cosa preferisco?",
+      "Cosa sono?"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-11",
+    "title": "Le pizze",
+    "topic": "Множественное число и артикли",
+    "prompt": "Как сказать «пиццы», если их несколько?",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "quiz",
+    "options": [
+      "le pizze",
+      "la pizze",
+      "i pizze",
+      "le pizza"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-12",
+    "title": "Il gelato, i gelati",
+    "topic": "Множественное число и артикли",
+    "prompt": "Вставьте артикль: сначала одно мороженое, потом несколько.",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "cloze",
+    "text": "____ gelato. Poi: ____ gelati.",
+    "answers": [
+      "Il",
+      "I"
+    ],
+    "bank": [
+      "Il",
+      "I",
+      "La",
+      "Le"
+    ]
+  },
+  {
+    "id": "a1-c03-13",
+    "title": "I ristoranti",
+    "topic": "Множественное число и артикли",
+    "prompt": "Как сказать «рестораны»?",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "quiz",
+    "options": [
+      "i ristoranti",
+      "le ristoranti",
+      "gli ristorante",
+      "i ristorante"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-14",
+    "title": "Le forchette",
+    "topic": "Множественное число и артикли",
+    "prompt": "Вставьте слово «вилка»: сначала одна, потом две.",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "cloze",
+    "text": "Una ____. Due ____.",
+    "answers": [
+      "forchetta",
+      "forchette"
+    ],
+    "bank": [
+      "forchetta",
+      "forchette",
+      "coltello",
+      "piatti"
+    ]
+  },
+  {
+    "id": "a1-c03-15",
+    "title": "I camerieri",
+    "topic": "Множественное число и артикли",
+    "prompt": "Как сказать «официанты»?",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "quiz",
+    "options": [
+      "i camerieri",
+      "le camerieri",
+      "i cameriere",
+      "gli camerieri"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-16",
+    "title": "Forchetta e cucchiaio",
+    "topic": "Гастрономический лексикон",
+    "prompt": "Вставьте приборы: пасту едят вилкой, суп — ложкой.",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "cloze",
+    "text": "Per la pasta uso la ____. Per la minestra uso il ____.",
+    "answers": [
+      "forchetta",
+      "cucchiaio"
+    ],
+    "bank": [
+      "forchetta",
+      "cucchiaio",
+      "bicchiere",
+      "conto"
+    ]
+  },
+  {
+    "id": "a1-c03-17",
+    "title": "Cena",
+    "topic": "Гастрономический лексикон",
+    "prompt": "Как читается c в слове cena?",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "quiz",
+    "options": [
+      "Как [ч]",
+      "Как [к]",
+      "Как [дж]",
+      "Не читается"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-18",
+    "title": "Gnocchi",
+    "topic": "Гастрономический лексикон",
+    "prompt": "В слове gnocchi сочетание chi читается как…",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "quiz",
+    "options": [
+      "[ки]",
+      "[чи]",
+      "[джи]",
+      "[гх]"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-19",
+    "title": "Scusi, cameriere",
+    "topic": "Гастрономический лексикон",
+    "prompt": "Выберите вежливое обращение к официанту, если нужно привлечь его внимание.",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "quiz",
+    "options": [
+      "Scusi.",
+      "Ciao, amico.",
+      "Buonanotte.",
+      "Non sono."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c03-20",
+    "title": "Il dolce",
+    "topic": "Гастрономический лексикон",
+    "prompt": "Вставьте слова меню: десерт и негазированная вода.",
+    "level": "A1",
+    "chapter": {
+      "number": 3,
+      "title": "Buon appetito!"
+    },
+    "type": "cloze",
+    "text": "Un pranzo: primo, secondo e ____. Bevo acqua ____.",
+    "answers": [
+      "dolce",
+      "naturale"
+    ],
+    "bank": [
+      "dolce",
+      "naturale",
+      "forchetta",
+      "scusi"
+    ]
+  },
+  {
+    "id": "a1-c04-01",
+    "title": "Anch'io",
+    "topic": "Хобби и предпочтения",
+    "prompt": "Друг говорит: «Mi piace il calcio». Вам футбол тоже нравится. Что ответить?",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "quiz",
+    "options": [
+      "Anch'io!",
+      "Non sono d'accordo.",
+      "Arrivederci.",
+      "Il conto, per favore."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c04-02",
+    "title": "Gioco a tennis",
+    "topic": "Хобби и предпочтения",
+    "prompt": "Вставьте предлоги. Вид спорта — с a, компания — с con.",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "cloze",
+    "text": "Gioco ____ tennis. Di solito esco ____ Luca.",
+    "answers": [
+      "a",
+      "con"
+    ],
+    "bank": [
+      "a",
+      "con",
+      "in",
+      "il"
+    ]
+  },
+  {
+    "id": "a1-c04-03",
+    "title": "Non sono d'accordo",
+    "topic": "Хобби и предпочтения",
+    "prompt": "Вы не согласны с другом. Выберите реплику.",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "quiz",
+    "options": [
+      "Non sono d'accordo.",
+      "Anch'io!",
+      "Piacere.",
+      "Sono le tre."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c04-04",
+    "title": "Di solito leggo",
+    "topic": "Хобби и предпочтения",
+    "prompt": "Как сказать «Обычно я читаю»?",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "quiz",
+    "options": [
+      "Di solito leggo.",
+      "Di solito leggi.",
+      "Sono leggo.",
+      "Vado leggo."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c04-05",
+    "title": "Neanch'io",
+    "topic": "Хобби и предпочтения",
+    "prompt": "Вставьте «я тоже» и «я тоже нет».",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "cloze",
+    "text": "— Mi piace la musica. — ____! — Non mi piace il tennis. — ____!",
+    "answers": [
+      "Anch'io",
+      "Neanch'io"
+    ],
+    "bank": [
+      "Anch'io",
+      "Neanch'io",
+      "Prego",
+      "Sempre"
+    ]
+  },
+  {
+    "id": "a1-c04-06",
+    "title": "Vado, andiamo",
+    "topic": "Глаголы III группы и движения",
+    "prompt": "Вставьте andare. Сначала «я», потом «мы».",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "cloze",
+    "text": "Io ____ in piscina. Noi ____ a casa.",
+    "answers": [
+      "vado",
+      "andiamo"
+    ],
+    "bank": [
+      "vado",
+      "andiamo",
+      "va",
+      "esco"
+    ]
+  },
+  {
+    "id": "a1-c04-07",
+    "title": "Esci",
+    "topic": "Глаголы III группы и движения",
+    "prompt": "Какая форма tu у глагола uscire?",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "quiz",
+    "options": [
+      "esci",
+      "esco",
+      "usci",
+      "esce"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c04-08",
+    "title": "Dormo, capisco",
+    "topic": "Глаголы III группы и движения",
+    "prompt": "Вставьте форму io. Первый глагол — dormire, второй — capire.",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "cloze",
+    "text": "Io ____ (dormire). Io ____ (capire) l'italiano.",
+    "answers": [
+      "dormo",
+      "capisco"
+    ],
+    "bank": [
+      "dormo",
+      "capisco",
+      "dormisco",
+      "capo"
+    ]
+  },
+  {
+    "id": "a1-c04-09",
+    "title": "Leggiamo",
+    "topic": "Глаголы III группы и движения",
+    "prompt": "Как сказать «Мы читаем»?",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "quiz",
+    "options": [
+      "Noi leggiamo.",
+      "Noi leggo.",
+      "Noi leggere.",
+      "Noi leggete."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c04-10",
+    "title": "Giochi a calcio",
+    "topic": "Глаголы III группы и движения",
+    "prompt": "Как спросить друга: «Ты играешь в футбол?»",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "quiz",
+    "options": [
+      "Tu giochi a calcio?",
+      "Tu gioco a calcio?",
+      "Tu gioca a calcio?",
+      "Tu giochiamo a calcio?"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c04-11",
+    "title": "Mi piace, mi piacciono",
+    "topic": "Конструкция mi piace / mi piacciono",
+    "prompt": "Вставьте форму. Футбол один, фильмов несколько.",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "cloze",
+    "text": "Mi ____ il calcio. Mi ____ i film.",
+    "answers": [
+      "piace",
+      "piacciono"
+    ],
+    "bank": [
+      "piace",
+      "piacciono",
+      "piaci",
+      "vado"
+    ]
+  },
+  {
+    "id": "a1-c04-12",
+    "title": "Non mi piace",
+    "topic": "Конструкция mi piace / mi piacciono",
+    "prompt": "Как сказать «Мне не нравится теннис»?",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "quiz",
+    "options": [
+      "Non mi piace il tennis.",
+      "Mi non piace il tennis.",
+      "Non mi piacciono il tennis.",
+      "Io piace il tennis."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c04-13",
+    "title": "In Italia",
+    "topic": "Конструкция mi piace / mi piacciono",
+    "prompt": "Какая фраза верна со значением «Я еду в Италию»?",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "quiz",
+    "options": [
+      "Vado in Italia.",
+      "Vado a Italia.",
+      "Vado con Italia.",
+      "Vado in Roma."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c04-14",
+    "title": "A Roma con un amico",
+    "topic": "Конструкция mi piace / mi piacciono",
+    "prompt": "Вставьте предлоги: город и компания.",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "cloze",
+    "text": "Sabato vado ____ Roma ____ un amico.",
+    "answers": [
+      "a",
+      "con"
+    ],
+    "bank": [
+      "a",
+      "con",
+      "in",
+      "il"
+    ]
+  },
+  {
+    "id": "a1-c04-15",
+    "title": "Esco con Maria",
+    "topic": "Конструкция mi piace / mi piacciono",
+    "prompt": "Как сказать «Я выхожу с Марией»?",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "quiz",
+    "options": [
+      "Esco con Maria.",
+      "Esco a Maria.",
+      "Esco in Maria.",
+      "Esci con Maria."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c04-16",
+    "title": "Martedì e sabato",
+    "topic": "Дни недели и время",
+    "prompt": "Вставьте дни недели. После понедельника идёт один день, в конце недели перед воскресеньем — другой.",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "cloze",
+    "text": "Dopo lunedì viene ____. Il fine settimana: ____ e domenica.",
+    "answers": [
+      "martedì",
+      "sabato"
+    ],
+    "bank": [
+      "martedì",
+      "sabato",
+      "mercoledì",
+      "venti"
+    ]
+  },
+  {
+    "id": "a1-c04-17",
+    "title": "Sono le tre",
+    "topic": "Дни недели и время",
+    "prompt": "Как сказать «Сейчас три часа»?",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "quiz",
+    "options": [
+      "Sono le tre.",
+      "È le tre.",
+      "Sono l'una.",
+      "È le una."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c04-18",
+    "title": "L'una e mezzo",
+    "topic": "Дни недели и время",
+    "prompt": "Вставьте время: 1:00 и половина после двух.",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "cloze",
+    "text": "1:00 — È ____. 2:30 — Sono le due e ____.",
+    "answers": [
+      "l'una",
+      "mezzo"
+    ],
+    "bank": [
+      "l'una",
+      "mezzo",
+      "le una",
+      "quarto"
+    ]
+  },
+  {
+    "id": "a1-c04-19",
+    "title": "Non gioco mai",
+    "topic": "Дни недели и время",
+    "prompt": "Выберите фразу: «Обычно я читаю. Я никогда не играю в теннис».",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "quiz",
+    "options": [
+      "Di solito leggo. Non gioco mai a tennis.",
+      "Mai leggo di solito tennis.",
+      "Non di solito gioco tennis.",
+      "Gioco mai a tennis."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c04-20",
+    "title": "Palla",
+    "topic": "Дни недели и время",
+    "prompt": "В каком слове удвоенная согласная и значение «мяч», а не «лопата»?",
+    "level": "A1",
+    "chapter": {
+      "number": 4,
+      "title": "Tempo libero"
+    },
+    "type": "quiz",
+    "options": [
+      "palla",
+      "pala",
+      "pane",
+      "casa"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c05-01",
+    "title": "Camera doppia",
+    "topic": "Бронирование и жилье",
+    "prompt": "Вставьте слова брони: двухместный номер и цена.",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "cloze",
+    "text": "Vorrei una camera ____. Qual è il ____ a notte?",
+    "answers": [
+      "doppia",
+      "prezzo"
+    ],
+    "bank": [
+      "doppia",
+      "prezzo",
+      "singola",
+      "letto"
+    ]
+  },
+  {
+    "id": "a1-c05-02",
+    "title": "Vorrei prenotare",
+    "topic": "Бронирование и жилье",
+    "prompt": "Вы на ресепшен и хотите забронировать номер. Что сказать?",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "quiz",
+    "options": [
+      "Vorrei prenotare una camera.",
+      "Vorrei il conto del gelato.",
+      "Esco con Maria.",
+      "Sono le tre e mezzo."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c05-03",
+    "title": "Al primo piano",
+    "topic": "Бронирование и жилье",
+    "prompt": "Вставьте порядковое числительное и удобство. Номер одноместный, на первом этаже, с ванной.",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "cloze",
+    "text": "Una camera singola al ____ piano, con ____.",
+    "answers": [
+      "primo",
+      "bagno"
+    ],
+    "bank": [
+      "primo",
+      "bagno",
+      "prima",
+      "conto"
+    ]
+  },
+  {
+    "id": "a1-c05-04",
+    "title": "Camera tranquilla",
+    "topic": "Бронирование и жилье",
+    "prompt": "«Tranquilla» значит «тихая». Как попросить тихий номер?",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "quiz",
+    "options": [
+      "Vorrei una camera tranquilla.",
+      "Vorrei una camera doppia per sei.",
+      "C'è un ristorante?",
+      "Vengo in piscina."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c05-05",
+    "title": "Camera singola",
+    "topic": "Бронирование и жилье",
+    "prompt": "Как называется номер для одного гостя?",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "quiz",
+    "options": [
+      "una camera singola",
+      "una camera doppia",
+      "due camere",
+      "il soggiorno"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c05-06",
+    "title": "C'è, ci sono",
+    "topic": "Оборот c'è / ci sono и сочлененные предлоги",
+    "prompt": "Вставьте оборот наличия: сначала одна ванная, потом кровати.",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "cloze",
+    "text": "____ un bagno? Sì. ____ due letti? No, un letto solo.",
+    "answers": [
+      "C'è",
+      "Ci sono"
+    ],
+    "bank": [
+      "C'è",
+      "Ci sono",
+      "È",
+      "Sono"
+    ]
+  },
+  {
+    "id": "a1-c05-07",
+    "title": "Non c'è",
+    "topic": "Оборот c'è / ci sono и сочлененные предлоги",
+    "prompt": "Как сказать «Лифта нет»?",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "quiz",
+    "options": [
+      "Non c'è l'ascensore.",
+      "Non ci sono l'ascensore.",
+      "Non è c'è ascensore.",
+      "Ci non è ascensore."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c05-08",
+    "title": "Della, al",
+    "topic": "Оборот c'è / ci sono и сочлененные предлоги",
+    "prompt": "Вставьте слитные предлоги di + la и a + il.",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "cloze",
+    "text": "Il bagno ____ camera è piccolo. Vado ____ bar dell'albergo.",
+    "answers": [
+      "della",
+      "al"
+    ],
+    "bank": [
+      "della",
+      "al",
+      "di la",
+      "a il"
+    ]
+  },
+  {
+    "id": "a1-c05-09",
+    "title": "Nell'albergo",
+    "topic": "Оборот c'è / ci sono и сочлененные предлоги",
+    "prompt": "Как сказать «Завтрак в отеле»?",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "quiz",
+    "options": [
+      "La colazione è nell'albergo.",
+      "La colazione è in il albergo.",
+      "La colazione è al la albergo.",
+      "La colazione è del albergo."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c05-10",
+    "title": "Sul tavolo",
+    "topic": "Оборот c'è / ci sono и сочлененные предлоги",
+    "prompt": "Как сказать «Ключ на столе»?",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "quiz",
+    "options": [
+      "La chiave è sul tavolo.",
+      "La chiave è su il tavolo.",
+      "La chiave è nel tavolo.",
+      "La chiave è al tavolo."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c05-11",
+    "title": "Letto e sedia",
+    "topic": "Описание интерьера и даты",
+    "prompt": "Вставьте мебель: кровать и стул.",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "cloze",
+    "text": "Nella camera c'è un ____ e una ____.",
+    "answers": [
+      "letto",
+      "sedia"
+    ],
+    "bank": [
+      "letto",
+      "sedia",
+      "gennaio",
+      "quinto"
+    ]
+  },
+  {
+    "id": "a1-c05-12",
+    "title": "Terzo piano",
+    "topic": "Описание интерьера и даты",
+    "prompt": "Номер на третьем этаже. Какое порядковое числительное нужно?",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "quiz",
+    "options": [
+      "terzo",
+      "tre",
+      "tredici",
+      "quarto"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c05-13",
+    "title": "Gennaio e dicembre",
+    "topic": "Описание интерьера и даты",
+    "prompt": "Вставьте первый и последний месяц года.",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "cloze",
+    "text": "Il primo mese è ____. L'ultimo mese è ____.",
+    "answers": [
+      "gennaio",
+      "dicembre"
+    ],
+    "bank": [
+      "gennaio",
+      "dicembre",
+      "marzo",
+      "lunedì"
+    ]
+  },
+  {
+    "id": "a1-c05-14",
+    "title": "Il 2 aprile",
+    "topic": "Описание интерьера и даты",
+    "prompt": "Как сказать дату «2 апреля»?",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "quiz",
+    "options": [
+      "il 2 aprile",
+      "il 2 di il aprile",
+      "il secondo aprile giorno",
+      "aprile 2 il"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c05-15",
+    "title": "Il primo gennaio",
+    "topic": "Описание интерьера и даты",
+    "prompt": "Как сказать «1 января»?",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "quiz",
+    "options": [
+      "il primo gennaio",
+      "il uno gennaio",
+      "la prima gennaio",
+      "gennaio primo"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c05-16",
+    "title": "Posso, puoi",
+    "topic": "Модальные глаголы умения и возможности",
+    "prompt": "Вставьте potere. Сначала вежливая просьба «можно мне», потом вопрос «ты можешь».",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "cloze",
+    "text": "____ avere la chiave? Sì, certo. Tu ____ venire alle otto?",
+    "answers": [
+      "Posso",
+      "puoi"
+    ],
+    "bank": [
+      "Posso",
+      "puoi",
+      "può",
+      "vengo"
+    ]
+  },
+  {
+    "id": "a1-c05-17",
+    "title": "Può aiutare",
+    "topic": "Модальные глаголы умения и возможности",
+    "prompt": "Вы гость и вежливо спрашиваете администратора: «Вы можете помочь?»",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "quiz",
+    "options": [
+      "Può aiutare, per favore?",
+      "Puoi aiutare, per favore?",
+      "Possiamo aiutare, per favore?",
+      "Vieni aiutare?"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c05-18",
+    "title": "Vengo, viene",
+    "topic": "Модальные глаголы умения и возможности",
+    "prompt": "Вставьте venire. Сначала «я», потом «он», о технике.",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "cloze",
+    "text": "Io ____ subito. Il tecnico ____ in camera.",
+    "answers": [
+      "vengo",
+      "viene"
+    ],
+    "bank": [
+      "vengo",
+      "viene",
+      "vieni",
+      "posso"
+    ]
+  },
+  {
+    "id": "a1-c05-19",
+    "title": "Venite",
+    "topic": "Модальные глаголы умения и возможности",
+    "prompt": "Как спросить двоих друзей: «Вы приходите в отель завтра?» Нужна форма voi.",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "quiz",
+    "options": [
+      "Venite in albergo domani?",
+      "Veniamo in albergo domani?",
+      "Vengo in albergo domani?",
+      "Venire in albergo domani?"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c05-20",
+    "title": "Non posso",
+    "topic": "Модальные глаголы умения и возможности",
+    "prompt": "Гость говорит: «Я не могу пользоваться ванной». Выберите фразу.",
+    "level": "A1",
+    "chapter": {
+      "number": 5,
+      "title": "In albergo"
+    },
+    "type": "quiz",
+    "options": [
+      "Non posso usare il bagno.",
+      "Non puoi usare il bagno.",
+      "Non posso usi il bagno.",
+      "Non potere il bagno."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-01",
+    "title": "Cin cin",
+    "topic": "Праздники и распорядок дня",
+    "prompt": "Друзья поднимают бокалы. Что говорят?",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "quiz",
+    "options": [
+      "Cin cin!",
+      "Buonanotte!",
+      "Il conto, per favore.",
+      "Non capisco."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-02",
+    "title": "Buon compleanno",
+    "topic": "Праздники и распорядок дня",
+    "prompt": "Вставьте поздравления: день рождения и «большие поздравления».",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "cloze",
+    "text": "____ compleanno! ____ auguri!",
+    "answers": [
+      "Buon",
+      "Tanti"
+    ],
+    "bank": [
+      "Buon",
+      "Tanti",
+      "Buona",
+      "Ciao"
+    ]
+  },
+  {
+    "id": "a1-c06-03",
+    "title": "Buon Natale",
+    "topic": "Праздники и распорядок дня",
+    "prompt": "Как поздравить с Рождеством?",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "quiz",
+    "options": [
+      "Buon Natale!",
+      "Buona Natale!",
+      "Tanti Natale!",
+      "Buon compleanno di Natale!"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-04",
+    "title": "Salute",
+    "topic": "Праздники и распорядок дня",
+    "prompt": "Кто-то чихнул. Какая короткая реплика уместна?",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "quiz",
+    "options": [
+      "Salute!",
+      "Cin cin!",
+      "Arrivederci!",
+      "Aperto."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-05",
+    "title": "Fare gli auguri",
+    "topic": "Праздники и распорядок дня",
+    "prompt": "Вставьте fare. Сначала «мы поздравляем», потом «я делаю подарок».",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "cloze",
+    "text": "Noi ____ gli auguri a Sara. Io ____ un regalo.",
+    "answers": [
+      "facciamo",
+      "faccio"
+    ],
+    "bank": [
+      "facciamo",
+      "faccio",
+      "fai",
+      "sono"
+    ]
+  },
+  {
+    "id": "a1-c06-06",
+    "title": "Mi sveglio",
+    "topic": "Возвратные глаголы",
+    "prompt": "Вставьте глаголы io. Сначала «просыпаюсь», потом «встаю».",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "cloze",
+    "text": "Io mi ____ alle sette e mi ____ subito.",
+    "answers": [
+      "sveglio",
+      "alzo"
+    ],
+    "bank": [
+      "sveglio",
+      "alzo",
+      "sveglia",
+      "alza"
+    ]
+  },
+  {
+    "id": "a1-c06-07",
+    "title": "Ti vesti",
+    "topic": "Возвратные глаголы",
+    "prompt": "Как сказать «Ты одеваешься»?",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "quiz",
+    "options": [
+      "Tu ti vesti.",
+      "Tu ti vestiti.",
+      "Voi vi vestite.",
+      "Io mi vesto."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-08",
+    "title": "Ci alziamo",
+    "topic": "Возвратные глаголы",
+    "prompt": "Вставьте alzarsi. Сначала «мы», потом «вы».",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "cloze",
+    "text": "Noi ci ____ tardi. Voi vi ____ presto?",
+    "answers": [
+      "alziamo",
+      "alzate"
+    ],
+    "bank": [
+      "alziamo",
+      "alzate",
+      "alzo",
+      "alzano"
+    ]
+  },
+  {
+    "id": "a1-c06-09",
+    "title": "Si lava",
+    "topic": "Возвратные глаголы",
+    "prompt": "Как сказать «Синьора Росси умывается»?",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "quiz",
+    "options": [
+      "La signora Rossi si lava.",
+      "La signora Rossi si lavo.",
+      "La signora Rossi mi lava.",
+      "La signora Rossi lava si."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-10",
+    "title": "Non mi alzo",
+    "topic": "Возвратные глаголы",
+    "prompt": "Как сказать «Я не встаю в пять»?",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "quiz",
+    "options": [
+      "Non mi alzo alle cinque.",
+      "Mi non alzo alle cinque.",
+      "Non alzo mi alle cinque.",
+      "Non mi alza alle cinque."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-11",
+    "title": "Il mio, la tua",
+    "topic": "Притяжательные местоимения",
+    "prompt": "Вставьте артикль. Телефон мужского рода, сумка женского. Это не родственники.",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "cloze",
+    "text": "____ mio telefono è qui. ____ tua borsa è sulla sedia.",
+    "answers": [
+      "Il",
+      "La"
+    ],
+    "bank": [
+      "Il",
+      "La",
+      "Lo",
+      "I"
+    ]
+  },
+  {
+    "id": "a1-c06-12",
+    "title": "Il suo libro",
+    "topic": "Притяжательные местоимения",
+    "prompt": "Книга принадлежит Марии. Как сказать «её книга»?",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "quiz",
+    "options": [
+      "il suo libro",
+      "la sua libro",
+      "il mio libro",
+      "il loro libro"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-13",
+    "title": "Le nostre chiavi",
+    "topic": "Притяжательные местоимения",
+    "prompt": "Как сказать «наши ключи»? Chiave женского рода.",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "quiz",
+    "options": [
+      "le nostre chiavi",
+      "i nostri chiavi",
+      "la nostra chiavi",
+      "le vostre chiave"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-14",
+    "title": "La nostra, la loro",
+    "topic": "Притяжательные местоимения",
+    "prompt": "Вставьте артикль перед «наша комната» и «их комната».",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "cloze",
+    "text": "È ____ nostra camera. È ____ loro camera.",
+    "answers": [
+      "la",
+      "la"
+    ],
+    "bank": [
+      "la",
+      "la",
+      "il",
+      "i"
+    ]
+  },
+  {
+    "id": "a1-c06-15",
+    "title": "La mia penna",
+    "topic": "Притяжательные местоимения",
+    "prompt": "Паоло говорит о своей ручке. Penna женского рода. Что верно?",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "quiz",
+    "options": [
+      "la mia penna",
+      "il mio penna",
+      "la mio penna",
+      "il mia penna"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-16",
+    "title": "Faccio colazione",
+    "topic": "Правила произношения",
+    "prompt": "Оба пропуска — форма io глагола fare. Сначала завтрак, потом душ.",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "cloze",
+    "text": "Al mattino ____ colazione e ____ la doccia.",
+    "answers": [
+      "faccio",
+      "faccio"
+    ],
+    "bank": [
+      "faccio",
+      "faccio",
+      "facciamo",
+      "sono"
+    ]
+  },
+  {
+    "id": "a1-c06-17",
+    "title": "Faccio sport",
+    "topic": "Правила произношения",
+    "prompt": "Как сказать «Я занимаюсь спортом каждый день»?",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "quiz",
+    "options": [
+      "Faccio sport ogni giorno.",
+      "Faccio lo sport ogni giorni.",
+      "Sono sport ogni giorno.",
+      "Faccio sport ogni giorni."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-18",
+    "title": "Ghiaccio",
+    "topic": "Правила произношения",
+    "prompt": "Как читается gh в слове ghiaccio?",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "quiz",
+    "options": [
+      "Как [г]",
+      "Как [дж]",
+      "Не читается",
+      "Как [к]"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-19",
+    "title": "Questo",
+    "topic": "Правила произношения",
+    "prompt": "Как читается qu в слове questo?",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "quiz",
+    "options": [
+      "Как [кв]",
+      "Как [ку]",
+      "Как [гв]",
+      "Не читается"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c06-20",
+    "title": "Che e quando",
+    "topic": "Правила произношения",
+    "prompt": "Вставьте слова «что» и «когда».",
+    "level": "A1",
+    "chapter": {
+      "number": 6,
+      "title": "Tanti auguri!"
+    },
+    "type": "cloze",
+    "text": "«Что» — ____. «Когда» — ____.",
+    "answers": [
+      "che",
+      "quando"
+    ],
+    "bank": [
+      "che",
+      "quando",
+      "ce",
+      "guando"
+    ]
+  },
+  {
+    "id": "a1-c07-01",
+    "title": "Deve andare dritto",
+    "topic": "Ориентация в городе",
+    "prompt": "Вставьте вежливую форму «должен / должна» и направление «направо». Речь на Lei.",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "cloze",
+    "text": "____ andare dritto e poi girare a ____.",
+    "answers": [
+      "Deve",
+      "destra"
+    ],
+    "bank": [
+      "Deve",
+      "destra",
+      "Devi",
+      "sinistra"
+    ]
+  },
+  {
+    "id": "a1-c07-02",
+    "title": "Deve girare",
+    "topic": "Ориентация в городе",
+    "prompt": "Вежливо объясните прохожему на Lei: повернуть нужно налево. Что сказать?",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "quiz",
+    "options": [
+      "Deve girare a sinistra.",
+      "Devi girare a sinistra.",
+      "Deve girare a destra.",
+      "Dobbiamo girare a sinistra."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c07-03",
+    "title": "Dov'è la stazione",
+    "topic": "Ориентация в городе",
+    "prompt": "Как спросить, где вокзал?",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "quiz",
+    "options": [
+      "Dov'è la stazione?",
+      "Dov'è è la stazione?",
+      "Dove sono la stazione?",
+      "Chi è la stazione?"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c07-04",
+    "title": "Alle nove",
+    "topic": "Ориентация в городе",
+    "prompt": "Оба пропуска — одна и та же форма времени «в … часов». Музей открывается в девять и закрывается в восемнадцать.",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "cloze",
+    "text": "Il museo apre ____ nove e chiude ____ diciotto.",
+    "answers": [
+      "alle",
+      "alle"
+    ],
+    "bank": [
+      "alle",
+      "alle",
+      "della",
+      "dal"
+    ]
+  },
+  {
+    "id": "a1-c07-05",
+    "title": "È chiuso",
+    "topic": "Ориентация в городе",
+    "prompt": "На двери музея написано, что он закрыт. Какая фраза об этом?",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "quiz",
+    "options": [
+      "È chiuso.",
+      "È aperto.",
+      "È chiude.",
+      "È aprire."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c07-06",
+    "title": "Dei musei",
+    "topic": "Частичный артикль и городская навигация",
+    "prompt": "Как сказать «В центре есть музеи», если речь о нескольких, не об одном известном музее?",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "quiz",
+    "options": [
+      "Ci sono dei musei.",
+      "Ci sono del musei.",
+      "Ci sono i un musei.",
+      "C'è dei musei."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c07-07",
+    "title": "Degli e delle",
+    "topic": "Частичный артикль и городская навигация",
+    "prompt": "Вставьте частичный артикль. Studenti начинается на s + согласная, chiese — женский род.",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "cloze",
+    "text": "Vicino alla piazza ci sono ____ studenti e ____ chiese.",
+    "answers": [
+      "degli",
+      "delle"
+    ],
+    "bank": [
+      "degli",
+      "delle",
+      "dei",
+      "del"
+    ]
+  },
+  {
+    "id": "a1-c07-08",
+    "title": "Delle informazioni",
+    "topic": "Частичный артикль и городская навигация",
+    "prompt": "Как вежливо попросить информацию? Слово informazioni только множественного числа.",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "quiz",
+    "options": [
+      "Vorrei delle informazioni.",
+      "Vorrei dei informazione.",
+      "Vorrei della informazioni.",
+      "Vorrei le informazione."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c07-09",
+    "title": "Delle piazze",
+    "topic": "Частичный артикль и городская навигация",
+    "prompt": "Какая форма — частичный артикль множественного числа для piazze?",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "quiz",
+    "options": [
+      "delle piazze",
+      "della piazza",
+      "dei piazza",
+      "degli piazza"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c07-10",
+    "title": "Dei palazzi",
+    "topic": "Частичный артикль и городская навигация",
+    "prompt": "Вставьте частичный артикль. Palazzi — мужской род, vetrine — женский.",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "cloze",
+    "text": "Vedo ____ palazzi e ____ vetrine.",
+    "answers": [
+      "dei",
+      "delle"
+    ],
+    "bank": [
+      "dei",
+      "delle",
+      "degli",
+      "della"
+    ]
+  },
+  {
+    "id": "a1-c07-11",
+    "title": "Ci vado",
+    "topic": "Глагол andare с частицей ci",
+    "prompt": "Вставьте частицу места. Оба раза речь о центре, который уже назван.",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "cloze",
+    "text": "— Vai in centro? — Sì, ____ vado. — E Marco? — Anche lui ____ va.",
+    "answers": [
+      "ci",
+      "ci"
+    ],
+    "bank": [
+      "ci",
+      "ci",
+      "vi",
+      "mi"
+    ]
+  },
+  {
+    "id": "a1-c07-12",
+    "title": "Ci andiamo",
+    "topic": "Глагол andare с частицей ci",
+    "prompt": "Место уже названо. Как сказать «Мы туда идём»?",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "quiz",
+    "options": [
+      "Ci andiamo.",
+      "Ci vado.",
+      "Andiamo ci.",
+      "Vi andiamo."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c07-13",
+    "title": "Ci vai",
+    "topic": "Глагол andare с частицей ci",
+    "prompt": "Как спросить друга: «Ты туда идёшь завтра?» Место уже известно.",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "quiz",
+    "options": [
+      "Ci vai domani?",
+      "Vai ci domani?",
+      "Ci andate domani?",
+      "Mi vai domani?"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c07-14",
+    "title": "Non ci vado",
+    "topic": "Глагол andare с частицей ci",
+    "prompt": "Вставьте частицу места. Сегодня туда не иду, завтра идём.",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "cloze",
+    "text": "Oggi non ____ vado: è chiuso. Domani ____ andiamo.",
+    "answers": [
+      "ci",
+      "ci"
+    ],
+    "bank": [
+      "ci",
+      "ci",
+      "vi",
+      "mi"
+    ]
+  },
+  {
+    "id": "a1-c07-15",
+    "title": "Ci, il luogo",
+    "topic": "Глагол andare с частицей ci",
+    "prompt": "Что заменяет ci во фразе «Ci vado alle nove»?",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "quiz",
+    "options": [
+      "уже названное место",
+      "имя человека",
+      "время суток",
+      "форму приветствия"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c07-16",
+    "title": "Devo, devi",
+    "topic": "Модальные глаголы в городе",
+    "prompt": "Вставьте dovere. Сначала «я должен», потом «ты должен». Scendere здесь значит «выходить из транспорта».",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "cloze",
+    "text": "Per la stazione ____ prendere l'autobus. Tu ____ scendere in piazza.",
+    "answers": [
+      "devo",
+      "devi"
+    ],
+    "bank": [
+      "devo",
+      "devi",
+      "deve",
+      "posso"
+    ]
+  },
+  {
+    "id": "a1-c07-17",
+    "title": "Dobbiamo",
+    "topic": "Модальные глаголы в городе",
+    "prompt": "Как сказать «Нам нужно идти пешком»?",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "quiz",
+    "options": [
+      "Dobbiamo andare a piedi.",
+      "Devo andare a piedi.",
+      "Devono andare a piedi.",
+      "Dovere a piedi."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c07-18",
+    "title": "Può prendere",
+    "topic": "Модальные глаголы в городе",
+    "prompt": "Вежливый совет прохожему на Lei: «Вы можете сесть на автобус 64».",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "quiz",
+    "options": [
+      "Può prendere l'autobus 64.",
+      "Puoi prendere l'autobus 64.",
+      "Posso prendere l'autobus 64.",
+      "Prende può l'autobus 64."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c07-19",
+    "title": "Voglio, vuole",
+    "topic": "Модальные глаголы в городе",
+    "prompt": "Вставьте volere. Сначала «я хочу», потом «она хочет».",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "cloze",
+    "text": "____ vedere il duomo. Anna ____ venire con me.",
+    "answers": [
+      "Voglio",
+      "vuole"
+    ],
+    "bank": [
+      "Voglio",
+      "vuole",
+      "vuoi",
+      "devo"
+    ]
+  },
+  {
+    "id": "a1-c07-20",
+    "title": "Devo prendere un taxi",
+    "topic": "Модальные глаголы в городе",
+    "prompt": "Музей далеко, и такси обязательно. Какая фраза это передаёт?",
+    "level": "A1",
+    "chapter": {
+      "number": 7,
+      "title": "In giro in città"
+    },
+    "type": "quiz",
+    "options": [
+      "Devo prendere un taxi.",
+      "Voglio un gelato in museo.",
+      "Posso la piazza.",
+      "Ci sono dovere."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c08-01",
+    "title": "Ho visitato",
+    "topic": "Прошедшее время (Passato prossimo)",
+    "prompt": "Вставьте вспомогательный глагол avere. Сначала «я», потом «она».",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "cloze",
+    "text": "Ieri ____ visitato il Colosseo. Anna ____ mangiato una pizza.",
+    "answers": [
+      "ho",
+      "ha"
+    ],
+    "bank": [
+      "ho",
+      "ha",
+      "sono",
+      "è"
+    ]
+  },
+  {
+    "id": "a1-c08-02",
+    "title": "Sono andata",
+    "topic": "Прошедшее время (Passato prossimo)",
+    "prompt": "Мария говорит: «Я ездила в Рим». Выберите фразу.",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "quiz",
+    "options": [
+      "Sono andata a Roma.",
+      "Ho andata a Roma.",
+      "Sono andato a Roma.",
+      "Ha andata a Roma."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c08-03",
+    "title": "Siamo andati",
+    "topic": "Прошедшее время (Passato prossimo)",
+    "prompt": "Вставьте essere. Сначала «мы», группа смешанная. Потом девушки.",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "cloze",
+    "text": "Noi ____ andati a Firenze. Le ragazze ____ andate a Venezia.",
+    "answers": [
+      "siamo",
+      "sono"
+    ],
+    "bank": [
+      "siamo",
+      "sono",
+      "abbiamo",
+      "hanno"
+    ]
+  },
+  {
+    "id": "a1-c08-04",
+    "title": "Ieri ho visto",
+    "topic": "Прошедшее время (Passato prossimo)",
+    "prompt": "Какое предложение о прошлом?",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "quiz",
+    "options": [
+      "Ieri ho visto il mare.",
+      "Domani vedo il mare.",
+      "Oggi vedo il mare.",
+      "Di solito vedo il mare."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c08-05",
+    "title": "Fa e scorsa",
+    "topic": "Прошедшее время (Passato prossimo)",
+    "prompt": "Вставьте указатели прошлого. Сначала «назад», потом форма со словом settimana.",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "cloze",
+    "text": "Due giorni ____ ho visitato Pompei. La settimana ____ siamo stati a Napoli.",
+    "answers": [
+      "fa",
+      "scorsa"
+    ],
+    "bank": [
+      "fa",
+      "scorsa",
+      "scorso",
+      "ieri"
+    ]
+  },
+  {
+    "id": "a1-c08-06",
+    "title": "Fatto",
+    "topic": "Причастия и вспомогательные глаголы",
+    "prompt": "Какое причастие у глагола fare?",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "quiz",
+    "options": [
+      "fatto",
+      "facuto",
+      "fare",
+      "faccio"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c08-07",
+    "title": "Visto e letto",
+    "topic": "Причастия и вспомогательные глаголы",
+    "prompt": "Вставьте причастия vedere и leggere.",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "cloze",
+    "text": "Ieri ho ____ un bel film e ho ____ un libro.",
+    "answers": [
+      "visto",
+      "letto"
+    ],
+    "bank": [
+      "visto",
+      "letto",
+      "scritto",
+      "preso"
+    ]
+  },
+  {
+    "id": "a1-c08-08",
+    "title": "Scritto",
+    "topic": "Причастия и вспомогательные глаголы",
+    "prompt": "Дополните фразу «Я написал письмо»: Ho ____ una lettera. Какое слово пропущено?",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "quiz",
+    "options": [
+      "scritto",
+      "scrivuto",
+      "scrivi",
+      "scrivere"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c08-09",
+    "title": "Aperto",
+    "topic": "Причастия и вспомогательные глаголы",
+    "prompt": "Какое причастие у глагола aprire?",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "quiz",
+    "options": [
+      "aperto",
+      "aprito",
+      "apriuto",
+      "apro"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c08-10",
+    "title": "Preso e bevuto",
+    "topic": "Причастия и вспомогательные глаголы",
+    "prompt": "Вставьте причастия prendere и bere.",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "cloze",
+    "text": "Al bar ho ____ un caffè e ho ____ un'acqua.",
+    "answers": [
+      "preso",
+      "bevuto"
+    ],
+    "bank": [
+      "preso",
+      "bevuto",
+      "prenduto",
+      "beuto"
+    ]
+  },
+  {
+    "id": "a1-c08-11",
+    "title": "Fa caldo",
+    "topic": "Погода и причастия",
+    "prompt": "На улице жарко. Что сказать?",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "quiz",
+    "options": [
+      "Fa caldo.",
+      "Fa freddo.",
+      "Piove.",
+      "È lunedì."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c08-12",
+    "title": "C'è il sole",
+    "topic": "Погода и причастия",
+    "prompt": "Сегодня солнечно, а вчера шёл дождь. Вставьте форму настоящего и причастие piovere.",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "cloze",
+    "text": "Oggi ____ il sole, ma ieri ha ____.",
+    "answers": [
+      "c'è",
+      "piovuto"
+    ],
+    "bank": [
+      "c'è",
+      "piovuto",
+      "fa",
+      "piove"
+    ]
+  },
+  {
+    "id": "a1-c08-13",
+    "title": "Nevica",
+    "topic": "Погода и причастия",
+    "prompt": "Идёт снег. Что сказать?",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "quiz",
+    "options": [
+      "Nevica.",
+      "Fa caldo.",
+      "C'è il sole.",
+      "Tira il libro."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c08-14",
+    "title": "Ha fatto freddo",
+    "topic": "Погода и причастия",
+    "prompt": "Как сказать «Вчера было холодно» в passato prossimo?",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "quiz",
+    "options": [
+      "Ieri ha fatto freddo.",
+      "Ieri faceva freddo.",
+      "Ieri fa freddo.",
+      "Ieri è fatto freddo."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c08-15",
+    "title": "Bel tempo",
+    "topic": "Погода и причастия",
+    "prompt": "Вставьте passato prossimo. Вчера была хорошая погода, дождя не было.",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "cloze",
+    "text": "Ieri ____ bel tempo e non ____ piovuto.",
+    "answers": [
+      "ha fatto",
+      "ha"
+    ],
+    "bank": [
+      "ha fatto",
+      "ha",
+      "fa",
+      "è"
+    ]
+  },
+  {
+    "id": "a1-c08-16",
+    "title": "Bellissima",
+    "topic": "Абсолютный превосходный градус",
+    "prompt": "Как сказать «Рим очень красивый» с суффиксом -issimo?",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "quiz",
+    "options": [
+      "Roma è bellissima.",
+      "Roma è bella molto.",
+      "Roma è il più bella.",
+      "Roma è bella-issima."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c08-17",
+    "title": "Buonissimo",
+    "topic": "Абсолютный превосходный градус",
+    "prompt": "Усильте прилагательные buono и caldo суффиксом -issimo.",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "cloze",
+    "text": "Il gelato è ____. Oggi fa ____.",
+    "answers": [
+      "buonissimo",
+      "caldissimo"
+    ],
+    "bank": [
+      "buonissimo",
+      "caldissimo",
+      "buono",
+      "caldo"
+    ]
+  },
+  {
+    "id": "a1-c08-18",
+    "title": "Non ho visto niente",
+    "topic": "Абсолютный превосходный градус",
+    "prompt": "Как сказать «Я ничего не видел»?",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "quiz",
+    "options": [
+      "Non ho visto niente.",
+      "Ho visto niente.",
+      "Non ho visto non niente.",
+      "Niente ho non visto."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c08-19",
+    "title": "Mai e nessuno",
+    "topic": "Абсолютный превосходный градус",
+    "prompt": "Говорит Лука. Вставьте «никогда» и «никого».",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "cloze",
+    "text": "Non sono ____ stato a Palermo. In piazza non c'è ____.",
+    "answers": [
+      "mai",
+      "nessuno"
+    ],
+    "bank": [
+      "mai",
+      "nessuno",
+      "niente",
+      "sempre"
+    ]
+  },
+  {
+    "id": "a1-c08-20",
+    "title": "Nessuno",
+    "topic": "Абсолютный превосходный градус",
+    "prompt": "Какая фраза верна со значением «Никто не приехал»?",
+    "level": "A1",
+    "chapter": {
+      "number": 8,
+      "title": "Italia da scoprire"
+    },
+    "type": "quiz",
+    "options": [
+      "Non è arrivato nessuno.",
+      "Non è arrivato niente persona.",
+      "È arrivato non nessuno.",
+      "Nessuno non è arrivato."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c09-01",
+    "title": "Mercato",
+    "topic": "Покупки и кулинария",
+    "prompt": "Вставьте магазин и рынок. Хлеб — в супермаркете, фрукты — на рынке.",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "cloze",
+    "text": "Compro il pane al ____ e la frutta al ____.",
+    "answers": [
+      "supermercato",
+      "mercato"
+    ],
+    "bank": [
+      "supermercato",
+      "mercato",
+      "chilo",
+      "sale"
+    ]
+  },
+  {
+    "id": "a1-c09-02",
+    "title": "Quanto costa",
+    "topic": "Покупки и кулинария",
+    "prompt": "Как спросить цену сыра?",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "quiz",
+    "options": [
+      "Quanto costa il formaggio?",
+      "Quanto costano il formaggio?",
+      "Quanti costa il formaggio?",
+      "Quanto costa i formaggi oggi?"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c09-03",
+    "title": "Costa, costano",
+    "topic": "Покупки и кулинария",
+    "prompt": "Вставьте costare. Яблоки во множественном числе, молоко в единственном.",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "cloze",
+    "text": "Le mele ____ tre euro al chilo. Il latte ____ un euro.",
+    "answers": [
+      "costano",
+      "costa"
+    ],
+    "bank": [
+      "costano",
+      "costa",
+      "comprano",
+      "è"
+    ]
+  },
+  {
+    "id": "a1-c09-04",
+    "title": "Al mercato",
+    "topic": "Покупки и кулинария",
+    "prompt": "Нужны свежие овощи и сыр с прилавка. Куда пойти?",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "quiz",
+    "options": [
+      "al mercato",
+      "in albergo a dormire",
+      "al museo chiuso",
+      "in piscina"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c09-05",
+    "title": "Chilo e bottiglia",
+    "topic": "Покупки и кулинария",
+    "prompt": "Вставьте количество: килограмм хлеба и бутылка молока.",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "cloze",
+    "text": "Vorrei un ____ di pane e una ____ di latte.",
+    "answers": [
+      "chilo",
+      "bottiglia"
+    ],
+    "bank": [
+      "chilo",
+      "bottiglia",
+      "etto",
+      "pacco"
+    ]
+  },
+  {
+    "id": "a1-c09-06",
+    "title": "Lo e la",
+    "topic": "Прямые местоимения и частица NE",
+    "prompt": "Вставьте местоимение. Pane мужского рода, frutta женского. Оба слова уже названы.",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "cloze",
+    "text": "Il pane? ____ prendo. La frutta? ____ compro.",
+    "answers": [
+      "Lo",
+      "La"
+    ],
+    "bank": [
+      "Lo",
+      "La",
+      "Li",
+      "Le"
+    ]
+  },
+  {
+    "id": "a1-c09-07",
+    "title": "Li prendo",
+    "topic": "Прямые местоимения и частица NE",
+    "prompt": "«Помидоры? Я их беру». Pomodori — мужской род, множественное число. Что сказать?",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "quiz",
+    "options": [
+      "Li prendo.",
+      "Le prendo.",
+      "Lo prendo.",
+      "La prendo."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c09-08",
+    "title": "Ne voglio",
+    "topic": "Прямые местоимения и частица NE",
+    "prompt": "Вставьте частицу количества. Оба пропуска — одно и то же слово.",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "cloze",
+    "text": "— Quante mele vuoi? — ____ voglio tre. — E di latte? — ____ prendo un litro.",
+    "answers": [
+      "Ne",
+      "Ne"
+    ],
+    "bank": [
+      "Ne",
+      "Ne",
+      "Lo",
+      "La"
+    ]
+  },
+  {
+    "id": "a1-c09-09",
+    "title": "Un etto",
+    "topic": "Прямые местоимения и частица NE",
+    "prompt": "«Сколько сыра? Хочу сто граммов». Какая фраза верна?",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "quiz",
+    "options": [
+      "Ne vorrei un etto.",
+      "Lo vorrei un etto.",
+      "Ne vorrei.",
+      "La vorrei un etto."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c09-10",
+    "title": "Lo compro",
+    "topic": "Прямые местоимения и частица NE",
+    "prompt": "Где стоит местоимение lo?",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "quiz",
+    "options": [
+      "Lo compro al mercato.",
+      "Compro lo al mercato.",
+      "Compro al mercato lo.",
+      "Lo al mercato compro formaggio."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c09-11",
+    "title": "Si taglia",
+    "topic": "Безличная конструкция (Si impersonale)",
+    "prompt": "Вставьте безличную частицу. Оба шага рецепта говорят о любом поваре, не о конкретном «я».",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "cloze",
+    "text": "Prima ____ taglia la cipolla. Poi ____ aggiunge l'olio.",
+    "answers": [
+      "si",
+      "si"
+    ],
+    "bank": [
+      "si",
+      "si",
+      "ci",
+      "ne"
+    ]
+  },
+  {
+    "id": "a1-c09-12",
+    "title": "Si lavano",
+    "topic": "Безличная конструкция (Si impersonale)",
+    "prompt": "Как сказать общее правило «яблоки моют»? Mele — множественное число.",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "quiz",
+    "options": [
+      "Si lavano le mele.",
+      "Si lava le mele.",
+      "Si lavano la mela.",
+      "Lavano si le mele."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c09-13",
+    "title": "Si aggiunge",
+    "topic": "Безличная конструкция (Si impersonale)",
+    "prompt": "Следующий шаг рецепта: «добавляют соль». Sale — единственное число.",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "quiz",
+    "options": [
+      "Si aggiunge il sale.",
+      "Si aggiungono il sale.",
+      "Ne aggiunge il sale.",
+      "Lo si aggiunge il sale."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c09-14",
+    "title": "Si compra, si pranza",
+    "topic": "Безличная конструкция (Si impersonale)",
+    "prompt": "Вставьте безличную частицу в двух общих фразах.",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "cloze",
+    "text": "Al mercato ____ compra il pane fresco. In Italia ____ pranza spesso a casa.",
+    "answers": [
+      "si",
+      "si"
+    ],
+    "bank": [
+      "si",
+      "si",
+      "ci",
+      "lo"
+    ]
+  },
+  {
+    "id": "a1-c09-15",
+    "title": "Si non è riflessivo",
+    "topic": "Безличная конструкция (Si impersonale)",
+    "prompt": "В рецепте si taglia значит…",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "quiz",
+    "options": [
+      "«нарезают» вообще, без конкретного лица",
+      "«он режет себя»",
+      "«мы нарезали вчера»",
+      "«нарежь, пожалуйста»"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c09-16",
+    "title": "Etto e chilo",
+    "topic": "Упаковки и меры веса",
+    "prompt": "Вставьте меры: 100 граммов и 1000 граммов.",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "cloze",
+    "text": "Un ____ è 100 grammi. Un ____ è 1000 grammi.",
+    "answers": [
+      "etto",
+      "chilo"
+    ],
+    "bank": [
+      "etto",
+      "chilo",
+      "litro",
+      "pacco"
+    ]
+  },
+  {
+    "id": "a1-c09-17",
+    "title": "Bottiglia di latte",
+    "topic": "Упаковки и меры веса",
+    "prompt": "Молоко продают в бутылке. Как это сказать?",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "quiz",
+    "options": [
+      "una bottiglia di latte",
+      "un pacco di latte",
+      "un etto di bottiglia",
+      "una bottiglia di biscotti"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c09-18",
+    "title": "Mezzo chilo",
+    "topic": "Упаковки и меры веса",
+    "prompt": "Как сказать «полкило помидоров»?",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "quiz",
+    "options": [
+      "mezzo chilo di pomodori",
+      "mezza chilo di pomodori",
+      "mezzo chili di pomodoro",
+      "un chilo mezzo pomodori"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c09-19",
+    "title": "Euro e confezione",
+    "topic": "Упаковки и меры веса",
+    "prompt": "Вставьте валюту и упаковку яиц.",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "cloze",
+    "text": "Il vino costa otto ____ al litro. Le uova costano due euro la ____.",
+    "answers": [
+      "euro",
+      "confezione"
+    ],
+    "bank": [
+      "euro",
+      "confezione",
+      "etto",
+      "chilo"
+    ]
+  },
+  {
+    "id": "a1-c09-20",
+    "title": "Un pacco",
+    "topic": "Упаковки и меры веса",
+    "prompt": "Как сказать «пачка печенья»?",
+    "level": "A1",
+    "chapter": {
+      "number": 9,
+      "title": "Sapori d'Italia"
+    },
+    "type": "quiz",
+    "options": [
+      "un pacco di biscotti",
+      "una pacca di biscotti",
+      "un pacco di biscotto",
+      "una bottiglia di biscotti"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-01",
+    "title": "Genitori e zio",
+    "topic": "Семья и родственники",
+    "prompt": "Вставьте родственников: родители и брат отца.",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "cloze",
+    "text": "Il padre e la madre sono i ____. Il fratello di mio padre è lo ____.",
+    "answers": [
+      "genitori",
+      "zio"
+    ],
+    "bank": [
+      "genitori",
+      "zio",
+      "cugini",
+      "nonna"
+    ]
+  },
+  {
+    "id": "a1-c10-02",
+    "title": "La figlia",
+    "topic": "Семья и родственники",
+    "prompt": "Как сказать «дочь Анны»?",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "la figlia di Anna",
+      "la figlio di Anna",
+      "il figlia di Anna",
+      "la madre di Anna"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-03",
+    "title": "Zia e cugino",
+    "topic": "Семья и родственники",
+    "prompt": "Вставьте родственников. Сначала сестра матери, потом сын дяди.",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "cloze",
+    "text": "La sorella di mia madre è mia ____. Il figlio di mio zio è mio ____.",
+    "answers": [
+      "zia",
+      "cugino"
+    ],
+    "bank": [
+      "zia",
+      "cugino",
+      "nonna",
+      "moglie"
+    ]
+  },
+  {
+    "id": "a1-c10-04",
+    "title": "La moglie",
+    "topic": "Семья и родственники",
+    "prompt": "Паоло женат на Джулии. Кем Джулия приходится Паоло?",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "la moglie",
+      "il marito",
+      "la sorella",
+      "la nonna"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-05",
+    "title": "I nonni",
+    "topic": "Семья и родственники",
+    "prompt": "Как называются родители отца?",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "i nonni",
+      "i figli",
+      "i cugini",
+      "i fratelli"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-06",
+    "title": "Mia madre",
+    "topic": "Притяжательные местоимения с родственниками",
+    "prompt": "Вставьте притяжательное без артикля. Один родственник, без прилагательного.",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "cloze",
+    "text": "____ madre si chiama Elena. ____ padre si chiama Paolo.",
+    "answers": [
+      "Mia",
+      "Mio"
+    ],
+    "bank": [
+      "Mia",
+      "Mio",
+      "La mia",
+      "Il mio"
+    ]
+  },
+  {
+    "id": "a1-c10-07",
+    "title": "La loro madre",
+    "topic": "Притяжательные местоимения с родственниками",
+    "prompt": "Как сказать «их мать»?",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "la loro madre",
+      "loro madre",
+      "il loro madre",
+      "la sua madre"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-08",
+    "title": "I miei fratelli",
+    "topic": "Притяжательные местоимения с родственниками",
+    "prompt": "Как сказать «мои братья»?",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "i miei fratelli",
+      "miei fratelli",
+      "il mio fratelli",
+      "le miei fratelli"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-09",
+    "title": "Il mio caro fratello",
+    "topic": "Притяжательные местоимения с родственниками",
+    "prompt": "Сначала брат с прилагательным caro, поэтому нужен артикль. Потом мать без прилагательного.",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "cloze",
+    "text": "____ mio caro fratello abita a Roma. ____ madre abita a Milano.",
+    "answers": [
+      "Il",
+      "Mia"
+    ],
+    "bank": [
+      "Il",
+      "Mia",
+      "La",
+      "Mio"
+    ]
+  },
+  {
+    "id": "a1-c10-10",
+    "title": "Le tue sorelle",
+    "topic": "Притяжательные местоимения с родственниками",
+    "prompt": "Как сказать «твои сёстры»?",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "le tue sorelle",
+      "le tuoi sorelle",
+      "i tuoi sorelle",
+      "tue sorelle"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-11",
+    "title": "Mi sono alzato",
+    "topic": "Прошедшее время возвратных глаголов",
+    "prompt": "Говорит мужчина. Оба пропуска — один и тот же вспомогательный глагол возвратного passato prossimo.",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "cloze",
+    "text": "Ieri io mi ____ alzato e mi ____ vestito.",
+    "answers": [
+      "sono",
+      "sono"
+    ],
+    "bank": [
+      "sono",
+      "sono",
+      "ho",
+      "ha"
+    ]
+  },
+  {
+    "id": "a1-c10-12",
+    "title": "Mi sono svegliata",
+    "topic": "Прошедшее время возвратных глаголов",
+    "prompt": "Анна говорит: «Я проснулась в восемь». Выберите фразу.",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "Mi sono svegliata alle otto.",
+      "Mi sono svegliato alle otto.",
+      "Ho svegliata alle otto.",
+      "Mi ho svegliata alle otto."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-13",
+    "title": "Ci siamo divertiti",
+    "topic": "Прошедшее время возвратных глаголов",
+    "prompt": "Вставьте essere. Сначала «мы» на празднике, потом бабушка и дедушка.",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "cloze",
+    "text": "Alla festa noi ci ____ divertiti. I nonni si ____ seduti.",
+    "answers": [
+      "siamo",
+      "sono"
+    ],
+    "bank": [
+      "siamo",
+      "sono",
+      "abbiamo",
+      "hanno"
+    ]
+  },
+  {
+    "id": "a1-c10-14",
+    "title": "Si sono sposati",
+    "topic": "Прошедшее время возвратных глаголов",
+    "prompt": "Лука и Анна поженились в мае. Как это сказать?",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "Si sono sposati a maggio.",
+      "Si hanno sposato a maggio.",
+      "Hanno sposati a maggio.",
+      "Si sono sposato a maggio."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-15",
+    "title": "Mi sono divertita",
+    "topic": "Прошедшее время возвратных глаголов",
+    "prompt": "Джулия говорит о себе: вчера ей было весело. Что верно?",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "Ieri mi sono divertita.",
+      "Ieri mi sono divertito.",
+      "Ieri mi ho divertita.",
+      "Ieri sono divertita mi."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-16",
+    "title": "Gesto del buono",
+    "topic": "Итальянские жесты и относительная степень",
+    "prompt": "Итальянец крутит указательным пальцем у щеки. За едой это обычно значит…",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "«вкусно, хорошо»",
+      "«дорого»",
+      "«направо»",
+      "«я не понимаю»"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-17",
+    "title": "Che vuoi?",
+    "topic": "Итальянские жесты и относительная степень",
+    "prompt": "Кончики пальцев собраны вместе, ладонь вверх, кисть слегка двигается. Частый смысл этого жеста:",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "«Чего ты хочешь?»",
+      "«С днём рождения!»",
+      "«Иди прямо»",
+      "«Это мой брат»"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-18",
+    "title": "Il più alto",
+    "topic": "Итальянские жесты и относительная степень",
+    "prompt": "Как сказать «Марко самый высокий в семье»?",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "Marco è il più alto della famiglia.",
+      "Marco è il più alta della famiglia.",
+      "Marco è più alto della famiglia.",
+      "Marco è altissimo della famiglia."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "a1-c10-19",
+    "title": "La più, i più",
+    "topic": "Итальянские жесты и относительная степень",
+    "prompt": "Вставьте артикль превосходной степени. Anna — женщина, i nonni — мужской род множественного числа.",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "cloze",
+    "text": "Anna è ____ più giovane. I nonni sono ____ più simpatici.",
+    "answers": [
+      "la",
+      "i"
+    ],
+    "bank": [
+      "la",
+      "i",
+      "il",
+      "le"
+    ]
+  },
+  {
+    "id": "a1-c10-20",
+    "title": "Le più gentili",
+    "topic": "Итальянские жесты и относительная степень",
+    "prompt": "Как сказать «Мои сёстры самые добрые в семье»? «Добрые» здесь — gentili.",
+    "level": "A1",
+    "chapter": {
+      "number": 10,
+      "title": "La famiglia"
+    },
+    "type": "quiz",
+    "options": [
+      "Le mie sorelle sono le più gentili della famiglia.",
+      "Le mie sorelle sono i più gentili della famiglia.",
+      "Le mie sorelle sono la più gentile della famiglia.",
+      "Mie sorelle sono più gentili della famiglia."
+    ],
+    "answer": 0
+  }
+]

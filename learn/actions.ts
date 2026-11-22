@@ -9,7 +9,7 @@ import {
   logoutStudent,
   logoutTeacher,
 } from "@/learn/auth";
-import { readActivityChapter, readActivityLevel } from "@/learn/cefr";
+import { applyActivityPlacement } from "@/learn/cefr";
 import { hashToken, randomToken, verifyPassword } from "@/learn/crypto";
 import { mutateStore, readStore } from "@/learn/data/store";
 import { addHour } from "@/learn/format";
@@ -391,13 +391,7 @@ function parseActivityForm(formData: FormData, id: string): { error?: string; ac
 }
 
 function attachPlacement(activity: Activity, formData: FormData): { error?: string; activity?: Activity } {
-  const levelRead = readActivityLevel(formData.get("level"));
-  if (levelRead.error) return { error: levelRead.error };
-  const chapterRead = readActivityChapter(formData.get("chapterNumber"), formData.get("chapterTitle"));
-  if (chapterRead.error) return { error: chapterRead.error };
-  if (levelRead.level) activity.level = levelRead.level;
-  if (chapterRead.chapter) activity.chapter = chapterRead.chapter;
-  return { activity };
+  return applyActivityPlacement(activity, formData);
 }
 
 export async function createActivityAction(formData: FormData): Promise<{ error?: string; id?: string }> {

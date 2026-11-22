@@ -38,6 +38,19 @@ Catalog tasks are objects in `aula_store.data` → `activities[]` (jsonb). There
 
 Teacher tab query: `?level=A1|A2|B1|B2|C1|C2|none` and `?chapter=<number>|none`. See `learn/cefr.ts`.
 
+### A1 catalog import
+
+The production image ships `node /app/a1-import/import-a1.mjs` and `activities.json`. It does not include `tsx`. The script updates only activity ids `a1-c01-01` … `a1-c10-20` inside `aula_store` row `id = 1`. Before an UPDATE it writes the current row to a JSON file and prints that path. A repeat run that already matches the catalog does not write.
+
+From `/opt/italiano`, after this image is the running `app` service:
+
+```bash
+sudo docker compose exec app node /app/a1-import/import-a1.mjs
+sudo docker compose exec -e A1_IMPORT_CONFIRM=production app node /app/a1-import/import-a1.mjs --apply
+```
+
+`A1_IMPORT_CONFIRM=local` is refused when the database host looks like production. The apply command prints `backup`. That file is the row before the write, under `/app/learn/data/backups` when that directory is writable, otherwise `/tmp/a1-import-backups`. Copy it out with `sudo docker compose cp` if you want it on the host.
+
 ## Health
 
 - `GET /api/health` — DB/store + **boolean** flags (`sessionSecret`, `smtp`, `appUrl`, …); never returns secret values.
