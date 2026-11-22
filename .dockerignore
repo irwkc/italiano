@@ -1,6 +1,7 @@
 node_modules
 .next
 .git
+ios
 .impeccable
 *.pem
 .env*
